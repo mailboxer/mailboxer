@@ -1,0 +1,101 @@
+<p id="notice"><%= notice %></p>
+
+
+
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Back', users_path %>
+<br><br>
+<hr>
+<h1>Pepe</h1>
+<hr>
+<% user = @pepe %>
+INBOX<hr>
+<% mails = user.mailbox[:inbox].mail %>
+<% mails.each do |mail| %>
+	<b><%= mail.mailboxer_conversation.subject %></b><br>
+	TO: (<%= mail.user.name %>) <br>
+	FROM:  (<%= mail.mailboxer_message.sender.name %>)<br>
+	SUBJECT: <%= mail.mailboxer_message.subject %> <br>
+	BODY: <%= mail.mailboxer_message.body %> <br>
+<% end %>
+<br>
+SENTBOX<hr>
+<% mails = user.mailbox[:sentbox].mail %>
+<% mails.each do |mail| %>
+	<b><%= mail.mailboxer_conversation.subject %></b><br>
+	TO: (<%= mail.user.name %>) <br>
+	FROM:  (<%= mail.mailboxer_message.sender.name %>)<br>
+	SUBJECT: <%= mail.mailboxer_message.subject %> <br>
+	BODY: <%= mail.mailboxer_message.body %> <br>
+<% end %>
+<br>
+TRASH (vacio? <%= user.mailbox[:trash].mail.empty? %>)<hr>
+<% mails = user.mailbox[:trash].mail %>
+<% mails.each do |mail| %>
+	<b><%= mail.mailboxer_conversation.subject %></b><br>
+	TO: (<%= mail.user.name %>) <br>
+	FROM:  (<%= mail.mailboxer_message.sender.name %>)<br>
+	SUBJECT: <%= mail.mailboxer_message.subject %> <br>
+	BODY: <%= mail.mailboxer_message.body %> <br>
+<% end %>
+<br>
+ALL<hr>
+<% mails = user.mailbox[:all].mail %>
+<% mails.each do |mail| %>
+	<b><%= mail.mailboxer_conversation.subject %></b><br>
+	TO: (<%= mail.user.name %>) <br>
+	FROM:  (<%= mail.mailboxer_message.sender.name %>)<br>
+	SUBJECT: <%= mail.mailboxer_message.subject %> <br>
+	BODY: <%= mail.mailboxer_message.body %> <br>
+<% end %>
+<br>
+
+<br>
+
+
+<hr>
+<h1>Juan</h1>
+<hr>
+<% user = @juan %>
+INBOX<hr>
+<% mails = user.mailbox[:inbox].mail %>
+<% mails.each do |mail| %>
+	<b><%= mail.mailboxer_conversation.subject %></b><br>
+	TO: (<%= mail.user.name %>) <br>
+	FROM:  (<%= mail.mailboxer_message.sender.name %>)<br>
+	SUBJECT: <%= mail.mailboxer_message.subject %> <br>
+	BODY: <%= mail.mailboxer_message.body %> <br>
+<% end %>
+<br>
+SENTBOX<hr>
+<% mails = user.mailbox[:sentbox].mail %>
+<% mails.each do |mail| %>
+	<b><%= mail.mailboxer_conversation.subject %></b><br>
+	TO: (<%= mail.user.name %>) <br>
+	FROM:  (<%= mail.mailboxer_message.sender.name %>)<br>
+	SUBJECT: <%= mail.mailboxer_message.subject %> <br>
+	BODY: <%= mail.mailboxer_message.body %> <br>
+<% end %>
+<br>
+TRASH (vacio? <%= user.mailbox[:trash].mail.empty? %>)<hr>
+<% mails = user.mailbox[:trash].mail %> 
+<% mails.each do |mail| %>
+	<b><%= mail.mailboxer_conversation.subject %></b><br>
+	TO: (<%= mail.user.name %>) <br>
+	FROM:  (<%= mail.mailboxer_message.sender.name %>)<br>
+	SUBJECT: <%= mail.mailboxer_message.subject %> <br>
+	BODY: <%= mail.mailboxer_message.body %> <br>
+<% end %>
+<br>
+ALL<hr>
+<% mails = user.mailbox[:all].mail %>
+<% mails.each do |mail| %>
+	<b><%= mail.mailboxer_conversation.subject %></b><br>
+	TO: (<%= mail.user.name %>) <br>
+	FROM:  (<%= mail.mailboxer_message.sender.name %>)<br>
+	SUBJECT: <%= mail.mailboxer_message.subject %> <br>
+	BODY: <%= mail.mailboxer_message.body %> <br>
+<% end %>
+<br>
+
+<br>

@@ -1,0 +1,1 @@
+run 'rake db:migrate' to complete install
