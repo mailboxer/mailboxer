@@ -10,7 +10,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110302132940) do
+ActiveRecord::Schema.define(:version => 20110306002940) do
+
+  create_table "ducks", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "mailboxer_conversations", :force => true do |t|
     t.string   "subject",    :default => ""
@@ -18,7 +24,8 @@ ActiveRecord::Schema.define(:version => 20110302132940) do
   end
 
   create_table "mailboxer_mails", :force => true do |t|
-    t.integer  "user_id",                                               :null => false
+    t.integer  "receiver_id"
+    t.string   "receiver_type"
     t.integer  "mailboxer_message_id",                                  :null => false
     t.boolean  "read",                               :default => false
     t.boolean  "trashed",                            :default => false
@@ -30,15 +37,11 @@ ActiveRecord::Schema.define(:version => 20110302132940) do
     t.text     "body"
     t.string   "subject",                   :default => ""
     t.text     "headers"
-    t.integer  "sender_id",                                    :null => false
+    t.integer  "sender_id"
+    t.string   "sender_type"
     t.integer  "mailboxer_conversation_id"
     t.boolean  "sent",                      :default => false
     t.datetime "created_at",                                   :null => false
-  end
-
-  create_table "mailboxer_recipients", :id => false, :force => true do |t|
-    t.integer "mailboxer_message_id", :null => false
-    t.integer "recipient_id",         :null => false
   end
 
   create_table "users", :force => true do |t|

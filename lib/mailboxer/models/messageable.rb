@@ -74,7 +74,7 @@ module Mailboxer
         def send_message(recipients, msg_body, subject = '')
           convo = MailboxerConversation.create({:subject => subject})
           message = MailboxerMessage.create({:sender => self, :mailboxer_conversation => convo,  :body => msg_body, :subject => subject})
-          message.mailboxer_recipients = recipients.is_a?(Array) ? mailboxer_recipients : [recipients]
+          message.recipients = recipients.is_a?(Array) ? recipients : [recipients]
           message.deliver(self.mailbox_types[:received])
           return mailbox[:sentbox] << message
         end
@@ -100,7 +100,7 @@ module Mailboxer
           return nil if(reply_body.blank?)
           subject = subject || "RE: #{conversation.subject}"
           response = MailboxerMessage.create({:sender => self, :mailboxer_conversation => conversation, :body => reply_body, :subject => subject})
-          response.mailboxer_recipients = recipients.is_a?(Array) ? recipients : [recipients]
+          response.recipients = recipients.is_a?(Array) ? recipients : [recipients]
           response.deliver(self.mailbox_types[:received])
           return mailbox[self.mailbox_types[:sent]] << response
         end
@@ -133,7 +133,7 @@ module Mailboxer
         #
         def reply_to_all(mail, reply_body, subject = nil)
           msg = mail.mailboxer_message
-          recipients = msg.mailboxer_recipients.clone()
+          recipients = msg.get_recipients
           if(msg.sender != self)
             recipients.delete(self)
             if(!recipients.include?(msg.sender))
@@ -162,7 +162,7 @@ module Mailboxer
             mailbox.move_to(self.mailbox_types[:received], :mailboxer_conversation => conversation)
           end
           #remove self from recipients unless you are the originator of the convo
-          recipients = conversation.original_message.mailboxer_recipients.clone()
+          recipients = conversation.original_message.get_recipients
           if(conversation.originator != self)
             recipients.delete(self)
             if(!recipients.include?(conversation.originator))

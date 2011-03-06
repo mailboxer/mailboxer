@@ -70,6 +70,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
+    mysql (2.8.1)
     nokogiri (1.4.4)
     polyglot (0.3.1)
     rack (1.2.1)
@@ -134,3 +135,4 @@ PLATFORMS
 
 DEPENDENCIES
   mailboxer!
+  mysql (= 2.8.1)

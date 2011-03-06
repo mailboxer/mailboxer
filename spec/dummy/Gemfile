@@ -2,4 +2,5 @@ source 'http://rubygems.org'
 
 gem 'mailboxer', :path => '../../../mailboxer'
 
+gem 'mysql', '2.8.1'
 
