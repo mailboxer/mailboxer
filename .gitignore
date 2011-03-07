@@ -9,3 +9,4 @@ Gemfile.lock
 .idea
 .project
 .document
+.settings/

@@ -1,6 +1,7 @@
 class MailboxerConversation < ActiveRecord::Base
   attr_reader :originator, :original_message, :last_sender, :last_message, :users
   has_many :mailboxer_messages
+  has_many :mailboxer_mails, :through => :mailboxer_messages
   before_create :clean
   #looks like shit but isnt too bad
   has_many :recipients, :finder_sql => 

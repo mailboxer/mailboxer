@@ -14,7 +14,7 @@ module Mailboxer
       # defined below when invoked
       module ClassMethods
         #enables a class to send and receive messages to members of the same class - currently assumes the model is of class type 'User', 
-        #some modifications to the migrations and model classes will need to be made to use a model of different type.
+        #some modifications to the migrations and model classes will need to be made to use a model of different type
         #
         #====options:
         #* :received - the mailbox type to store received messages (defaults to :inbox)
@@ -49,7 +49,7 @@ module Mailboxer
         #   phil.mailbox[:inbox].unread_mail      #returns all unread mail in your inbox
         #   phil.mailbox[:sentbox].mail         #returns all sent mail messages
         #  
-        def mailbox()
+        def mailbox
           @mailbox = MailboxerMailbox.new(self) if @mailbox.nil?
           @mailbox.type = :all
           return @mailbox
@@ -172,13 +172,17 @@ module Mailboxer
           return reply(conversation,recipients, reply_body, subject)
         end
         #returns the mail given as the parameter, marked as read.
-        def read_mail(mail)
-          return mail.mark_as_read()
+        def read_mail(mail)          
+            return mail.mark_as_read if mail.receiver == self
+        end
+        #returns the mail given as the parameter, marked as unread.
+        def unread_mail(mail)
+            return mail.mark_as_unread if mail.receiver == self
         end
         #returns an array of the user's Mail associated with the given conversation. 
         #All mail is marked as read but the returning array is built before this so you can see which messages were unread when viewing the conversation.
         #
-        #This returns deleted/trashed messages as well for the purpose of reading trashed convos, to disable this send the option ':conditions => "mail.trashed != true"'
+        #???This returns deleted/trashed messages as well for the purpose of reading trashed convos, to disable this send the option ':conditions => "mail.trashed != true"'
         #
         #====params:
         #conversation::
@@ -190,9 +194,14 @@ module Mailboxer
         #array of Mail belonging to the given conversation.
         #
         def read_conversation(conversation, options = {})
-          convo_mail = self.mailbox.mail(options.merge(:mailboxer_conversation => conversation))
-          self.mailbox.mark_as_read(:mailboxer_conversation => conversation)
-          return convo_mail
+          mails = conversation.mailboxer_mails.receiver(self)
+          mails_clone = mails.clone
+          
+          mails.each do |mail|
+            mail.mark_as_read
+          end
+          
+          return mails_clone
         end
       end
     end

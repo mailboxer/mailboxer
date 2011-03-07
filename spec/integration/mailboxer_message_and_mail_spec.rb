@@ -141,6 +141,27 @@ describe "Mailboxer Messages And Mails" do
         @message1.mailboxer_conversation.id.should==@message2.mailboxer_conversation.id      
       end           
     end
+    describe "message replying to conversation (TODO)" do
+      before do
+        #TODO        
+      end
+      
+      it "should create proper message" do
+        #TODO       
+      end
+      
+      it "should create proper mails" do
+        #TODO       
+      end
+      
+      it "should have the correct recipients" do
+        #TODO       
+      end
+      
+      it "should be associated to the same conversation" do
+        #TODO       
+      end           
+    end
   end
   
   describe "two different entities" do
@@ -280,6 +301,27 @@ describe "Mailboxer Messages And Mails" do
       
       it "should be associated to the same conversation" do
         @message1.mailboxer_conversation.id.should==@message2.mailboxer_conversation.id      
+      end           
+    end
+    describe "message replying to conversation (TODO)" do
+      before do
+        #TODO        
+      end
+      
+      it "should create proper message" do
+        #TODO       
+      end
+      
+      it "should create proper mails" do
+        #TODO       
+      end
+      
+      it "should have the correct recipients" do
+        #TODO       
+      end
+      
+      it "should be associated to the same conversation" do
+        #TODO       
       end           
     end
   end
@@ -443,6 +485,27 @@ describe "Mailboxer Messages And Mails" do
         @message1.mailboxer_conversation.id.should==@message2.mailboxer_conversation.id      
       end           
     end
+    describe "message replying to conversation (TODO)" do
+      before do
+        #TODO        
+      end
+      
+      it "should create proper message" do
+        #TODO       
+      end
+      
+      it "should create proper mails" do
+        #TODO       
+      end
+      
+      it "should have the correct recipients" do
+        #TODO       
+      end
+      
+      it "should be associated to the same conversation" do
+        #TODO       
+      end           
+    end
   end
   
   describe "three different entities" do
@@ -602,6 +665,28 @@ describe "Mailboxer Messages And Mails" do
       
       it "should be associated to the same conversation" do
         @message1.mailboxer_conversation.id.should==@message2.mailboxer_conversation.id      
+      end           
+    end
+    
+    describe "message replying to conversation (TODO)" do
+      before do
+        #TODO        
+      end
+      
+      it "should create proper message" do
+        #TODO       
+      end
+      
+      it "should create proper mails" do
+        #TODO       
+      end
+      
+      it "should have the correct recipients" do
+        #TODO       
+      end
+      
+      it "should be associated to the same conversation" do
+        #TODO       
       end           
     end
   end

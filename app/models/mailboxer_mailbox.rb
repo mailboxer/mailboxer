@@ -33,7 +33,7 @@ class MailboxerMailbox
   #   phil.mailbox[:inbox].mail_count(:unread)
   #
   def mail_count(filter = :all, options = {})
-    default_options = {:conditions => ["user_id = ?", @messageable.id]}
+    default_options = {:conditions => ["receiver_id = ? AND receiver_type=?", @messageable.id, @messageable.type]}
     add_mailbox_condition!(default_options, @type)
     add_conditions!(default_options, "read = ?", filter == :read) unless filter == :all
     return count_mail(default_options, options)
@@ -81,7 +81,7 @@ class MailboxerMailbox
   #   phil.mailbox[:inbox].unread_mail
   #
   def unread_mail(options = {})
-    default_options = {:conditions => ["read = ? AND user_id = ?", false, @messageable.id]}
+    default_options = {:conditions => ["read = ? AND receiver_id = ? AND receiver_type=?", false, @messageable.id, @messageable.type]}
     add_mailbox_condition!(default_options, @type)
     return get_mail(default_options, options)
   end
@@ -100,7 +100,7 @@ class MailboxerMailbox
   #   phil.mailbox[:inbox].read_mail
   #
   def read_mail(options = {})
-    default_options = {:conditions => ["read = ? AND user_id = ?", true, @messageable.id]}
+    default_options = {:conditions => ["read = ? AND receiver_id = ? AND receiver_type=?", true, @messageable.id, @messageable.type]}
     add_mailbox_condition!(default_options, @type)
     return get_mail(default_options, options)
   end
@@ -137,7 +137,7 @@ class MailboxerMailbox
   def add(msg)
     attributes = {:mailboxer_message => msg}
     attributes[:mailbox_type] = @type.to_s unless @type == :all
-    attributes[:read] = msg.sender.id == @messageable.id
+    attributes[:read] = (msg.sender.id == @messageable.id && msg.sender.class == @messageable.class)
     mail_msg = MailboxerMail.new(attributes)
     mail_msg.receiver = @messageable
     @messageable.mailboxer_mails << mail_msg
@@ -158,9 +158,9 @@ class MailboxerMailbox
   #   phil.mailbox[:inbox].mark_as_read()
   #
   def mark_as_read(options = {})
-    default_options = {:conditions => ["user_id = ?", @messageable.id]}
+    default_options = {:conditions => ["receiver_id = ? AND receiver_type=?", @messageable.id, @messageable.type]}
     add_mailbox_condition!(default_options, @type)
-    return update_mail("read = true", default_options, options)
+    return update_mail("read = 't'", default_options, options)
   end
   #marks all the mail messages matched by the options and type as unread, except for sent messages.
   #
@@ -177,9 +177,9 @@ class MailboxerMailbox
   #   phil.mailbox[:inbox].mark_as_unread()
   #
   def mark_as_unread(options = {})
-    default_options = {:conditions => ["mailbox_type != ? AND user_id = ?",@messageable.mailbox_types[:sent].to_s, @messageable.id]}
+    default_options = {:conditions => ["mailbox_type != ? AND receiver_id = ? AND receiver_type=?",@messageable.mailbox_types[:sent].to_s, @messageable.id, @messageable.type]}
     add_mailbox_condition!(default_options, @type)
-    return update_mail("read = false", default_options, options)
+    return update_mail("read = 'f'", default_options, options)
   end
   #moves all mail matched by the options to the given mailbox. sent messages stay in the sentbox.
   #
@@ -190,7 +190,7 @@ class MailboxerMailbox
   def move_to(mailbox, options = {})
     mailbox = mailbox.to_sym
     trash = mailbox == @messageable.mailbox_types[:deleted].to_sym
-    default_options = {:conditions => ["user_id = ?", @messageable.id]}
+    default_options = {:conditions => ["receiver_id = ? AND receiver_type=?", @messageable.id, @messageable.type]}
     add_mailbox_condition!(default_options, @type)
     if(!trash)
       #conditional update because sentmail is always sentmail - I believe case if the most widely supported conditional, mysql also has an if which would work as well but i think mysql is the only one to support it
@@ -208,7 +208,7 @@ class MailboxerMailbox
   #options:: see mail for acceptable options.
   # 
   def delete(options = {})
-    default_options = {:conditions => ["user_id = ?", @messageable.id]}
+    default_options = {:conditions => ["receiver_id = ? AND receiver_type=?", @messageable.id, @messageable.type]}
     add_mailbox_condition!(default_options, @type)
     return delete_mail(default_options, options)
   end
@@ -222,7 +222,7 @@ class MailboxerMailbox
   #options:: see mail for acceptable options.
   # 
   def empty_trash(options = {})
-    default_options = {:conditions => ["user_id = ? AND trashed = ?", @messageable.id, true]}
+    default_options = {:conditions => ["trashed = ? AND receiver_id = ? AND receiver_type=?", true, @messageable.id, @messageable.type]}
     add_mailbox_condition!(default_options, @type)
     return delete_mail(default_options, options)
   end
@@ -249,30 +249,38 @@ class MailboxerMailbox
     self.type = mailbox_type
     return self
   end
+  
+  
   private
+  
   def get_mail(default_options, options)
     build_options(default_options, options) unless options.empty?
     return MailboxerMail.find(:all, default_options)
   end
+  
   def update_mail(updates, default_options, options)
     build_options(default_options, options) unless options.empty?
     return MailboxerMail.update_all(updates, default_options[:conditions])
   end
+  
   def delete_mail(default_options, options)
     build_options(default_options, options) unless options.empty?
     return MailboxerMail.delete_all(default_options[:conditions])
   end
+  
   def count_mail(default_options, options)
     build_options(default_options, options) unless options.empty?
     return MailboxerMail.count(:all, default_options)
   end
+  
   def build_options(default_options, options)
-    add_conversation_condition!(default_options, options[:conversation]) unless options[:conversation].nil?
-    options.delete(:conversation)
+    add_conversation_condition!(default_options, options[:mailboxer_conversation]) unless options[:conversation].nil?
+    options.delete(:mailboxer_conversation)
     add_conditions!(default_options, options[:conditions]) unless options[:conditions].nil?
     options.delete(:conditions)
     default_options.merge!(options)
   end
+  
   def only_latest(mail)
     convos = []
     latest = []
@@ -283,11 +291,13 @@ class MailboxerMailbox
     end
     return latest
   end
+  
   def add_mailbox_condition!(options, mailbox_type)
     return if mailbox_type == :all
     return add_conditions!(options, "mailbox_type = ? AND trashed = ?", mailbox_type.to_s, false) unless mailbox_type == @messageable.mailbox_types[:deleted]
     return add_conditions!(options, "trashed = ?", true)
   end
+  
   def add_conversation_condition!(options, conversation)
     options.merge!({:order => 'created_at ASC'})
     if(conversation.is_a?(Array))
@@ -297,6 +307,7 @@ class MailboxerMailbox
     end
     return add_conditions!(options, "conversation_id IN (?)", conversation)
   end
+  
   def add_conditions!(options, conditions, *values)
     return nil unless options.is_a?(Hash)
     if(options[:conditions].nil?)
