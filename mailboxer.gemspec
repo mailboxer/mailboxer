@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.summary = %q{Private messaging system for rails apps.}
   s.files = `git ls-files`.split("\n")
   
-  s.add_dependency(%q<rails>, ["= 3.0.0"])
+  s.add_dependency(%q<rails>, ["= 3.0.5"])
   s.add_dependency(%q<capybara>, [">= 0.3.9"])
   s.add_dependency(%q<webrat>, [">= 0"])
   s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
