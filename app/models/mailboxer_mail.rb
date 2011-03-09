@@ -17,26 +17,54 @@ class MailboxerMail < ActiveRecord::Base
   scope :read, where(:read => true)
   scope :unread, where(:read => false)
   
-  #sets the read attribute of the mail message to true.
-  def mark_as_read 
-    update_attribute('read', true)
-  end
-  
   class << self 
-    def mark_all_as_read    
-      update_all(:read => true)
+    def mark_as_read(options={})    
+      where(options).update_all(:read => true)
     end
-    def mark_all_as_unread    
-      update_all(:read => false)
+    
+    def mark_as_unread(options={}) 
+      where(options).update_all(:read => false)
+    end
+    
+    def move_to_trash(options={})     
+      where(options).update_all(:trashed => true)
+    end
+    
+    def untrash(options={})     
+      where(options).update_all(:trashed => false)
+    end
+    
+    def move_to_inbox(options={})     
+      where(options).update_all(:mailbox_type => :inbox, :trashed => false)
+    end
+    
+    def move_to_sentbox(options={})     
+      where(options).update_all(:mailbox_type => :sentbox, :trashed => false)
     end
   end 
-  #sets the read attribute of the mail message to false.
+  
+  def mark_as_read 
+    update_attributes(:read => true)
+  end
+
   def mark_as_unread
-    update_attribute('read', false)
+    update_attributes(:read => false)
   end
   
-  #  def mailboxer_conversation
-  #    return self.mailboxer_message.mailboxer_conversation
-  #  end
+  def move_to_trash
+    update_attributes(:trashed => true)
+  end
+  
+  def untrash
+    update_attributes(:trashed => false)
+  end
+  
+  def move_to_inbox
+    update_attributes(:mailbox_type => :inbox, :trashed => false)
+  end
+  
+  def move_to_sentbox
+    update_attributes(:mailbox_type => :sentbox, :trashed => false)
+  end
   
 end

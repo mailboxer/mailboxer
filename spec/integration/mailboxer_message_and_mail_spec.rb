@@ -24,7 +24,7 @@ describe "Mailboxer Messages And Mails" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message1.id,@entity1.id,@entity1.class])
+        mail = MailboxerMail.receiver(@entity1).message(@message1).first
         assert mail
         if mail
           mail.read.should==true
@@ -32,7 +32,7 @@ describe "Mailboxer Messages And Mails" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message1.id,@entity2.id,@entity2.class])
+        mail = MailboxerMail.receiver(@entity2).message(@message1).first
         assert mail
         if mail
           mail.read.should==false
@@ -67,7 +67,7 @@ describe "Mailboxer Messages And Mails" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity2.id,@entity2.class])
+        mail = MailboxerMail.receiver(@entity2).message(@message2).first
         assert mail
         if mail
           mail.read.should==true
@@ -113,7 +113,7 @@ describe "Mailboxer Messages And Mails" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity2.id,@entity2.class])
+        mail = MailboxerMail.receiver(@entity2).message(@message2).first
         assert mail
         if mail
           mail.read.should==true
@@ -141,26 +141,50 @@ describe "Mailboxer Messages And Mails" do
         @message1.mailboxer_conversation.id.should==@message2.mailboxer_conversation.id      
       end           
     end
-    describe "message replying to conversation (TODO)" do
+    describe "message replying to conversation" do
       before do
-        #TODO        
+        @mail1 = @entity1.send_message(@entity2,"Body","Subject")
+        @mail2 = @entity2.reply_to_conversation(@mail1.mailboxer_conversation,"Reply body")
+        @message1 = @mail1.mailboxer_message
+        @message2 = @mail2.mailboxer_message
       end
       
       it "should create proper message" do
-        #TODO       
+        @message2.sender.id.should == @entity2.id
+        @message2.sender.class.should == @entity2.class
+        assert @message2.body.eql?"Reply body"
+        assert @message2.subject.eql?"RE: Subject"
       end
       
       it "should create proper mails" do
-        #TODO       
+        #Sender Mail
+        mail = MailboxerMail.receiver(@entity2).message(@message2).first
+        assert mail
+        if mail
+          mail.read.should==true
+          mail.trashed.should==false
+          mail.mailbox_type.should=="sentbox"
+        end      
+        #Receiver Mail
+        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity1.id,@entity1.class])
+        assert mail
+        if mail
+          mail.read.should==false
+          mail.trashed.should==false
+          mail.mailbox_type.should=="inbox"
+        end
       end
       
       it "should have the correct recipients" do
-        #TODO       
+        recipients = @message2.get_recipients
+        recipients.count.should==2
+        recipients.count(@entity1).should==1
+        recipients.count(@entity2).should==1
       end
       
       it "should be associated to the same conversation" do
-        #TODO       
-      end           
+        @message1.mailboxer_conversation.id.should==@message2.mailboxer_conversation.id      
+      end              
     end
   end
   
@@ -186,7 +210,7 @@ describe "Mailboxer Messages And Mails" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message1.id,@entity1.id,@entity1.class])
+        mail = MailboxerMail.receiver(@entity1).message(@message1).first
         assert mail
         if mail
           mail.read.should==true
@@ -194,7 +218,7 @@ describe "Mailboxer Messages And Mails" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message1.id,@entity2.id,@entity2.class])
+        mail = MailboxerMail.receiver(@entity2).message(@message1).first
         assert mail
         if mail
           mail.read.should==false
@@ -229,7 +253,7 @@ describe "Mailboxer Messages And Mails" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity2.id,@entity2.class])
+        mail = MailboxerMail.receiver(@entity2).message(@message2).first
         assert mail
         if mail
           mail.read.should==true
@@ -275,7 +299,7 @@ describe "Mailboxer Messages And Mails" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity2.id,@entity2.class])
+        mail = MailboxerMail.receiver(@entity2).message(@message2).first
         assert mail
         if mail
           mail.read.should==true
@@ -352,7 +376,7 @@ describe "Mailboxer Messages And Mails" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message1.id,@entity1.id,@entity1.class])
+        mail = MailboxerMail.receiver(@entity1).message(@message1).first
         assert mail
         if mail
           mail.read.should==true
@@ -398,7 +422,7 @@ describe "Mailboxer Messages And Mails" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity2.id,@entity2.class])
+        mail = MailboxerMail.receiver(@entity2).message(@message2).first
         assert mail
         if mail
           mail.read.should==true
@@ -454,7 +478,7 @@ describe "Mailboxer Messages And Mails" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity2.id,@entity2.class])
+        mail = MailboxerMail.receiver(@entity2).message(@message2).first
         assert mail
         if mail
           mail.read.should==true
@@ -463,7 +487,7 @@ describe "Mailboxer Messages And Mails" do
         end      
         #Receiver Mails
         @recipients2.each do |receiver|
-          mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,receiver.id,receiver.class])
+          mail = MailboxerMail.receiver(receiver).message(@message2).first
           assert mail
           if mail
             mail.read.should==false
@@ -534,7 +558,7 @@ describe "Mailboxer Messages And Mails" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message1.id,@entity1.id,@entity1.class])
+        mail = MailboxerMail.receiver(@entity1).message(@message1).first
         assert mail
         if mail
           mail.read.should==true
@@ -580,7 +604,7 @@ describe "Mailboxer Messages And Mails" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity2.id,@entity2.class])
+        mail = MailboxerMail.receiver(@entity2).message(@message2).first
         assert mail
         if mail
           mail.read.should==true
@@ -636,7 +660,7 @@ describe "Mailboxer Messages And Mails" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity2.id,@entity2.class])
+        mail = MailboxerMail.receiver(@entity2).message(@message2).first
         assert mail
         if mail
           mail.read.should==true
@@ -645,7 +669,7 @@ describe "Mailboxer Messages And Mails" do
         end      
         #Receiver Mails
         @recipients2.each do |receiver|
-          mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,receiver.id,receiver.class])
+          mail = MailboxerMail.receiver(receiver).message(@message2).first
           assert mail
           if mail
             mail.read.should==false

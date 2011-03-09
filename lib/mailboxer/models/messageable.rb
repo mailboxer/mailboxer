@@ -25,12 +25,7 @@ module Mailboxer
         #
         #====example:
         #   acts_as_messageable :received => :in, :sent => :sent, :deleted => :garbage
-        def acts_as_messageable(options = {})
-          self.mailbox_types = {
-            :received => :inbox,
-            :sent => :sentbox,
-            :deleted => :trash
-          }.merge(options)
+        def acts_as_messageable
           include Mailboxer::Models::Messageable::InstanceMethods
         end
       end
@@ -75,7 +70,7 @@ module Mailboxer
           convo = MailboxerConversation.create({:subject => subject})
           message = MailboxerMessage.create({:sender => self, :mailboxer_conversation => convo,  :body => msg_body, :subject => subject})
           message.recipients = recipients.is_a?(Array) ? recipients : [recipients]
-          message.deliver(self.mailbox_types[:received])
+          message.deliver(:inbox)
           return mailbox[:sentbox] << message
         end
         #creates a new Message associated with the given conversation and delivers the reply to each of the given recipients.
@@ -101,8 +96,8 @@ module Mailboxer
           subject = subject || "RE: #{conversation.subject}"
           response = MailboxerMessage.create({:sender => self, :mailboxer_conversation => conversation, :body => reply_body, :subject => subject})
           response.recipients = recipients.is_a?(Array) ? recipients : [recipients]
-          response.deliver(self.mailbox_types[:received])
-          return mailbox[self.mailbox_types[:sent]] << response
+          response.deliver(:inbox)
+          return mailbox[:sentbox] << response
         end
         #sends a Mail to the sender of the given mail message.
         #
@@ -158,11 +153,11 @@ module Mailboxer
         #
         def reply_to_conversation(conversation, reply_body, subject = nil)
           #move conversation to inbox if it is currently in the trash - doesnt make much sense replying to a trashed convo.
-          if((mailbox[self.mailbox_types[:deleted]].has_conversation?(conversation)))
-            mailbox.move_to(self.mailbox_types[:received], :mailboxer_conversation => conversation)
+          if(mailbox.is_trashed?(conversation))
+            mailbox.mail.conversation(conversation).untrash
           end
           #remove self from recipients unless you are the originator of the convo
-          recipients = conversation.original_message.get_recipients
+          recipients = conversation.get_recipients
           if(conversation.originator != self)
             recipients.delete(self)
             if(!recipients.include?(conversation.originator))

@@ -3,14 +3,10 @@ class MailboxerConversation < ActiveRecord::Base
   has_many :mailboxer_messages
   has_many :mailboxer_mails, :through => :mailboxer_messages
   before_create :clean
-  #looks like shit but isnt too bad
-  has_many :recipients, :finder_sql => 
-    'SELECT users.* FROM mailboxer_conversations 
-    INNER JOIN mailboxer_messages ON mailboxer_conversations.id = mailboxer_messages.mailboxer_conversation_id 
-    INNER JOIN mailboxer__recipients ON mailboxer__recipients.message_id = mailboxer_messages.id 
-    INNER JOIN users ON messages_recipients.recipient_id = users.id
-    WHERE conversations.id = #{self.id} GROUP BY users.id;'
-  
+  scope :participant, lambda {|participant|
+    joins(:mailboxer_messages,:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.receiver_id' => participant.id,'mailboxer_mails.receiver_type' => participant.class.to_s)    
+  }
+    
   #originator of the conversation.
   def originator
     @orignator = self.original_message.sender if @originator.nil?
@@ -36,12 +32,16 @@ class MailboxerConversation < ActiveRecord::Base
   end
   
   #all users involved in the conversation.
-  def users
-    if @users.nil?
-      @users = self.recipients.clone
-      @users << self.originator unless @users.include?(self.originator) 
-    end
-    return @users
+  def recipients
+    return last_message.get_recipients
+  end
+  
+  def get_recipients
+    return self.recipients
+  end
+  
+  def count_messages
+    return MailboxerMessage.conversation(self).count
   end
     
   protected

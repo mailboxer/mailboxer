@@ -14,6 +14,10 @@ class MailboxerMailbox
     @type = val.to_sym
   end
 
+  def conversations(options = {})
+    return MailboxerConversation.where(options).participant(@messageable)
+  end
+
   def mail(options = {})
     return MailboxerMail.where(options).receiver(@messageable)
   end
@@ -28,11 +32,6 @@ class MailboxerMailbox
   
   def trash(options = {})
     return self.mail(options).trash
-  end
-
-
-  def latest_mail(options = {})
-    return only_latest(mail(options))
   end
 
   def [](mailbox_type)
@@ -61,18 +60,9 @@ class MailboxerMailbox
   def has_conversation?(conversation)
     return self.mail.conversation(converstaion).count!=0
   end
-  
-  
-  private
-  
-  def only_latest(mail)
-    convos = []
-    latest = []
-    mail.each do |m|
-      next if(convos.include?(m.mailboxer_conversation_id))
-      convos << m.mailboxer_conversation_id
-      latest << m
-    end
-    return latest
+
+  def is_trashed?(conversation)
+    return self.trash.conversation(conversation).count!=0
   end
+
 end
