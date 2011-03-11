@@ -9,11 +9,11 @@ describe MailboxerMail do
   end
   
   it "should belong to a message" do
-    assert @mail1.mailboxer_message
+    assert @mail1.message
   end
   
   it "should belong to a conversation" do
-    assert @mail1.mailboxer_conversation    
+    assert @mail1.conversation    
   end
   
   it "should be able to be marked as unread" do

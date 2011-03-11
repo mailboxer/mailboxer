@@ -67,4 +67,12 @@ class MailboxerMail < ActiveRecord::Base
     update_attributes(:mailbox_type => :sentbox, :trashed => false)
   end
   
+  def message
+    self.mailboxer_message
+  end
+  
+  def conversation
+    self.mailboxer_conversation
+  end
+  
 end

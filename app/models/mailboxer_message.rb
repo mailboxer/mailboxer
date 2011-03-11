@@ -39,4 +39,12 @@ class MailboxerMessage < ActiveRecord::Base
     return recipients_array
   end
   
+  def conversation
+    self.mailboxer_conversation
+  end
+  
+  def mails
+    self.mailboxer_mails
+  end
+  
 end

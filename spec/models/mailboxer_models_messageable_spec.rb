@@ -64,12 +64,12 @@ describe "Mailboxer::Models::Messageable through User" do
     @mail2 = @entity2.reply_to_all(@mail1,"Reply body 1")
     @mail3 = @entity1.reply_to_all(@mail2,"Reply body 2")
     @mail4 = @entity2.reply_to_all(@mail3,"Reply body 3")
-    @message1 = @mail1.mailboxer_message
-    @conversation = @message1.mailboxer_conversation
+    @message1 = @mail1.message
+    @conversation = @message1.conversation
     
     @entity1.read_conversation(@conversation)
     
-    @mails = @conversation.mailboxer_mails.receiver(@entity1)
+    @mails = @conversation.mails.receiver(@entity1)
     
     @mails.each do |mail|
       mail.read.should==true
@@ -82,13 +82,13 @@ describe "Mailboxer::Models::Messageable through User" do
     @mail2 = @entity2.reply_to_all(@mail1,"Reply body 1")
     @mail3 = @entity1.reply_to_all(@mail2,"Reply body 2")
     @mail4 = @entity2.reply_to_all(@mail3,"Reply body 3")
-    @message1 = @mail1.mailboxer_message
-    @conversation = @message1.mailboxer_conversation
+    @message1 = @mail1.message
+    @conversation = @message1.conversation
     
     @entity2.read_conversation(@conversation)
     
-    @mails = @conversation.mailboxer_mails.receiver(@entity1)
-    @mails_total = @conversation.mailboxer_mails
+    @mails = @conversation.mails.receiver(@entity1)
+    @mails_total = @conversation.mails
     
     unread_mails = 0
     

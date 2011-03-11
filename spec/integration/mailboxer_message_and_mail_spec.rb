@@ -12,7 +12,7 @@ describe "Mailboxer Messages And Mails" do
       
       before do
         @mail1 = @entity1.send_message(@entity2,"Body","Subject")
-        @message1 = @mail1.mailboxer_message
+        @message1 = @mail1.message
       end
       
       it "should create proper message" do
@@ -54,8 +54,8 @@ describe "Mailboxer Messages And Mails" do
       before do
         @mail1 = @entity1.send_message(@entity2,"Body","Subject")
         @mail2 = @entity2.reply_to_sender(@mail1,"Reply body")
-        @message1 = @mail1.mailboxer_message
-        @message2 = @mail2.mailboxer_message
+        @message1 = @mail1.message
+        @message2 = @mail2.message
       end
       
       it "should create proper message" do
@@ -75,7 +75,7 @@ describe "Mailboxer Messages And Mails" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity1.id,@entity1.class])
+        mail = MailboxerMail.receiver(@entity1).message(@message2).first
         assert mail
         if mail
           mail.read.should==false
@@ -92,7 +92,7 @@ describe "Mailboxer Messages And Mails" do
       end
       
       it "should be associated to the same conversation" do
-        @message1.mailboxer_conversation.id.should==@message2.mailboxer_conversation.id      
+        @message1.conversation.id.should==@message2.conversation.id      
       end           
     end
     
@@ -100,8 +100,8 @@ describe "Mailboxer Messages And Mails" do
       before do
         @mail1 = @entity1.send_message(@entity2,"Body","Subject")
         @mail2 = @entity2.reply_to_all(@mail1,"Reply body")
-        @message1 = @mail1.mailboxer_message
-        @message2 = @mail2.mailboxer_message
+        @message1 = @mail1.message
+        @message2 = @mail2.message
       end
       
       it "should create proper message" do
@@ -121,7 +121,7 @@ describe "Mailboxer Messages And Mails" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity1.id,@entity1.class])
+        mail = MailboxerMail.receiver(@entity1).message(@message2).first
         assert mail
         if mail
           mail.read.should==false
@@ -138,15 +138,15 @@ describe "Mailboxer Messages And Mails" do
       end
       
       it "should be associated to the same conversation" do
-        @message1.mailboxer_conversation.id.should==@message2.mailboxer_conversation.id      
+        @message1.conversation.id.should==@message2.conversation.id      
       end           
     end
     describe "message replying to conversation" do
       before do
         @mail1 = @entity1.send_message(@entity2,"Body","Subject")
-        @mail2 = @entity2.reply_to_conversation(@mail1.mailboxer_conversation,"Reply body")
-        @message1 = @mail1.mailboxer_message
-        @message2 = @mail2.mailboxer_message
+        @mail2 = @entity2.reply_to_conversation(@mail1.conversation,"Reply body")
+        @message1 = @mail1.message
+        @message2 = @mail2.message
       end
       
       it "should create proper message" do
@@ -166,7 +166,7 @@ describe "Mailboxer Messages And Mails" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity1.id,@entity1.class])
+        mail = MailboxerMail.receiver(@entity1).message(@message2).first
         assert mail
         if mail
           mail.read.should==false
@@ -183,7 +183,7 @@ describe "Mailboxer Messages And Mails" do
       end
       
       it "should be associated to the same conversation" do
-        @message1.mailboxer_conversation.id.should==@message2.mailboxer_conversation.id      
+        @message1.conversation.id.should==@message2.conversation.id      
       end              
     end
   end
@@ -198,7 +198,7 @@ describe "Mailboxer Messages And Mails" do
       
       before do
         @mail1 = @entity1.send_message(@entity2,"Body","Subject")
-        @message1 = @mail1.mailboxer_message
+        @message1 = @mail1.message
       end
       
       it "should create proper message" do
@@ -240,8 +240,8 @@ describe "Mailboxer Messages And Mails" do
       before do
         @mail1 = @entity1.send_message(@entity2,"Body","Subject")
         @mail2 = @entity2.reply_to_sender(@mail1,"Reply body")
-        @message1 = @mail1.mailboxer_message
-        @message2 = @mail2.mailboxer_message
+        @message1 = @mail1.message
+        @message2 = @mail2.message
       end
       
       it "should create proper message" do
@@ -261,7 +261,7 @@ describe "Mailboxer Messages And Mails" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity1.id,@entity1.class])
+        mail = MailboxerMail.receiver(@entity1).message(@message2).first
         assert mail
         if mail
           mail.read.should==false
@@ -278,7 +278,7 @@ describe "Mailboxer Messages And Mails" do
       end
       
       it "should be associated to the same conversation" do
-        @message1.mailboxer_conversation.id.should==@message2.mailboxer_conversation.id      
+        @message1.conversation.id.should==@message2.conversation.id      
       end           
     end
     
@@ -286,8 +286,8 @@ describe "Mailboxer Messages And Mails" do
       before do
         @mail1 = @entity1.send_message(@entity2,"Body","Subject")
         @mail2 = @entity2.reply_to_all(@mail1,"Reply body")
-        @message1 = @mail1.mailboxer_message
-        @message2 = @mail2.mailboxer_message
+        @message1 = @mail1.message
+        @message2 = @mail2.message
       end
       
       it "should create proper message" do
@@ -307,7 +307,7 @@ describe "Mailboxer Messages And Mails" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity1.id,@entity1.class])
+        mail = MailboxerMail.receiver(@entity1).message(@message2).first
         assert mail
         if mail
           mail.read.should==false
@@ -324,7 +324,7 @@ describe "Mailboxer Messages And Mails" do
       end
       
       it "should be associated to the same conversation" do
-        @message1.mailboxer_conversation.id.should==@message2.mailboxer_conversation.id      
+        @message1.conversation.id.should==@message2.conversation.id      
       end           
     end
     describe "message replying to conversation (TODO)" do
@@ -364,7 +364,7 @@ describe "Mailboxer Messages And Mails" do
       
       before do
         @mail1 = @entity1.send_message(@recipients,"Body","Subject")
-        @message1 = @mail1.mailboxer_message
+        @message1 = @mail1.message
       end
       
       it "should create proper message" do
@@ -385,7 +385,7 @@ describe "Mailboxer Messages And Mails" do
         end      
         #Receiver Mails
         @recipients.each do |receiver|
-          mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message1.id,receiver.id,receiver.class])
+          mail = MailboxerMail.receiver(receiver).message(@message1).first
           assert mail
           if mail
             mail.read.should==false
@@ -409,8 +409,8 @@ describe "Mailboxer Messages And Mails" do
       before do
         @mail1 = @entity1.send_message(@recipients,"Body","Subject")
         @mail2 = @entity2.reply_to_sender(@mail1,"Reply body")
-        @message1 = @mail1.mailboxer_message
-        @message2 = @mail2.mailboxer_message
+        @message1 = @mail1.message
+        @message2 = @mail2.message
       end
       
       it "should create proper message" do
@@ -430,7 +430,7 @@ describe "Mailboxer Messages And Mails" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity1.id,@entity1.class])
+        mail = MailboxerMail.receiver(@entity1).message(@message2).first
         assert mail
         if mail
           mail.read.should==false
@@ -439,7 +439,7 @@ describe "Mailboxer Messages And Mails" do
         end
         
         #No Receiver, No Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity3.id,@entity3.class])
+        mail = MailboxerMail.receiver(@entity3).message(@message2).first
         assert mail.nil?
         
       end
@@ -453,7 +453,7 @@ describe "Mailboxer Messages And Mails" do
       end
       
       it "should be associated to the same conversation" do
-        @message1.mailboxer_conversation.id.should==@message2.mailboxer_conversation.id      
+        @message1.conversation.id.should==@message2.conversation.id      
       end           
     end
     
@@ -461,8 +461,8 @@ describe "Mailboxer Messages And Mails" do
       before do
         @mail1 = @entity1.send_message(@recipients,"Body","Subject")
         @mail2 = @entity2.reply_to_all(@mail1,"Reply body")
-        @message1 = @mail1.mailboxer_message
-        @message2 = @mail2.mailboxer_message
+        @message1 = @mail1.message
+        @message2 = @mail2.message
         @recipients2 = Array.new
         @recipients2 << @entity1
         @recipients2 << @entity3
@@ -506,7 +506,7 @@ describe "Mailboxer Messages And Mails" do
       end
       
       it "should be associated to the same conversation" do
-        @message1.mailboxer_conversation.id.should==@message2.mailboxer_conversation.id      
+        @message1.conversation.id.should==@message2.conversation.id      
       end           
     end
     describe "message replying to conversation (TODO)" do
@@ -546,7 +546,7 @@ describe "Mailboxer Messages And Mails" do
       
       before do
         @mail1 = @entity1.send_message(@recipients,"Body","Subject")
-        @message1 = @mail1.mailboxer_message
+        @message1 = @mail1.message
       end
       
       it "should create proper message" do
@@ -567,7 +567,7 @@ describe "Mailboxer Messages And Mails" do
         end      
         #Receiver Mails
         @recipients.each do |receiver|
-          mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message1.id,receiver.id,receiver.class])
+          mail = MailboxerMail.receiver(receiver).message(@message1).first
           assert mail
           if mail
             mail.read.should==false
@@ -591,8 +591,8 @@ describe "Mailboxer Messages And Mails" do
       before do
         @mail1 = @entity1.send_message(@recipients,"Body","Subject")
         @mail2 = @entity2.reply_to_sender(@mail1,"Reply body")
-        @message1 = @mail1.mailboxer_message
-        @message2 = @mail2.mailboxer_message
+        @message1 = @mail1.message
+        @message2 = @mail2.message
       end
       
       it "should create proper message" do
@@ -612,7 +612,7 @@ describe "Mailboxer Messages And Mails" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity1.id,@entity1.class])
+        mail = MailboxerMail.receiver(@entity1).message(@message2).first
         assert mail
         if mail
           mail.read.should==false
@@ -621,7 +621,7 @@ describe "Mailboxer Messages And Mails" do
         end
         
         #No Receiver, No Mail
-        mail = MailboxerMail.find(:first,:conditions=>["mailboxer_message_id=? AND receiver_id=? AND receiver_type=?",@message2.id,@entity3.id,@entity3.class])
+        mail = MailboxerMail.receiver(@entity3).message(@message2).first
         assert mail.nil?
         
       end
@@ -635,7 +635,7 @@ describe "Mailboxer Messages And Mails" do
       end
       
       it "should be associated to the same conversation" do
-        @message1.mailboxer_conversation.id.should==@message2.mailboxer_conversation.id      
+        @message1.conversation.id.should==@message2.conversation.id      
       end           
     end
     
@@ -643,8 +643,8 @@ describe "Mailboxer Messages And Mails" do
       before do
         @mail1 = @entity1.send_message(@recipients,"Body","Subject")
         @mail2 = @entity2.reply_to_all(@mail1,"Reply body")
-        @message1 = @mail1.mailboxer_message
-        @message2 = @mail2.mailboxer_message
+        @message1 = @mail1.message
+        @message2 = @mail2.message
         @recipients2 = Array.new
         @recipients2 << @entity1
         @recipients2 << @entity3
@@ -688,7 +688,7 @@ describe "Mailboxer Messages And Mails" do
       end
       
       it "should be associated to the same conversation" do
-        @message1.mailboxer_conversation.id.should==@message2.mailboxer_conversation.id      
+        @message1.conversation.id.should==@message2.conversation.id      
       end           
     end
     

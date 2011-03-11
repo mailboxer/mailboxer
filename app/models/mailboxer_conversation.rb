@@ -6,7 +6,7 @@ class MailboxerConversation < ActiveRecord::Base
   scope :participant, lambda {|participant|
     joins(:mailboxer_messages,:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.receiver_id' => participant.id,'mailboxer_mails.receiver_type' => participant.class.to_s)    
   }
-    
+  
   #originator of the conversation.
   def originator
     @orignator = self.original_message.sender if @originator.nil?
@@ -21,7 +21,7 @@ class MailboxerConversation < ActiveRecord::Base
   
   #sender of the last message.
   def last_sender
-     @last_sender = self.last_message.sender if @last_sender.nil?
+    @last_sender = self.last_message.sender if @last_sender.nil?
     return @last_sender
   end
   
@@ -29,6 +29,11 @@ class MailboxerConversation < ActiveRecord::Base
   def last_message
     @last_message = self.mailboxer_messages.find(:first, :order => 'created_at DESC') if @last_message.nil?
     return @last_message
+  end
+  
+  def mails(participant=nil)
+    return MailboxerMail.conversation(self).receiver(participant) if participant
+    return MailboxerMail.conversation(self)
   end
   
   #all users involved in the conversation.
@@ -40,10 +45,14 @@ class MailboxerConversation < ActiveRecord::Base
     return self.recipients
   end
   
+  def messages
+    self.mailboxer_messages
+  end
+  
   def count_messages
     return MailboxerMessage.conversation(self).count
   end
-    
+  
   protected
   #[empty method]
   #
