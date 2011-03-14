@@ -1,13 +1,9 @@
 module Mailboxer 
   module Models 
     module Messageable       
-      extend ActiveSupport::Concern
       
-      included do
-        has_many :mailboxer_messages
-        cattr_accessor :mailbox_types
-        has_many :mailboxer_mails, :order => 'created_at DESC', :dependent => :delete_all       
-        
+      def self.included(mod)
+        mod.extend(ClassMethods)
       end
       # declare the class level helper methods which
       # will load the relevant instance methods
@@ -25,7 +21,11 @@ module Mailboxer
         #
         #====example:
         #   acts_as_messageable :received => :in, :sent => :sent, :deleted => :garbage
-        def acts_as_messageable
+        def acts_as_messageable          
+          has_many :mailboxer_messages
+          cattr_accessor :mailbox_types
+          has_many :mailboxer_mails, :order => 'created_at DESC', :dependent => :delete_all    
+          
           include Mailboxer::Models::Messageable::InstanceMethods
         end
       end
@@ -168,11 +168,11 @@ module Mailboxer
         end
         #returns the mail given as the parameter, marked as read.
         def read_mail(mail)          
-            return mail.mark_as_read if mail.receiver == self
+          return mail.mark_as_read if mail.receiver == self
         end
         #returns the mail given as the parameter, marked as unread.
         def unread_mail(mail)
-            return mail.mark_as_unread if mail.receiver == self
+          return mail.mark_as_unread if mail.receiver == self
         end
         #returns an array of the user's Mail associated with the given conversation. 
         #All mail is marked as read but the returning array is built before this so you can see which messages were unread when viewing the conversation.
