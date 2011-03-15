@@ -45,55 +45,55 @@ describe MailboxerMailbox do
   end
   
   it "should return sentbox" do
-    assert @entity1.mailbox.inbox
-    @entity1.mailbox.sentbox.count.should==2
-    @entity1.mailbox.sentbox[0].should==@mail1
-    @entity1.mailbox.sentbox[1].should==@mail3
+    assert @entity1.mailbox.mail.inbox
+    @entity1.mailbox.mail.sentbox.count.should==2
+    @entity1.mailbox.mail.sentbox[0].should==@mail1
+    @entity1.mailbox.mail.sentbox[1].should==@mail3
     
-    assert @entity2.mailbox.inbox
-    @entity2.mailbox.sentbox.count.should==2
-    @entity2.mailbox.sentbox[0].should==@mail2
-    @entity2.mailbox.sentbox[1].should==@mail4
+    assert @entity2.mailbox.mail.inbox
+    @entity2.mailbox.mail.sentbox.count.should==2
+    @entity2.mailbox.mail.sentbox[0].should==@mail2
+    @entity2.mailbox.mail.sentbox[1].should==@mail4
   end
   
   it "should return inbox" do
-    assert @entity1.mailbox.inbox
-    @entity1.mailbox.inbox.count.should==2
-    @entity1.mailbox.inbox[0].should==MailboxerMail.receiver(@entity1).inbox.conversation(@conversation)[0]
-    @entity1.mailbox.inbox[1].should==MailboxerMail.receiver(@entity1).inbox.conversation(@conversation)[1]
+    assert @entity1.mailbox.mail.inbox
+    @entity1.mailbox.mail.inbox.count.should==2
+    @entity1.mailbox.mail.inbox[0].should==MailboxerMail.receiver(@entity1).inbox.conversation(@conversation)[0]
+    @entity1.mailbox.mail.inbox[1].should==MailboxerMail.receiver(@entity1).inbox.conversation(@conversation)[1]
     
-    assert @entity2.mailbox.inbox
-    @entity2.mailbox.inbox.count.should==2
-    @entity2.mailbox.inbox[0].should==MailboxerMail.receiver(@entity2).inbox.conversation(@conversation)[0]
-    @entity2.mailbox.inbox[1].should==MailboxerMail.receiver(@entity2).inbox.conversation(@conversation)[1]
+    assert @entity2.mailbox.mail.inbox
+    @entity2.mailbox.mail.inbox.count.should==2
+    @entity2.mailbox.mail.inbox[0].should==MailboxerMail.receiver(@entity2).inbox.conversation(@conversation)[0]
+    @entity2.mailbox.mail.inbox[1].should==MailboxerMail.receiver(@entity2).inbox.conversation(@conversation)[1]
   end
   
   it "should return trashed mails" do 
     @entity1.mailbox.mail.move_to_trash
     
-    assert @entity1.mailbox.trash
-    @entity1.mailbox.trash.count.should==4
-    @entity1.mailbox.trash[0].should==MailboxerMail.receiver(@entity1).conversation(@conversation)[0]
-    @entity1.mailbox.trash[1].should==MailboxerMail.receiver(@entity1).conversation(@conversation)[1]
-    @entity1.mailbox.trash[2].should==MailboxerMail.receiver(@entity1).conversation(@conversation)[2]
-    @entity1.mailbox.trash[3].should==MailboxerMail.receiver(@entity1).conversation(@conversation)[3]
+    assert @entity1.mailbox.mail.trash
+    @entity1.mailbox.mail.trash.count.should==4
+    @entity1.mailbox.mail.trash[0].should==MailboxerMail.receiver(@entity1).conversation(@conversation)[0]
+    @entity1.mailbox.mail.trash[1].should==MailboxerMail.receiver(@entity1).conversation(@conversation)[1]
+    @entity1.mailbox.mail.trash[2].should==MailboxerMail.receiver(@entity1).conversation(@conversation)[2]
+    @entity1.mailbox.mail.trash[3].should==MailboxerMail.receiver(@entity1).conversation(@conversation)[3]
     
-    assert @entity2.mailbox.trash
-    @entity2.mailbox.trash.count.should==0    
+    assert @entity2.mailbox.mail.trash
+    @entity2.mailbox.mail.trash.count.should==0    
   end
   
   it "should delete trashed mails" do 
     @entity1.mailbox.mail.move_to_trash
     @entity1.mailbox.empty_trash
     
-    assert @entity1.mailbox.trash
-    @entity1.mailbox.trash.count.should==0    
+    assert @entity1.mailbox.mail.trash
+    @entity1.mailbox.mail.trash.count.should==0    
     
     assert @entity2.mailbox.mail
     @entity2.mailbox.mail.count.should==4
     
-    assert @entity2.mailbox.trash
-    @entity2.mailbox.trash.count.should==0    
+    assert @entity2.mailbox.mail.trash
+    @entity2.mailbox.mail.trash.count.should==0    
   end
   
 end

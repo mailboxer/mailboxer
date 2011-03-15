@@ -15,25 +15,25 @@ class MailboxerMailbox
   end
 
   def conversations(options = {})
-    return MailboxerConversation.where(options).participant(@messageable)
+    return MailboxerConversation.where(options).participant(@messageable).uniq
+  end
+  
+  def inbox(options={})
+    return MailboxerConversation.where(options).inbox(@messageable).uniq    
+  end
+  
+  def sentbox(options={})
+    return MailboxerConversation.where(options).sentbox(@messageable).uniq
+  end
+  
+  def trash(options={})
+    return MailboxerConversation.where(options).participant(@messageable).trash.uniq    
   end
 
   def mail(options = {})
     return MailboxerMail.where(options).receiver(@messageable)
   end
   
-  def inbox(options = {})
-    return self.mail(options).inbox
-  end
-  
-  def sentbox(options = {})
-    return self.mail(options).sentbox
-  end
-  
-  def trash(options = {})
-    return self.mail(options).trash
-  end
-
   def [](mailbox_type)
     self.type = mailbox_type
     return self
@@ -54,7 +54,7 @@ class MailboxerMailbox
   end
 
   def empty_trash(options = {})
-    return self.trash(options).delete_all
+    return self.mail.trash(options).delete_all
   end
 
   def has_conversation?(conversation)
@@ -62,7 +62,10 @@ class MailboxerMailbox
   end
 
   def is_trashed?(conversation)
-    return self.trash.conversation(conversation).count!=0
+    return self.mail.trash.conversation(conversation).count!=0
+  end
+  def is_completely_trashed?(conversation)
+    return self.mail.trash.conversation(conversation).count==self.mail.conversation(conversation).count
   end
 
 end

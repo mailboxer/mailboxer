@@ -2,10 +2,44 @@ class MailboxerConversation < ActiveRecord::Base
   attr_reader :originator, :original_message, :last_sender, :last_message, :users
   has_many :mailboxer_messages
   has_many :mailboxer_mails, :through => :mailboxer_messages
-  before_create :clean
+#  before_create :clean
   scope :participant, lambda {|participant|
-    joins(:mailboxer_messages,:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.receiver_id' => participant.id,'mailboxer_mails.receiver_type' => participant.class.to_s)    
+    joins(:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.receiver_id' => participant.id,'mailboxer_mails.receiver_type' => participant.class.to_s)    
   }
+  scope :inbox, lambda {|participant|
+    joins(:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.receiver_id' => participant.id,'mailboxer_mails.receiver_type' => participant.class.to_s, 'mailboxer_mails.mailbox_type' => 'inbox') 
+  }
+  scope :sentbox, lambda {|participant|
+    joins(:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.receiver_id' => participant.id,'mailboxer_mails.receiver_type' => participant.class.to_s, 'mailboxer_mails.mailbox_type' => 'sentbox')    
+  }
+  scope :trash, joins(:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.trashed' => true)    
+  scope :unread, joins(:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.read' => false)    
+  
+  class << self
+    def total
+      count('DISTINCT mailboxer_conversations.id')
+    end
+  end
+ 
+  def mark_as_read(participant)
+    return if participant.nil?
+    return MailboxerMail.conversation(self).receiver(participant).mark_as_read
+  end
+
+  def mark_as_unread(participant)
+    return if participant.nil?
+    return MailboxerMail.conversation(self).receiver(participant).mark_as_unread
+  end
+  
+  def move_to_trash(participant)
+    return if participant.nil?
+    return MailboxerMail.conversation(self).receiver(participant).move_to_trash
+  end
+  
+  def untrash(participant)
+    return if participant.nil?
+    return MailboxerMail.conversation(self).receiver(participant).untrash
+  end
   
   #originator of the conversation.
   def originator
@@ -53,12 +87,12 @@ class MailboxerConversation < ActiveRecord::Base
     return MailboxerMessage.conversation(self).count
   end
   
-  protected
-  #[empty method]
-  #
-  #this gets called before_create. Implement this if you wish to clean out illegal content such as scripts or anything that will break layout. This is left empty because what is considered illegal content varies.
-  def clean
-    return if subject.nil?
-    #strip all illegal content here. (scripts, shit that will break layout, etc.)
-  end
+#  protected
+#  #[empty method]
+#  #
+#  #this gets called before_create. Implement this if you wish to clean out illegal content such as scripts or anything that will break layout. This is left empty because what is considered illegal content varies.
+#  def clean
+#    return if subject.nil?
+#    #strip all illegal content here. (scripts, shit that will break layout, etc.)
+#  end
 end
