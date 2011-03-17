@@ -91,6 +91,10 @@ class MailboxerConversation < ActiveRecord::Base
     return MailboxerMessage.conversation(self).count
   end
   
+  def is_participant?(participant)
+    return false if participant.nil?
+    return MailboxerMail.conversation(self).receiver(participant).count != 0
+  end
   #  protected
   #  #[empty method]
   #  #

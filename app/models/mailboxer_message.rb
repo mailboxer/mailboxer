@@ -36,7 +36,7 @@ class MailboxerMessage < ActiveRecord::Base
     self.mailboxer_mails.each do |mail|      
       recipients_array << mail.receiver
     end
-    return recipients_array
+    return recipients_array.uniq
   end
   
   def conversation
