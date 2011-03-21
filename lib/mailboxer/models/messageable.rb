@@ -34,6 +34,7 @@ module Mailboxer
         
         def reply(conversation, recipients, reply_body, subject = nil)
           return nil if(reply_body.blank?)
+          conversation.update_attribute(:updated_at, Time.now)
           subject = subject || "RE: #{conversation.subject}"
           response = MailboxerMessage.create({:sender => self, :mailboxer_conversation => conversation, :body => reply_body, :subject => subject})
           response.recipients = recipients.is_a?(Array) ? recipients : [recipients]

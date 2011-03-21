@@ -4,19 +4,19 @@ class MailboxerConversation < ActiveRecord::Base
   has_many :mailboxer_mails, :through => :mailboxer_messages
   #  before_create :clean
   scope :participant, lambda {|participant|
-    joins(:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.receiver_id' => participant.id,'mailboxer_mails.receiver_type' => participant.class.to_s)    
+    joins(:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.receiver_id' => participant.id,'mailboxer_mails.receiver_type' => participant.class.to_s).order("mailboxer_conversations.updated_at DESC")
   }
   scope :inbox, lambda {|participant|
-    joins(:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.receiver_id' => participant.id,'mailboxer_mails.receiver_type' => participant.class.to_s, 'mailboxer_mails.mailbox_type' => 'inbox','mailboxer_mails.trashed' => false) 
+    joins(:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.receiver_id' => participant.id,'mailboxer_mails.receiver_type' => participant.class.to_s, 'mailboxer_mails.mailbox_type' => 'inbox','mailboxer_mails.trashed' => false).order("mailboxer_conversations.updated_at DESC")
   }
   scope :sentbox, lambda {|participant|
-    joins(:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.receiver_id' => participant.id,'mailboxer_mails.receiver_type' => participant.class.to_s, 'mailboxer_mails.mailbox_type' => 'sentbox','mailboxer_mails.trashed' => false)    
+    joins(:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.receiver_id' => participant.id,'mailboxer_mails.receiver_type' => participant.class.to_s, 'mailboxer_mails.mailbox_type' => 'sentbox','mailboxer_mails.trashed' => false).order("mailboxer_conversations.updated_at DESC")    
   }
   scope :trash, lambda {|participant|
-    joins(:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.receiver_id' => participant.id,'mailboxer_mails.receiver_type' => participant.class.to_s,'mailboxer_mails.trashed' => true)
+    joins(:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.receiver_id' => participant.id,'mailboxer_mails.receiver_type' => participant.class.to_s,'mailboxer_mails.trashed' => true).order("mailboxer_conversations.updated_at DESC")
   }
   scope :unread,  lambda {|participant|
-    joins(:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.receiver_id' => participant.id,'mailboxer_mails.receiver_type' => participant.class.to_s,'mailboxer_mails.read' => false)
+    joins(:mailboxer_mails).select('DISTINCT mailboxer_conversations.*').where('mailboxer_mails.receiver_id' => participant.id,'mailboxer_mails.receiver_type' => participant.class.to_s,'mailboxer_mails.read' => false).order("mailboxer_conversations.updated_at DESC")
   }
   
   class << self
