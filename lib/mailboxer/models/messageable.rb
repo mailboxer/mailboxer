@@ -87,14 +87,11 @@ module Mailboxer
 				end
 
 				def read_conversation(conversation, options = {})
-					receipts = Receipt.conversation(conversation).receiver(self)
-					receipts_clone = receipts.clone
-
+					receipts = conversation.receipts.receiver(self)		
 					receipts.each do |receipt|
 						receipt.mark_as_read
-					end
-
-					return receipts_clone
+					end					
+					return receipts
 				end
 			end
 		end

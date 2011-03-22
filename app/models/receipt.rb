@@ -9,7 +9,7 @@ class Receipt < ActiveRecord::Base
     where(:message_id => message.id)
   }
   scope :conversation, lambda { |conversation|    
-    joins(:message).where('messages.conversation_id' => conversation.id)
+    includes(:message).where('messages.conversation_id' => conversation.id)
   }
   scope :sentbox, where(:mailbox_type => "sentbox")
   scope :inbox, where(:mailbox_type => "inbox")

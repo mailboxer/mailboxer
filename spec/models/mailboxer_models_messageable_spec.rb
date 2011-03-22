@@ -73,8 +73,7 @@ describe "Mailboxer::Models::Messageable through User" do
     
     @receipts.each do |mail|
       mail.read.should==true
-    end
-    
+    end    
   end
   
   it "should not be able to read not owned mails of a conversation" do
