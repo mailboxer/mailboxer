@@ -85,14 +85,6 @@ module Mailboxer
 					end
 					return nil
 				end
-
-				def read_conversation(conversation, options = {})
-					receipts = conversation.receipts.receiver(self)		
-					receipts.each do |receipt|
-						receipt.mark_as_read
-					end					
-					return receipts
-				end
 			end
 		end
 	end

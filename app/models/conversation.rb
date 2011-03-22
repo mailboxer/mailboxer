@@ -27,22 +27,22 @@ class Conversation < ActiveRecord::Base
   
   def mark_as_read(participant)
     return if participant.nil?
-    return Receipt.conversation(self).receiver(participant).mark_as_read
+    return self.receipts(participant).mark_as_read
   end
   
   def mark_as_unread(participant)
     return if participant.nil?
-    return Receipt.conversation(self).receiver(participant).mark_as_unread
+    return self.receipts(participant).mark_as_unread
   end
   
   def move_to_trash(participant)
     return if participant.nil?
-    return Receipt.conversation(self).receiver(participant).move_to_trash
+    return self.receipts(participant).move_to_trash
   end
   
   def untrash(participant)
     return if participant.nil?
-    return Receipt.conversation(self).receiver(participant).untrash
+    return self.receipts(participant).untrash
   end
   
   #originator of the conversation.
@@ -89,7 +89,7 @@ class Conversation < ActiveRecord::Base
   
   def is_participant?(participant)
     return false if participant.nil?
-    return Receipt.cReceiptrsation(self).receiver(participant).count != 0
+    return self.receipts(participant).count != 0
   end
   #  protected
   #  #[empty method]
