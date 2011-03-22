@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe MailboxerMail do
+describe Receipt do
   
   before do
     @entity1 = Factory(:user)

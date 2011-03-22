@@ -1,9 +1,6 @@
-class MailboxerMailbox
-  #this is used to filter mail by mailbox type, use the [] method rather than setting this directly.
+class Mailbox
   attr_accessor :type
-  #the user/owner of this mailbox, set when initialized.
   attr_reader :messageable
-  #creates a new Mailbox instance with the given user and optional type.
   
   def initialize(recipient, box = :all)
     @messageable = recipient
@@ -15,16 +12,16 @@ class MailboxerMailbox
   end
   
   def conversations(options = {})
-    conv = MailboxerConversation.participant(@messageable)
+    conv = Conversation.participant(@messageable)
     
     if options[:mailbox_type].present?
       case options[:mailbox_type]
         when 'inbox'
-        conv = MailboxerConversation.inbox(@messageable)
+        conv = Conversation.inbox(@messageable)
         when 'sentbox'
-        conv = MailboxerConversation.sentbox(@messageable)
+        conv = Conversation.sentbox(@messageable)
         when 'trash'
-        conv = MailboxerConversation.trash(@messageable)
+        conv = Conversation.trash(@messageable)
       end      
     end
     
@@ -50,8 +47,8 @@ class MailboxerMailbox
     return self.conversations(options)     
   end
   
-  def mail(options = {})
-    return MailboxerMail.where(options).receiver(@messageable)
+  def receipts(options = {})
+    return Receipt.where(options).receiver(@messageable)
   end
   
   def [](mailbox_type)
@@ -64,28 +61,28 @@ class MailboxerMailbox
   end
   
   def add(msg)
-    mail_msg = MailboxerMail.new
-    mail_msg.mailboxer_message = msg
-    mail_msg.read = (msg.sender.id == @messageable.id && msg.sender.class == @messageable.class)
-    mail_msg.receiver = @messageable
-    mail_msg.mailbox_type = @type.to_s unless @type == :all
-    @messageable.mailboxer_mails << mail_msg
-    return mail_msg
+    msg_receipt = Receipt.new
+    msg_receipt.message = msg
+    msg_receipt.read = (msg.sender.id == @messageable.id && msg.sender.class == @messageable.class)
+    msg_receipt.receiver = @messageable
+    msg_receipt.mailbox_type = @type.to_s unless @type == :all
+    @messageable.receipts << msg_receipt
+    return msg_receipt
   end
   
   def empty_trash(options = {})
-    return self.mail.trash(options).delete_all
+    return false
   end
   
   def has_conversation?(conversation)
-    return self.mail.conversation(converstaion).count!=0
+    return self.receipts.conversation(converstaion).count!=0
   end
   
   def is_trashed?(conversation)
-    return self.mail.trash.conversation(conversation).count!=0
+    return self.receipts.trash.conversation(conversation).count!=0
   end
   def is_completely_trashed?(conversation)
-    return self.mail.trash.conversation(conversation).count==self.mail.conversation(conversation).count
+    return self.receipts.trash.conversation(conversation).count==self.receipts.conversation(conversation).count
   end
   
 end

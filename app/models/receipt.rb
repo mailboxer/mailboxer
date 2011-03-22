@@ -1,15 +1,15 @@
-class MailboxerMail < ActiveRecord::Base
-  belongs_to :mailboxer_message
-  has_one :mailboxer_conversation, :through => :mailboxer_message
+class Receipt < ActiveRecord::Base
+  belongs_to :message
+  has_one :conversation, :through => :message
   belongs_to :receiver, :polymorphic => :true
   scope :receiver, lambda { |receiver|
     where(:receiver_id => receiver.id,:receiver_type => receiver.class.to_s)
   }
   scope :message, lambda { |message|
-    where(:mailboxer_message_id => message.id)
+    where(:message_id => message.id)
   }
   scope :conversation, lambda { |conversation|    
-    joins(:mailboxer_message).where('mailboxer_messages.mailboxer_conversation_id' => conversation.id)
+    joins(:message).where('messages.conversation_id' => conversation.id)
   }
   scope :sentbox, where(:mailbox_type => "sentbox")
   scope :inbox, where(:mailbox_type => "inbox")
@@ -66,13 +66,5 @@ class MailboxerMail < ActiveRecord::Base
   def move_to_sentbox
     update_attributes(:mailbox_type => :sentbox, :trashed => false)
   end
-  
-  def message
-    self.mailboxer_message
-  end
-  
-  def conversation
-    self.mailboxer_conversation
-  end
-  
+
 end

@@ -1,4 +1,4 @@
-class MailboxerMessage < ActiveRecord::Base
+class Message < ActiveRecord::Base
   #any additional info that needs to be sent in a message (ex. I use these to determine request types)
   serialize :headers
   
@@ -9,10 +9,10 @@ class MailboxerMessage < ActiveRecord::Base
   class_inheritable_accessor :on_deliver_clean
   protected :on_deliver_clean
   belongs_to :sender, :polymorphic => :true
-  belongs_to :mailboxer_conversation
-  has_many :mailboxer_mails
+  belongs_to :conversation
+  has_many :receipts
   scope :conversation, lambda { |conversation|    
-    where(:mailboxer_conversation_id => conversation.id)
+    where(:conversation_id => conversation.id)
   }
     
   class << self
@@ -33,18 +33,10 @@ class MailboxerMessage < ActiveRecord::Base
   
   def get_recipients
     recipients_array = Array.new 
-    self.mailboxer_mails.each do |mail|      
-      recipients_array << mail.receiver
+    self.receipts.each do |receipt|      
+      recipients_array << receipt.receiver
     end
     return recipients_array.uniq
-  end
-  
-  def conversation
-    self.mailboxer_conversation
-  end
-  
-  def mails
-    self.mailboxer_mails
   end
   
 end
