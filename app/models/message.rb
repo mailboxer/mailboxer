@@ -6,8 +6,6 @@ class Message < ActiveRecord::Base
   
   class_inheritable_accessor :on_deliver_callback
   protected :on_deliver_callback  
-  class_inheritable_accessor :on_deliver_clean
-  protected :on_deliver_clean
   belongs_to :sender, :polymorphic => :true
   belongs_to :conversation
   has_many :receipts
@@ -16,14 +14,13 @@ class Message < ActiveRecord::Base
   }
     
   class << self
-    def on_deliver(clean_method, callback_method)
-      self.on_deliver_clean = clean_method
+    def on_deliver(callback_method)
       self.on_deliver_callback = callback_method
     end
   end  
   
   def deliver(mailbox_type, should_clean = true)
-    self.on_deliver_clean.call(self) unless self.on_deliver_clean.nil? or !should_clean
+    self.clean if should_clean
     self.save
     self.recipients.each do |r|
       r.mailbox[mailbox_type] << self
@@ -37,6 +34,14 @@ class Message < ActiveRecord::Base
       recipients_array << receipt.receiver
     end
     return recipients_array.uniq
+  end
+  
+  include ActionView::Helpers::SanitizeHelper
+  def clean 
+  	unless self.subject.nil?
+  		self.subject = sanitize self.subject
+  	end
+  	self.body = sanitize self.body
   end
   
 end
