@@ -93,6 +93,21 @@ class Conversation < ActiveRecord::Base
 		return false if participant.nil?
 		return self.receipts(participant).count != 0
 	end
+	
+	def is_trashed?(participant)
+		return false if participant.nil?
+    	return self.receipts(participant).trash.count!=0
+	end
+	
+	def is_completely_trashed?(participant)
+		return false if participant.nil?
+	    return self.receipts(participant).trash.count==self.receipts(participant).count
+	end
+	
+	def is_unread?(participant)
+		return false if participant.nil?
+    	return self.receipts(participant).unread.count!=0
+	end
 	#  protected
 	#  #[empty method]
 	#  #

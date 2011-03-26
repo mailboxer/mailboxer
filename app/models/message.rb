@@ -34,7 +34,17 @@ class Message < ActiveRecord::Base
       recipients_array << receipt.receiver
     end
     return recipients_array.uniq
-  end
+  end  
+
+	def receipts(participant=nil)
+		return Receipt.message(self).receiver(participant) if participant
+		return Receipt.message(self)
+	end
+	
+	def is_unread?(participant)
+		return false if participant.nil?
+    	return self.receipts(participant).unread.count!=0
+	end
   
   include ActionView::Helpers::SanitizeHelper
   def clean 

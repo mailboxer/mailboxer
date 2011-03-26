@@ -75,14 +75,14 @@ class Mailbox
   end
   
   def has_conversation?(conversation)
-    return self.receipts.conversation(converstaion).count!=0
+    return conversation.is_participant?(@messageable)
   end
   
   def is_trashed?(conversation)
-    return self.receipts.trash.conversation(conversation).count!=0
+    return conversation.is_trashed?(@messageable)
   end
   def is_completely_trashed?(conversation)
-    return self.receipts.trash.conversation(conversation).count==self.receipts.conversation(conversation).count
+    return conversation.is_completely_trashed?(@messageable)
   end
   
 end
