@@ -3,6 +3,8 @@ class Message < ActiveRecord::Base
   serialize :headers
   
   attr_accessor :recipients
+  validates_presence_of :subject, :body, :sender  
+  validates_associated :conversation
   
   class_inheritable_accessor :on_deliver_callback
   protected :on_deliver_callback  
@@ -19,14 +21,36 @@ class Message < ActiveRecord::Base
     end
   end  
   
-  def deliver(mailbox_type, should_clean = true)
+  def deliver(should_clean = true)
     self.clean if should_clean
-    self.save
+    temp_receipts = Array.new
+    #Receiver receipts
     self.recipients.each do |r|
-      r.mailbox[mailbox_type] << self
+      msg_receipt = Receipt.new
+	  msg_receipt.message = self
+	  msg_receipt.read = false
+	  msg_receipt.receiver = r
+	  msg_receipt.mailbox_type = "inbox"
+   	  temp_receipts << msg_receipt
     end
+    #Sender receipt
+      sender_receipt = Receipt.new
+	  sender_receipt.message = self
+	  sender_receipt.read = true
+	  sender_receipt.receiver = self.sender
+	  sender_receipt.mailbox_type = "sentbox"
+   	  temp_receipts << sender_receipt
+    
+    if temp_receipts.each(&:valid?)    
+    	temp_receipts.each(&:save!) #Save receipts
+    	self.save!					#Save message 
+    	self.conversation.save!  	#Save conversation  
+   		self.recipients=nil
+    	return sender_receipt	
+    end
+    
     self.recipients=nil
-    self.on_deliver_callback.call(self, mailbox_type) unless self.on_deliver_callback.nil?
+    self.on_deliver_callback.call(self) unless self.on_deliver_callback.nil?
   end
    
   def recipients

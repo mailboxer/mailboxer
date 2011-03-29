@@ -1,11 +1,11 @@
 
 Gem::Specification.new do |s|
   s.name = "mailboxer"
-  s.version = "0.0.12"
+  s.version = "0.0.14"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Eduardo Casanova Cuesta"]
-  s.date = %q{2011-03-26}
+  s.date = %q{2011-03-30}
   s.description = %q{A Rails engine that allows any model to act as messageable, permitting it interchange messages with any other messageable model. }
   s.email = %q{ecasanovac@gmail.com}
   s.extra_rdoc_files = [

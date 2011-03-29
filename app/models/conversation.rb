@@ -1,13 +1,11 @@
 class Conversation < ActiveRecord::Base
 	attr_reader :originator, :original_message, :last_sender, :last_message
-	attr_accessor :recipients, :body
 	has_many :messages
 	has_many :receipts, :through => :messages
 
-	validates_presence_of :recipients, :subject, :body
+	validates_presence_of :subject
 
-	before_create :clean
-	after_create :clear_recipients
+	before_validation :clean
 
 	#  before_create :clean
 	scope :participant, lambda {|participant|
@@ -52,12 +50,12 @@ class Conversation < ActiveRecord::Base
 	end
 
 	def recipients
-		if @recipients.blank? and self.last_message
+		if self.last_message
 			recps = self.last_message.recipients
 			recps = recps.is_a?(Array) ? recps : [recps]
-			return recps
+		return recps
 		end
-		return @recipients
+		return []
 	end
 
 	#originator of the conversation.
@@ -127,10 +125,6 @@ class Conversation < ActiveRecord::Base
 
 	def clean
 		self.subject = sanitize self.subject
-	end
-
-	def clear_recipients
-		self.recipients=nil
 	end
 
 end

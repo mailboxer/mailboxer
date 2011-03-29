@@ -2,6 +2,10 @@ class Receipt < ActiveRecord::Base
   belongs_to :message
   has_one :conversation, :through => :message
   belongs_to :receiver, :polymorphic => :true
+  
+  validates_presence_of :receiver
+  validates_associated :message
+  
   scope :receiver, lambda { |receiver|
     where(:receiver_id => receiver.id,:receiver_type => receiver.class.to_s)
   }

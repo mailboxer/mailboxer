@@ -22,24 +22,22 @@ module Mailboxer
 				end
 
 				def send_message(recipients, msg_body, subject)
-					convo = Conversation.create!({:recipients => recipients, :body => msg_body, :subject => subject})
-					message = Message.create({:sender => self, :conversation => convo,  :body => msg_body, :subject => subject})
+					convo = Conversation.new({:subject => subject})
+					message = Message.new({:sender => self, :conversation => convo,  :body => msg_body, :subject => subject})
 					message.recipients = recipients.is_a?(Array) ? recipients : [recipients]
 					message.recipients = message.recipients.uniq
-					message.deliver(:inbox)
-					return mailbox[:sentbox] << message
+					return message.deliver
 				end
 
 				def reply(conversation, recipients, reply_body, subject = nil)
 					return nil if(reply_body.blank?)
 					conversation.update_attribute(:updated_at, Time.now)
 					subject = subject || "RE: #{conversation.subject}"
-					response = Message.create({:sender => self, :conversation => conversation, :body => reply_body, :subject => subject})
+					response = Message.new({:sender => self, :conversation => conversation, :body => reply_body, :subject => subject})
 					response.recipients = recipients.is_a?(Array) ? recipients : [recipients]					
 					response.recipients = response.recipients.uniq
 					response.recipients.delete(self)
-					response.deliver(:inbox)
-					return mailbox[:sentbox] << response
+					return response.deliver
 				end
 
 				def reply_to_sender(receipt, reply_body, subject = nil)
