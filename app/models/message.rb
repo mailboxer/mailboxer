@@ -25,16 +25,20 @@ class Message < ActiveRecord::Base
     self.recipients.each do |r|
       r.mailbox[mailbox_type] << self
     end
+    self.recipients=nil
     self.on_deliver_callback.call(self, mailbox_type) unless self.on_deliver_callback.nil?
   end
-  
-  def get_recipients
-    recipients_array = Array.new 
-    self.receipts.each do |receipt|      
-      recipients_array << receipt.receiver
-    end
-    return recipients_array.uniq
-  end  
+   
+  def recipients
+		if @recipients.blank?
+			recipients_array = Array.new
+			self.receipts.each do |receipt|
+				recipients_array << receipt.receiver
+			end
+		return recipients_array
+		end
+		return @recipients
+	end
 
 	def receipts(participant=nil)
 		return Receipt.message(self).receiver(participant) if participant

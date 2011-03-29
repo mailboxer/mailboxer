@@ -42,7 +42,7 @@ describe "Messages And Receipts" do
       end
       
       it "should have the correct recipients" do
-        recipients = @message1.get_recipients
+        recipients = @message1.recipients
         recipients.count.should==2
         recipients.count(@entity1).should==1
         recipients.count(@entity2).should==1
@@ -85,7 +85,7 @@ describe "Messages And Receipts" do
       end
       
       it "should have the correct recipients" do
-        recipients = @message2.get_recipients
+        recipients = @message2.recipients
         recipients.count.should==2
         recipients.count(@entity1).should==1
         recipients.count(@entity2).should==1
@@ -131,7 +131,7 @@ describe "Messages And Receipts" do
       end
       
       it "should have the correct recipients" do
-        recipients = @message2.get_recipients
+        recipients = @message2.recipients
         recipients.count.should==2
         recipients.count(@entity1).should==1
         recipients.count(@entity2).should==1
@@ -176,7 +176,7 @@ describe "Messages And Receipts" do
       end
       
       it "should have the correct recipients" do
-        recipients = @message2.get_recipients
+        recipients = @message2.recipients
         recipients.count.should==2
         recipients.count(@entity1).should==1
         recipients.count(@entity2).should==1
@@ -228,7 +228,7 @@ describe "Messages And Receipts" do
       end
       
       it "should have the correct recipients" do
-        recipients = @message1.get_recipients
+        recipients = @message1.recipients
         recipients.count.should==2
         recipients.count(@entity1).should==1
         recipients.count(@entity2).should==1
@@ -271,7 +271,7 @@ describe "Messages And Receipts" do
       end
       
       it "should have the correct recipients" do
-        recipients = @message2.get_recipients
+        recipients = @message2.recipients
         recipients.count.should==2
         recipients.count(@entity1).should==1
         recipients.count(@entity2).should==1
@@ -317,7 +317,7 @@ describe "Messages And Receipts" do
       end
       
       it "should have the correct recipients" do
-        recipients = @message2.get_recipients
+        recipients = @message2.recipients
         recipients.count.should==2
         recipients.count(@entity1).should==1
         recipients.count(@entity2).should==1
@@ -396,7 +396,7 @@ describe "Messages And Receipts" do
       end
       
       it "should have the correct recipients" do
-        recipients = @message1.get_recipients
+        recipients = @message1.recipients
         recipients.count.should==3
         recipients.count(@entity1).should==1
         recipients.count(@entity2).should==1
@@ -445,7 +445,7 @@ describe "Messages And Receipts" do
       end
       
       it "should have the correct recipients" do
-        recipients = @message2.get_recipients
+        recipients = @message2.recipients
         recipients.count.should==2
         recipients.count(@entity1).should==1
         recipients.count(@entity2).should==1
@@ -498,7 +498,7 @@ describe "Messages And Receipts" do
       end
       
       it "should have the correct recipients" do
-        recipients = @message2.get_recipients
+        recipients = @message2.recipients
         recipients.count.should==3
         recipients.count(@entity1).should==1
         recipients.count(@entity2).should==1
@@ -578,7 +578,7 @@ describe "Messages And Receipts" do
       end
       
       it "should have the correct recipients" do
-        recipients = @message1.get_recipients
+        recipients = @message1.recipients
         recipients.count.should==3
         recipients.count(@entity1).should==1
         recipients.count(@entity2).should==1
@@ -627,7 +627,7 @@ describe "Messages And Receipts" do
       end
       
       it "should have the correct recipients" do
-        recipients = @message2.get_recipients
+        recipients = @message2.recipients
         recipients.count.should==2
         recipients.count(@entity1).should==1
         recipients.count(@entity2).should==1
@@ -680,7 +680,7 @@ describe "Messages And Receipts" do
       end
       
       it "should have the correct recipients" do
-        recipients = @message2.get_recipients
+        recipients = @message2.recipients
         recipients.count.should==3
         recipients.count(@entity1).should==1
         recipients.count(@entity2).should==1

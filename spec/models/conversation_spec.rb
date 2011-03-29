@@ -31,9 +31,10 @@ describe Conversation do
   end
   
   it "should have all conversation users" do   
-    @conversation.get_recipients.count.should==2
-    @conversation.get_recipients.count(@entity1).should==1
-    @conversation.get_recipients.count(@entity2).should==1
+    @conversation.recipients.count.should==2
+    @conversation.recipients.count.should==2
+    @conversation.recipients.count(@entity1).should==1
+    @conversation.recipients.count(@entity2).should==1
   end
   
 end

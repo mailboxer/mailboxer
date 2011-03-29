@@ -1,9 +1,13 @@
 class Conversation < ActiveRecord::Base
-	attr_reader :originator, :original_message, :last_sender, :last_message, :users
+	attr_reader :originator, :original_message, :last_sender, :last_message
+	attr_accessor :recipients, :body
 	has_many :messages
 	has_many :receipts, :through => :messages
 
+	validates_presence_of :recipients, :subject, :body
+
 	before_create :clean
+	after_create :clear_recipients
 
 	#  before_create :clean
 	scope :participant, lambda {|participant|
@@ -47,6 +51,15 @@ class Conversation < ActiveRecord::Base
 		return self.receipts(participant).untrash
 	end
 
+	def recipients
+		if @recipients.blank? and self.last_message
+			recps = self.last_message.recipients
+			recps = recps.is_a?(Array) ? recps : [recps]
+			return recps
+		end
+		return @recipients
+	end
+
 	#originator of the conversation.
 	def originator
 		@orignator = self.original_message.sender if @originator.nil?
@@ -76,15 +89,6 @@ class Conversation < ActiveRecord::Base
 		return Receipt.conversation(self)
 	end
 
-	#all users involved in the conversation.
-	def recipients
-		return last_message.get_recipients
-	end
-
-	def get_recipients
-		return self.recipients
-	end
-
 	def count_messages
 		return Message.conversation(self).count
 	end
@@ -93,20 +97,20 @@ class Conversation < ActiveRecord::Base
 		return false if participant.nil?
 		return self.receipts(participant).count != 0
 	end
-	
+
 	def is_trashed?(participant)
 		return false if participant.nil?
-    	return self.receipts(participant).trash.count!=0
+		return self.receipts(participant).trash.count!=0
 	end
-	
+
 	def is_completely_trashed?(participant)
 		return false if participant.nil?
-	    return self.receipts(participant).trash.count==self.receipts(participant).count
+		return self.receipts(participant).trash.count==self.receipts(participant).count
 	end
-	
+
 	def is_unread?(participant)
 		return false if participant.nil?
-    	return self.receipts(participant).unread.count!=0
+		return self.receipts(participant).unread.count!=0
 	end
 	#  protected
 	#  #[empty method]
@@ -117,9 +121,16 @@ class Conversation < ActiveRecord::Base
 	#    #strip all illegal content here. (scripts, shit that will break layout, etc.)
 	#  end
 
+	protected
+
 	include ActionView::Helpers::SanitizeHelper
 
 	def clean
 		self.subject = sanitize self.subject
 	end
+
+	def clear_recipients
+		self.recipients=nil
+	end
+
 end

@@ -21,10 +21,11 @@ module Mailboxer
 					return @mailbox
 				end
 
-				def send_message(recipients, msg_body, subject = '')
-					convo = Conversation.create({:subject => subject})
+				def send_message(recipients, msg_body, subject)
+					convo = Conversation.create!({:recipients => recipients, :body => msg_body, :subject => subject})
 					message = Message.create({:sender => self, :conversation => convo,  :body => msg_body, :subject => subject})
 					message.recipients = recipients.is_a?(Array) ? recipients : [recipients]
+					message.recipients = message.recipients.uniq
 					message.deliver(:inbox)
 					return mailbox[:sentbox] << message
 				end
@@ -34,7 +35,8 @@ module Mailboxer
 					conversation.update_attribute(:updated_at, Time.now)
 					subject = subject || "RE: #{conversation.subject}"
 					response = Message.create({:sender => self, :conversation => conversation, :body => reply_body, :subject => subject})
-					response.recipients = recipients.is_a?(Array) ? recipients : [recipients]
+					response.recipients = recipients.is_a?(Array) ? recipients : [recipients]					
+					response.recipients = response.recipients.uniq
 					response.recipients.delete(self)
 					response.deliver(:inbox)
 					return mailbox[:sentbox] << response
@@ -45,9 +47,7 @@ module Mailboxer
 				end
 
 				def reply_to_all(receipt, reply_body, subject = nil)
-					msg = receipt.message
-					recipients = msg.get_recipients
-					return reply(receipt.conversation, recipients, reply_body, subject)
+					return reply(receipt.conversation, receipt.message.recipients, reply_body, subject)
 				end
 
 				def reply_to_conversation(conversation, reply_body, subject = nil)
@@ -56,7 +56,7 @@ module Mailboxer
 						mailbox.receipts.conversation(conversation).untrash
 					end
 					#remove self from recipients unless you are the originator of the convo
-					recipients = conversation.get_recipients
+					recipients = conversation.last_message.recipients
 					if(conversation.originator != self)
 						recipients.delete(self)
 						if(!recipients.include?(conversation.originator))
