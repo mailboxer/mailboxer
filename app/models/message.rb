@@ -1,15 +1,12 @@
 class Message < ActiveRecord::Base
-  #any additional info that needs to be sent in a message (ex. I use these to determine request types)
-  serialize :headers
-  
+  #  
   attr_accessor :recipients
+  belongs_to :sender, :polymorphic => :true
+  belongs_to :conversation, :validate => true, :autosave => true
   validates_presence_of :subject, :body, :sender  
-  validates_associated :conversation
   
   class_inheritable_accessor :on_deliver_callback
   protected :on_deliver_callback  
-  belongs_to :sender, :polymorphic => :true
-  belongs_to :conversation
   has_many :receipts
   scope :conversation, lambda { |conversation|    
     where(:conversation_id => conversation.id)
@@ -41,13 +38,11 @@ class Message < ActiveRecord::Base
 	sender_receipt.mailbox_type = "sentbox"
    	temp_receipts << sender_receipt
     
- 	if temp_receipts.each(&:valid?)
-		temp_receipts.each(&:save) 	#Save receipts
-		self.save					#Save message
+ 	temp_receipts.each(&:valid?)
+ 	if temp_receipts.all? { |t| t.errors.empty? }
+		temp_receipts.each(&:save!) 	#Save receipts
 		if reply
 			self.conversation.update_attribute(:updated_at, Time.now)
-		else
-			self.conversation.save  	#Save conversation*
 		end
 		self.recipients=nil
 		self.on_deliver_callback.call(self) unless self.on_deliver_callback.nil?
