@@ -21,7 +21,7 @@ class Message < ActiveRecord::Base
     end
   end  
   
-  def deliver(should_clean = true)
+  def deliver(reply = false, should_clean = true)
     self.clean if should_clean
     temp_receipts = Array.new
     #Receiver receipts
@@ -34,23 +34,25 @@ class Message < ActiveRecord::Base
    	  temp_receipts << msg_receipt
     end
     #Sender receipt
-      sender_receipt = Receipt.new
-	  sender_receipt.message = self
-	  sender_receipt.read = true
-	  sender_receipt.receiver = self.sender
-	  sender_receipt.mailbox_type = "sentbox"
-   	  temp_receipts << sender_receipt
+    sender_receipt = Receipt.new
+	sender_receipt.message = self
+	sender_receipt.read = true
+	sender_receipt.receiver = self.sender
+	sender_receipt.mailbox_type = "sentbox"
+   	temp_receipts << sender_receipt
     
-    if temp_receipts.each(&:valid?)    
-    	temp_receipts.each(&:save!) #Save receipts
-    	self.save!					#Save message 
-    	self.conversation.save!  	#Save conversation  
-   		self.recipients=nil
-    	return sender_receipt	
-    end
-    
-    self.recipients=nil
-    self.on_deliver_callback.call(self) unless self.on_deliver_callback.nil?
+ 	if temp_receipts.each(&:valid?)
+		temp_receipts.each(&:save) 	#Save receipts
+		self.save					#Save message
+		if reply
+			self.conversation.update_attribute(:updated_at, Time.now)
+		else
+			self.conversation.save  	#Save conversation*
+		end
+		self.recipients=nil
+		self.on_deliver_callback.call(self) unless self.on_deliver_callback.nil?
+	end
+    return sender_receipt	
   end
    
   def recipients
