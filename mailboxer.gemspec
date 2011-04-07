@@ -1,9 +1,9 @@
 Gem::Specification.new do |s|
 	s.name = "mailboxer"
-	s.version = "0.0.14"
+	s.version = "0.0.15"
 	s.authors = ["Eduardo Casanova Cuesta"]
 	s.summary = "Messaging system for rails apps."
-	s.description = "A Rails engine that allows any model to act as messageable, permitting it interchange messages with any other messageable model."
+	s.description = "A Rails engine that allows any model to act as messageable, permitting it interchange messages with any other messageable model and receive system notifications."
 	s.email = "ecasanovac@gmail.com"
 	s.homepage = "http://github.com/ging/mailboxer"
 	s.files = `git ls-files`.split("\n")

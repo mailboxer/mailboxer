@@ -5,12 +5,12 @@ describe Conversation do
   before do
     @entity1 = Factory(:user)
     @entity2 = Factory(:user)
-    @mail1 = @entity1.send_message(@entity2,"Body","Subject")
-    @mail2 = @entity2.reply_to_all(@mail1,"Reply body 1")
-    @mail3 = @entity1.reply_to_all(@mail2,"Reply body 2")
-    @mail4 = @entity2.reply_to_all(@mail3,"Reply body 3")
-    @message1 = @mail1.message
-    @message4 = @mail4.message
+    @receipt1 = @entity1.send_message(@entity2,"Body","Subject")
+    @receipt2 = @entity2.reply_to_all(@receipt1,"Reply body 1")
+    @receipt3 = @entity1.reply_to_all(@receipt2,"Reply body 2")
+    @receipt4 = @entity2.reply_to_all(@receipt3,"Reply body 3")
+    @message1 = @receipt1.notification
+    @message4 = @receipt4.notification
     @conversation = @message1.conversation
   end
   

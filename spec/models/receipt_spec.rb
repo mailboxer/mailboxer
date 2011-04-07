@@ -9,7 +9,7 @@ describe Receipt do
   end
   
   it "should belong to a message" do
-    assert @mail1.message
+    assert @mail1.notification
   end
   
   it "should belong to a conversation" do

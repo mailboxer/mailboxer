@@ -39,11 +39,11 @@ module Mailboxer
 				end
 
 				def reply_to_sender(receipt, reply_body, subject = nil)
-					return reply(receipt.conversation, receipt.message.sender, reply_body, subject)
+					return reply(receipt.conversation, receipt.notification.sender, reply_body, subject)
 				end
 
 				def reply_to_all(receipt, reply_body, subject = nil)
-					return reply(receipt.conversation, receipt.message.recipients, reply_body, subject)
+					return reply(receipt.conversation, receipt.notification.recipients, reply_body, subject)
 				end
 
 				def reply_to_conversation(conversation, reply_body, subject = nil)

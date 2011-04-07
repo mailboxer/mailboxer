@@ -5,3 +5,22 @@ This project is based on the need of a private message system for {ging / social
 It is born from the great, but old, code from {lpsergi / acts_as_messageable}[https://github.com/psergi/acts_as_messageable].
 
 There is a lack of documentaion and it will be solved as soon as the gem is more stable and had proved to be useful integrated with SocialStream.
+
+
+= Installation
+
+Add to your Gemfile:
+
+  gem 'mailboxer'
+
+Migrations:
+
+  rails g mailboxer:install
+
+= Usage
+
+In your model:
+
+  class User < ActiveRecord::Base
+    acts_as_messageable
+  end

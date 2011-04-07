@@ -1,6 +1,5 @@
 class Receipt < ActiveRecord::Base
-	belongs_to :message, :validate => true, :autosave => true
-	has_one :conversation, :through => :message
+	belongs_to :notification, :validate => true, :autosave => true
 	belongs_to :receiver, :polymorphic => :true
 
 	validates_presence_of :receiver
@@ -8,11 +7,11 @@ class Receipt < ActiveRecord::Base
 	scope :receiver, lambda { |receiver|
     where(:receiver_id => receiver.id,:receiver_type => receiver.class.to_s)
   }
-	scope :message, lambda { |message|
-    where(:message_id => message.id)
+	scope :notification, lambda { |notification|
+    where(:notification_id => notification.id)
   }
 	scope :conversation, lambda { |conversation|
-    joins(:message).where('messages.conversation_id' => conversation.id)
+    joins(:notification).where('notifications.conversation_id' => conversation.id)
   }
 	scope :sentbox, where(:mailbox_type => "sentbox")
 	scope :inbox, where(:mailbox_type => "inbox")
@@ -71,6 +70,11 @@ class Receipt < ActiveRecord::Base
 	def move_to_sentbox
 		update_attributes(:mailbox_type => :sentbox, :trashed => false)
 	end
+
+  def conversation
+    return nil if notification.class == Notification
+    return notification.conversation if notification.class == Message
+  end
 
 	protected
 
