@@ -4,6 +4,10 @@ class Mailbox
 	def initialize(recipient, box = :all)
 		@messageable = recipient
 	end
+	
+	def notifications(options = {})
+	  
+	end
 
 	def conversations(options = {})
 		conv = Conversation.participant(@messageable)
@@ -46,6 +50,7 @@ class Mailbox
 	end
 
 	def empty_trash(options = {})
+	  #TODO
 		return false
 	end
 

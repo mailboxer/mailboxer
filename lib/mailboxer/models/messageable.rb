@@ -15,11 +15,24 @@ module Mailboxer
 			end
 
 			module InstanceMethods
+			  
+			  ################################### MAILBOXES
+			  
 				def mailbox
 					@mailbox = Mailbox.new(self) if @mailbox.nil?
 					@mailbox.type = :all
 					return @mailbox
 				end
+				
+				################################### NOTIFICATIONS
+				
+				def notify(subject,body)
+          notification = Notification.new({:body => body, :subject => subject})
+          notification.recipients = [self]
+          return notification.deliver				  
+				end
+				
+				################################### MESSAGES
 
 				def send_message(recipients, msg_body, subject)
 					convo = Conversation.new({:subject => subject})
@@ -81,6 +94,8 @@ module Mailboxer
 					end
 					return nil
 				end
+				
+				
 			end
 		end
 	end

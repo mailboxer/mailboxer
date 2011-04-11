@@ -4,7 +4,6 @@ class Message < Notification
 
   class_inheritable_accessor :on_deliver_callback
   protected :on_deliver_callback
-  has_many :receipts
   scope :conversation, lambda { |conversation|
     where(:conversation_id => conversation.id)
   }
@@ -40,15 +39,11 @@ class Message < Notification
       if reply
       self.conversation.update_attribute(:updated_at, Time.now)
       end
-    self.recipients=nil
-    self.on_deliver_callback.call(self) unless self.on_deliver_callback.nil?
+      self.recipients=nil
+      self.on_deliver_callback.call(self) unless self.on_deliver_callback.nil?
     end
     return sender_receipt
   end  
 
-  def receipts(participant=nil)
-    return Receipt.notification(self).receiver(participant) if participant
-    return Receipt.notification(self)
-  end
 
 end

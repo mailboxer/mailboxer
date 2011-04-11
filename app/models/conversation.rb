@@ -31,22 +31,22 @@ class Conversation < ActiveRecord::Base
 
 	def mark_as_read(participant)
 		return if participant.nil?
-		return self.receipts(participant).mark_as_read
+		return self.receipts_for(participant).mark_as_read
 	end
 
 	def mark_as_unread(participant)
 		return if participant.nil?
-		return self.receipts(participant).mark_as_unread
+		return self.receipts_for(participant).mark_as_unread
 	end
 
 	def move_to_trash(participant)
 		return if participant.nil?
-		return self.receipts(participant).move_to_trash
+		return self.receipts_for(participant).move_to_trash
 	end
 
 	def untrash(participant)
 		return if participant.nil?
-		return self.receipts(participant).untrash
+		return self.receipts_for(participant).untrash
 	end
 
 	def recipients
@@ -82,9 +82,8 @@ class Conversation < ActiveRecord::Base
 		return @last_message
 	end
 
-	def receipts(participant=nil)
-		return Receipt.conversation(self).receiver(participant) if participant
-		return Receipt.conversation(self)
+	def receipts_for(participant)
+		return Receipt.conversation(self).receiver(participant)
 	end
 
 	def count_messages
@@ -93,22 +92,22 @@ class Conversation < ActiveRecord::Base
 
 	def is_participant?(participant)
 		return false if participant.nil?
-		return self.receipts(participant).count != 0
+		return self.receipts_for(participant).count != 0
 	end
 
 	def is_trashed?(participant)
 		return false if participant.nil?
-		return self.receipts(participant).trash.count!=0
+		return self.receipts_for(participant).trash.count!=0
 	end
 
 	def is_completely_trashed?(participant)
 		return false if participant.nil?
-		return self.receipts(participant).trash.count==self.receipts(participant).count
+		return self.receipts_for(participant).trash.count==self.receipts(participant).count
 	end
 
 	def is_unread?(participant)
 		return false if participant.nil?
-		return self.receipts(participant).unread.count!=0
+		return self.receipts_for(participant).unread.count!=0
 	end
 	#  protected
 	#  #[empty method]
