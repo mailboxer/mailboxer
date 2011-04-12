@@ -6,7 +6,7 @@ class Mailbox
 	end
 	
 	def notifications(options = {})
-	  
+	  return Receipt.where(options).receiver(@messageable).notifications
 	end
 
 	def conversations(options = {})

@@ -2,7 +2,7 @@ class Notification < ActiveRecord::Base
 
   attr_accessor :recipients
   belongs_to :sender, :polymorphic => :true
-  validates_presence_of :subject, :body, :sender
+  validates_presence_of :subject, :body
   has_many :receipts
   
   class << self
@@ -30,7 +30,7 @@ class Notification < ActiveRecord::Base
       temp_receipts.each(&:save!)   #Save receipts
       self.recipients=nil
     end
-    return sender_receipt
+    return temp_receipts
   end
 
   def recipients
