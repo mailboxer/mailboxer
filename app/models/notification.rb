@@ -5,6 +5,10 @@ class Notification < ActiveRecord::Base
   validates_presence_of :subject, :body
   has_many :receipts
   
+  scope :receiver, lambda { |receiver|
+    joins(:receipts).where('receipts.receiver_id' => receiver.id,'receipts.receiver_type' => receiver.class.to_s)
+  }
+  
   class << self
     def notify_all(recipients,subject,body)
       notification = Notification.new({:body => body, :subject => subject})

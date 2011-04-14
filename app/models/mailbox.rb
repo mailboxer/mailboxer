@@ -6,7 +6,7 @@ class Mailbox
 	end
 	
 	def notifications(options = {})
-	  return Receipt.where(options).receiver(@messageable).notifications
+	  return Notification.receiver(@messageable)
 	end
 
 	def conversations(options = {})
@@ -65,5 +65,14 @@ class Mailbox
 	def is_completely_trashed?(conversation)
 		return conversation.is_completely_trashed?(@messageable)
 	end
+
+  def receipts_for(object)    
+    if object.is_a?(Message) or object.is_a?(Notification)
+      return [object.receipt_for(@messageable)]
+   elsif object.is_a?(Conversation)
+      return object.receipts_for(@messageable)
+    end
+    return "JAJA"
+  end
 
 end
