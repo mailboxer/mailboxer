@@ -32,30 +32,30 @@ describe "Mailboxer::Models::Messageable through User" do
   it "should be able to unread an owned mail (mark as unread)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @receipt.read.should==true
-    @entity1.unread_message(@receipt)
+    @entity1.unread(@receipt)
     @receipt.read.should==false
   end
   
   it "should be able to read an owned mail (mark as read)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @receipt.read.should==true
-    @entity1.unread_message(@receipt)
-    @entity1.read_message(@receipt)
+    @entity1.unread(@receipt)
+    @entity1.read(@receipt)
     @receipt.read.should==true
   end
   
   it "should be able to unread anot owned mail (mark as unread)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @receipt.read.should==true
-    @entity2.unread_message(@receipt) #Should not change
+    @entity2.unread(@receipt) #Should not change
     @receipt.read.should==true
   end
   
   it "should be able to read a not owned mail (mark as read)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @receipt.read.should==true
-    @entity1.unread_message(@receipt) #From read to unread
-    @entity2.read_message(@receipt) #Should not change
+    @entity1.unread(@receipt) #From read to unread
+    @entity2.read(@receipt) #Should not change
     @receipt.read.should==false
   end
   

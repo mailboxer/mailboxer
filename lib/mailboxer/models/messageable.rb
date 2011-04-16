@@ -1,102 +1,127 @@
 module Mailboxer
-	module Models
-		module Messageable
-			def self.included(mod)
-				mod.extend(ClassMethods)
-			end
+  module Models
+    module Messageable
+      def self.included(mod)
+        mod.extend(ClassMethods)
+      end
 
-			module ClassMethods
-				def acts_as_messageable
-					has_many :messages
-					has_many :receipts, :order => 'created_at DESC', :dependent => :delete_all
+      module ClassMethods
+        #Converts the model into messageable allowing it to interchange messages and
+        #receive notifications
+        def acts_as_messageable
+          has_many :messages
+          has_many :receipts, :order => 'created_at DESC', :dependent => :delete_all
 
-					include Mailboxer::Models::Messageable::InstanceMethods
-				end
-			end
+          include Mailboxer::Models::Messageable::InstanceMethods
+        end
+      end
 
-			module InstanceMethods
-			  
-			  ################################### MAILBOXES
-			  
-				def mailbox
-					@mailbox = Mailbox.new(self) if @mailbox.nil?
-					@mailbox.type = :all
-					return @mailbox
-				end
-				
-				################################### NOTIFICATIONS
-				
-				def notify(subject,body)
+      module InstanceMethods
+        #Gets the mailbox of the messageable
+        def mailbox
+          @mailbox = Mailbox.new(self) if @mailbox.nil?
+          @mailbox.type = :all
+          return @mailbox
+        end
+
+        #Sends a notification to the messageable
+        def notify(subject,body)
           notification = Notification.new({:body => body, :subject => subject})
           notification.recipients = [self]
-          return notification.deliver				  
-				end
-				
-				################################### MESSAGES
+          return notification.deliver
+        end
 
-				def send_message(recipients, msg_body, subject)
-					convo = Conversation.new({:subject => subject})
-					message = Message.new({:sender => self, :conversation => convo,  :body => msg_body, :subject => subject})
-					message.recipients = recipients.is_a?(Array) ? recipients : [recipients]
-					message.recipients = message.recipients.uniq
-					return message.deliver
-				end
+        #Sends a messages, starting a new conversation, with the messageable
+        #as originator
+        def send_message(recipients, msg_body, subject)
+          convo = Conversation.new({:subject => subject})
+          message = Message.new({:sender => self, :conversation => convo,  :body => msg_body, :subject => subject})
+          message.recipients = recipients.is_a?(Array) ? recipients : [recipients]
+          message.recipients = message.recipients.uniq
+          return message.deliver
+        end
 
-				def reply(conversation, recipients, reply_body, subject = nil)
-					subject = subject || "RE: #{conversation.subject}"
-					response = Message.new({:sender => self, :conversation => conversation, :body => reply_body, :subject => subject})
-					response.recipients = recipients.is_a?(Array) ? recipients : [recipients]					
-					response.recipients = response.recipients.uniq
-					response.recipients.delete(self)
-					return response.deliver(true)
-				end
+        #Basic reply method. USE NOT RECOMENDED.
+        #Use reply_to_sender, reply_to_all and reply_to_conversation instead.
+        def reply(conversation, recipients, reply_body, subject = nil)
+          subject = subject || "RE: #{conversation.subject}"
+          response = Message.new({:sender => self, :conversation => conversation, :body => reply_body, :subject => subject})
+          response.recipients = recipients.is_a?(Array) ? recipients : [recipients]
+          response.recipients = response.recipients.uniq
+          response.recipients.delete(self)
+          return response.deliver(true)
+        end
 
-				def reply_to_sender(receipt, reply_body, subject = nil)
-					return reply(receipt.conversation, receipt.notification.sender, reply_body, subject)
-				end
+        #Replies to the sender of the message in the conversation
+        def reply_to_sender(receipt, reply_body, subject = nil)
+          return reply(receipt.conversation, receipt.message.sender, reply_body, subject)
+        end
 
-				def reply_to_all(receipt, reply_body, subject = nil)
-					return reply(receipt.conversation, receipt.notification.recipients, reply_body, subject)
-				end
+        #Replies to all the recipients of the message in the conversation
+        def reply_to_all(receipt, reply_body, subject = nil)
+          return reply(receipt.conversation, receipt.message.recipients, reply_body, subject)
+        end
 
-				def reply_to_conversation(conversation, reply_body, subject = nil)
-					#move conversation to inbox if it is currently in the trash - doesnt make much sense replying to a trashed convo.
-					if(mailbox.is_trashed?(conversation))
-						mailbox.receipts.conversation(conversation).untrash
-					end
-					#remove self from recipients unless you are the originator of the convo
-					recipients = conversation.last_message.recipients
-					if(conversation.originator != self)
-						recipients.delete(self)
-						if(!recipients.include?(conversation.originator))
-						recipients << conversation.originator
-						end
-					end
-					return reply(conversation,recipients, reply_body, subject)
-				end
+        #Replies to all the recipients of the last message in the conversation and untrash any trashed message by messageable
+        #if should_untrash is set to true (this is so by default)
+        def reply_to_conversation(conversation, reply_body, subject = nil, should_untrash = true)
+          #move conversation to inbox if it is currently in the trash and should_untrash parameter is true.
+          if should_untrash && mailbox.is_trashed?(conversation)
+            mailbox.receipts_for(conversation).untrash
+          end
+          return reply(conversation, conversation.last_message.recipients, reply_body, subject)
+        end
 
-				def read_message(obj)
-					if obj.class.to_s.eql? 'Receipt'
-						return obj.mark_as_read if obj.receiver == self
-					elsif obj.class.to_s.eql? 'Message'
-						receipts = obj.receipts.receiver(self)
-						return receipts.mark_as_read
-					end
-					return nil
-				end
+        #Mark the object as read for messageable.
+        #
+        #Object can be:
+        #* A Receipt
+        #* A Message
+        #* A Notification
+        #* A Conversation
+        #* An array with any of them
+        def read(obj)
+          case obj
+          when Receipt
+            return obj.mark_as_read if obj.receiver == self
+          when Message, Notification
+            receipt = obj.receipt_for(self)
+            return receipt.mark_as_read
+          when Conversation
+            receipts = obj.receipts_for(self)
+            return receipts.mark_as_read
+          when Array
+            obj.map{ |sub_obj| read(sub_obj) }
+          else
+          return nil
+          end
+        end
 
-				def unread_message(obj)
-					if obj.class.to_s.eql? 'Receipt'
-						return obj.mark_as_unread if obj.receiver == self
-					elsif obj.class.to_s.eql? 'Message'
-						receipts = obj.receipts.receiver(self)
-						return receipts.mark_as_unread
-					end
-					return nil
-				end
-				
-				
-			end
-		end
-	end
+        #Mark the object as unread for messageable.
+        #
+        #Object can be:
+        #* A Receipt
+        #* A Message
+        #* A Notification
+        #* A Conversation
+        #* An array with any of them
+        def unread(obj)
+          case obj
+          when Receipt
+            return obj.mark_as_unread if obj.receiver == self
+          when Message, Notification
+            receipt = obj.receipt_for(self)
+            return receipt.mark_as_unread
+          when Conversation
+            receipts = obj.receipts_for(self)
+            return receipts.mark_as_unread
+          when Array
+            obj.map{ |sub_obj| unread(sub_obj) }
+          else
+          return nil
+          end
+        end
+      end
+    end
+  end
 end

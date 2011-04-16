@@ -10,6 +10,7 @@ class Notification < ActiveRecord::Base
   }
   
   class << self
+    #Sends a Notification to all the recipients
     def notify_all(recipients,subject,body)
       notification = Notification.new({:body => body, :subject => subject})
       notification.recipients = recipients.is_a?(Array) ? recipients : [recipients]
@@ -18,6 +19,8 @@ class Notification < ActiveRecord::Base
     end
   end
 
+  #Delivers a Notification. USE NOT RECOMENDED.
+  #Use Mailboxer::Models::Message.notify and Notification.notify_all instead.
   def deliver(should_clean = true)
     self.clean if should_clean
     temp_receipts = Array.new
@@ -36,7 +39,8 @@ class Notification < ActiveRecord::Base
     end
     return temp_receipts
   end
-
+  
+  #Returns the recipients of the Notification
   def recipients
     if @recipients.blank?
       recipients_array = Array.new
@@ -48,10 +52,12 @@ class Notification < ActiveRecord::Base
     return @recipients
   end
 
+  #Returns the receipt for the participant
   def receipt_for(participant)
     return Receipt.notification(self).receiver(participant)
   end
 
+  #Returns if the participant have read the Notification
   def is_unread?(participant)
     return false if participant.nil?
     return self.receipt_for(participant).unread.count!=0
@@ -59,6 +65,7 @@ class Notification < ActiveRecord::Base
 
   include ActionView::Helpers::SanitizeHelper
 
+  #Sanitizes the body and subject
   def clean
     unless self.subject.nil?
       self.subject = sanitize self.subject

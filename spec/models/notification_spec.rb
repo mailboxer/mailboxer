@@ -20,8 +20,7 @@ describe Message do
     
     #Check getting NOTIFICATION receipts only
     @entity1.mailbox.notifications.size.should==1
-    receipt = @entity1.mailbox.notifications.first
-    notification = receipt.notification
+    notification = @entity1.mailbox.notifications.first
     notification.subject.should=="Subject"
     notification.body.should=="Body"       
   end
@@ -48,18 +47,15 @@ describe Message do
     
     #Check getting NOTIFICATION receipts only
     @entity1.mailbox.notifications.size.should==1
-    receipt = @entity1.mailbox.notifications.first
-    notification = receipt.notification
+    notification = @entity1.mailbox.notifications.first
     notification.subject.should=="Subject"
     notification.body.should=="Body"
     @entity2.mailbox.notifications.size.should==1
-    receipt = @entity2.mailbox.notifications.first
-    notification = receipt.notification
+    notification = @entity2.mailbox.notifications.first
     notification.subject.should=="Subject"
     notification.body.should=="Body"
     @entity3.mailbox.notifications.size.should==1
-    receipt = @entity3.mailbox.notifications.first
-    notification = receipt.notification
+    notification = @entity3.mailbox.notifications.first
     notification.subject.should=="Subject"
     notification.body.should=="Body"
           
