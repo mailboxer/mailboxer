@@ -12,6 +12,14 @@ module Mailboxer
           has_many :messages
           has_many :receipts, :order => 'created_at DESC', :dependent => :delete_all
 
+          required_methods =  [:name, :email, :should_email?]
+
+          required_methods.each do |method|
+            if !self.new.respond_to? method
+              raise Mailboxer::Exceptions::NotCompliantModel, "Undefined " + method.to_s + " method for " + self.to_s + ". For further information check the documentation. "
+            end
+          end
+
           include Mailboxer::Models::Messageable::InstanceMethods
         end
       end

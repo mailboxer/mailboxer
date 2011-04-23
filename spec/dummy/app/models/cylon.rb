@@ -1,3 +1,7 @@
 class Cylon < ActiveRecord::Base
-  acts_as_messageable 
+  def should_email?(object)
+    true
+  end
+
+  acts_as_messageable
 end

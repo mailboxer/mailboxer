@@ -2,6 +2,7 @@ class CreateDucks < ActiveRecord::Migration
   def self.up
     create_table :ducks do |t|
       t.string :name
+      t.string :email
 
       t.timestamps
     end
