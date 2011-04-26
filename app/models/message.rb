@@ -8,14 +8,13 @@ class Message < Notification
   scope :conversation, lambda { |conversation|
     where(:conversation_id => conversation.id)
   }
-  
   class << self
     #Sets the on deliver callback method.
     def on_deliver(callback_method)
       self.on_deliver_callback = callback_method
     end
   end
-  
+
   #Delivers a Message. USE NOT RECOMENDED.
   #Use Mailboxer::Models::Message.send_message instead.
   def deliver(reply = false, should_clean = true)
@@ -29,6 +28,10 @@ class Message < Notification
       msg_receipt.receiver = r
       msg_receipt.mailbox_type = "inbox"
       temp_receipts << msg_receipt
+      #Should send an email?
+      if r.should_email? self
+        MessageMailer.send_email(self,r)
+      end
     end
     #Sender receipt
     sender_receipt = Receipt.new
@@ -44,9 +47,9 @@ class Message < Notification
       if reply
       self.conversation.update_attribute(:updated_at, Time.now)
       end
-      self.recipients=nil
-      self.on_deliver_callback.call(self) unless self.on_deliver_callback.nil?
+    self.recipients=nil
+    self.on_deliver_callback.call(self) unless self.on_deliver_callback.nil?
     end
     return sender_receipt
-  end  
+  end
 end

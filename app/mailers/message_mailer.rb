@@ -1,3 +1,5 @@
-class MessageMailer < ActionMailer::Base
-  default :from => "from@example.com"
+class MessageMailer < ActionMailer::Base  
+  def send_email(message,receiver)
+    
+  end
 end

@@ -1,3 +1,5 @@
 class NotificationMailer < ActionMailer::Base
-  default :from => "from@example.com"
+  def send_email(notification,receiver)
+
+  end
 end

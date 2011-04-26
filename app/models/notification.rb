@@ -30,7 +30,11 @@ class Notification < ActiveRecord::Base
       msg_receipt.notification = self
       msg_receipt.read = false
       msg_receipt.receiver = r
-      temp_receipts << msg_receipt
+      temp_receipts << msg_receipt      
+      #Should send an email?
+      if r.should_email? self
+        MessageMailer.send_email(self,r)
+      end
     end
     temp_receipts.each(&:valid?)
     if temp_receipts.all? { |t| t.errors.empty? }
