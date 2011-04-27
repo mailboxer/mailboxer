@@ -59,7 +59,6 @@ describe MessageMailer do
     it "should send emails when should_email? is true (1 out of 3)" do
       ActionMailer::Base.deliveries.empty?.should==false
       ActionMailer::Base.deliveries.size.should==2
-      print_emails
     end
 
     it "should send an email to user entity" do
