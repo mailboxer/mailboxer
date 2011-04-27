@@ -30,7 +30,7 @@ class Message < Notification
       temp_receipts << msg_receipt
       #Should send an email?
       if r.should_email? self
-        MessageMailer.send_email(self,r)
+        MessageMailer.send_email(self,r).deliver
       end
     end
     #Sender receipt

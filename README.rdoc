@@ -22,34 +22,29 @@ Migrations:
 We are now adding support for sending emails when a Notification or a Message is sent to one o more recipients. So that, we mus assure that Messageable models have some specific methods. This methods are:
 
   #Returning any kind of indentification you want for the model
-    def name
-	  ....
-	  return name
-    end
+  def name
+	return "You should add method :name in your Messageable model"
+  end
 
   #Returning the email address of the model
   def email
-    ...
-    return email
+    return "define_email@on_your.model"
   end
 
   #Returning whether an email should be sent for this object (Message or Notification)
   def should_email?(object)
-    ...
-    return boolean
+    return true
   end
 
-For now, these methods have to be defined before calling to acts_as_messageable. We are working on a better way of requirement. 
-
-If these methods are not present, and Mailboxer::Exception::NotCompliantModel error will arise.
+If these methods are not present, default ones will be created (the ones above).
 
 
 = Usage
 
 In your model:
 
-  class User < ActiveRecord::Base    
-    #Definitions of required methods name, email (both could be just columns on the DB) and should_email?
-      
+  class User < ActiveRecord::Base      
     acts_as_messageable
+    
+    #Definitions of required methods name, email (both could be just columns on the DB) and should_email?
   end

@@ -1,6 +1,7 @@
 class Notification < ActiveRecord::Base
 
   attr_accessor :recipients
+  attr_accessor :object
   belongs_to :sender, :polymorphic => :true
   validates_presence_of :subject, :body
   has_many :receipts
@@ -33,7 +34,7 @@ class Notification < ActiveRecord::Base
       temp_receipts << msg_receipt      
       #Should send an email?
       if r.should_email? self
-        MessageMailer.send_email(self,r)
+        NotificationMailer.send_email(self,r).deliver
       end
     end
     temp_receipts.each(&:valid?)

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h1>You have a new notification: <%= strip_tags(@notification.subject) %></h1>
+    <p>
+      You have received a new notification:
+    </p>
+    <blockquote>
+      <p>
+        <%= raw @notification.body %>
+      </p>
+    </blockquote>
+    <p>
+      Visit <%= link_to root_url,root_url %> and go to your notifications for more info.
+    </p>
+  </body>
+</html>

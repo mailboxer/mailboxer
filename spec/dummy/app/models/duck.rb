@@ -1,4 +1,6 @@
 class Duck < ActiveRecord::Base
+  acts_as_messageable
+  
   def should_email?(object)
     case object
     when Message
@@ -7,6 +9,4 @@ class Duck < ActiveRecord::Base
       return true
     end
   end
-
-  acts_as_messageable
 end

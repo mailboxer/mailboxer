@@ -12,14 +12,34 @@ module Mailboxer
           has_many :messages
           has_many :receipts, :order => 'created_at DESC', :dependent => :delete_all
 
-          required_methods =  [:name, :email, :should_email?]
+          if self.table_exists?
+            if !self.new.respond_to? :name
+              self.class_eval do
+              #Returning any kind of indentification you want for the model
+                def name
+                  return "You should add method :name in your Messageable model"
+                end
+              end
+            end
 
-          required_methods.each do |method|
-            if !self.new.respond_to? method
-              raise Mailboxer::Exceptions::NotCompliantModel, "Undefined " + method.to_s + " method for " + self.to_s + ". For further information check the documentation. "
+            if !self.new.respond_to? :email
+              self.class_eval do
+              #Returning the email address of the model
+                def email
+                  return "define_email@on_your.model"
+                end
+              end
+            end
+
+            if !self.new.respond_to? :should_email?
+              self.class_eval do
+              #Returning whether an email should be sent for this object (Message or Notification)
+                def should_email?(object)
+                  return true
+                end
+              end
             end
           end
-
           include Mailboxer::Models::Messageable::InstanceMethods
         end
       end

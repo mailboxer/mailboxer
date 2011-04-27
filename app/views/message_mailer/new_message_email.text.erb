@@ -1,0 +1,10 @@
+You have a new message: <%= strip_tags(@message.subject) %>
+===============================================
+ 
+You have received a new message:
+
+-----------------------------------------------
+<%= strip_tags @message.body %>
+-----------------------------------------------
+
+Visit <%= root_url %> and go to your inbox for more info.

@@ -1,0 +1,10 @@
+You have a new notification: <%= strip_tags(@notification.subject) %>
+===============================================
+ 
+You have received a new notification:
+
+-----------------------------------------------
+<%= strip_tags @notification.body %>
+-----------------------------------------------
+
+Visit <%= root_url %> and go to your notifications for more info.
