@@ -9,6 +9,10 @@ class Mailboxer::InstallGenerator < Rails::Generators::Base #:nodoc:
     ActiveRecord::Generators::Base.next_migration_number(dirname)
   end
   
+  def create_initializer_file
+    template 'initializer.rb', 'config/initializers/mailboxer.rb'
+  end
+  
   def create_migration_file
     migration_template 'migration.rb', 'db/migrate/create_mailboxer.rb'
   end

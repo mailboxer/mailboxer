@@ -52,13 +52,14 @@ describe MessageMailer do
       @entity1 = Factory(:user)
       @entity2 = Factory(:duck)
       @entity3 = Factory(:cylon)
-      @receipt1 = @sender.send_message([@entity1,@entity2,@entity3], "Body Body Body Body Body Body Body Body Body Body Body Body","Subject")
-      @receipt2 = @sender.reply_to_all(@receipt1, "Body Body Body Body Body Body Body Body Body Body Body Body")
+      @receipt1 = @sender.send_message([@entity1,@entity2,@entity3], "Body","Subject")
+      @receipt2 = @sender.reply_to_all(@receipt1, "Body")
     end
     
     it "should send emails when should_email? is true (1 out of 3)" do
       ActionMailer::Base.deliveries.empty?.should==false
       ActionMailer::Base.deliveries.size.should==2
+      print_emails
     end
 
     it "should send an email to user entity" do

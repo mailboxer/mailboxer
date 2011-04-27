@@ -12,10 +12,18 @@ There is a lack of documentaion and it will be solved as soon as the gem is more
 Add to your Gemfile:
 
   gem 'mailboxer'
+  
+Then run:
 
-Migrations:
+  bundle update
+
+Run install script:
 
   rails g mailboxer:install
+  
+And don't forget to migrate you database:
+
+  rake db:migrate
   
 = Requirements
 
@@ -23,7 +31,7 @@ We are now adding support for sending emails when a Notification or a Message is
 
   #Returning any kind of indentification you want for the model
   def name
-	return "You should add method :name in your Messageable model"
+    return "You should add method :name in your Messageable model"
   end
 
   #Returning the email address of the model
@@ -45,6 +53,4 @@ In your model:
 
   class User < ActiveRecord::Base      
     acts_as_messageable
-    
-    #Definitions of required methods name, email (both could be just columns on the DB) and should_email?
   end
