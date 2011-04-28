@@ -12,39 +12,32 @@ module Mailboxer
           has_many :messages
           has_many :receipts, :order => 'created_at DESC', :dependent => :delete_all
 
-          if self.table_exists?
-            if !self.new.respond_to? :name
-              self.class_eval do
-              #Returning any kind of indentification you want for the model
-                def name
-                  return "You should add method :name in your Messageable model"
-                end
-              end
-            end
-
-            if !self.new.respond_to? :email
-              self.class_eval do
-              #Returning the email address of the model
-                def email
-                  return "define_email@on_your.model"
-                end
-              end
-            end
-
-            if !self.new.respond_to? :should_email?
-              self.class_eval do
-              #Returning whether an email should be sent for this object (Message or Notification)
-                def should_email?(object)
-                  return true
-                end
-              end
-            end
-          end
           include Mailboxer::Models::Messageable::InstanceMethods
         end
       end
 
       module InstanceMethods
+        #Returning any kind of indentification you want for the model
+        def name
+          super
+        rescue
+          return "You should add method :name in your Messageable model"
+          end
+
+        #Returning the email address of the model
+        def email
+          super
+        rescue
+          return "define_email@on_your.model"
+          end
+
+        #Returning whether an email should be sent for this object (Message or Notification)
+        def should_email?(object)
+          super
+        rescue
+          return true
+          end
+
         #Gets the mailbox of the messageable
         def mailbox
           @mailbox = Mailbox.new(self) if @mailbox.nil?
