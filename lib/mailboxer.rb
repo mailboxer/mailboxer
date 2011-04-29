@@ -7,6 +7,7 @@ module Mailboxer
   end  
   
   mattr_accessor :default_from
+  mattr_accessor :uses_emails
   
    class << self
     def setup

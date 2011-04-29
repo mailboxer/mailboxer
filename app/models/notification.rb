@@ -33,7 +33,7 @@ class Notification < ActiveRecord::Base
       msg_receipt.receiver = r
       temp_receipts << msg_receipt      
       #Should send an email?
-      if r.should_email? self
+      if Mailboxer.uses_emails and r.should_email? self
         NotificationMailer.send_email(self,r).deliver
       end
     end
