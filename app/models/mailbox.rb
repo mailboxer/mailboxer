@@ -8,7 +8,8 @@ class Mailbox
 
   #Returns the notifications for the messageable
   def notifications(options = {})
-    return Notification.receiver(@messageable)
+    #:type => nil is a hack not to give Messages as Notifications
+    return Notification.receiver(@messageable).where(:type => nil) 
   end
 
   #Returns the conversations for the messageable
