@@ -24,6 +24,7 @@ class CreateMailboxer < ActiveRecord::Migration
       t.column :body, :text
       t.column :subject, :string, :default => ""
       t.references :sender, :polymorphic => true
+      t.references :object, :polymorphic => true
       t.column :conversation_id, :integer
       t.column :draft, :boolean, :default => false
       t.column :updated_at, :datetime, :null => false
