@@ -12,10 +12,11 @@ class Notification < ActiveRecord::Base
   
   class << self
     #Sends a Notification to all the recipients
-    def notify_all(recipients,subject,body)
+    def notify_all(recipients,subject,body,object = nil)
       notification = Notification.new({:body => body, :subject => subject})
       notification.recipients = recipients.is_a?(Array) ? recipients : [recipients]
       notification.recipients = notification.recipients.uniq
+      notification.object = object if object.present?
       return notification.deliver
     end
   end
