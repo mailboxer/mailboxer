@@ -4,6 +4,7 @@ pkg/
 spec/dummy/db/*.sqlite3
 spec/dummy/log/*.log
 spec/dummy/tmp/
+spec/dummy/.project
 **.tmp_*
 Gemfile.lock
 .idea
