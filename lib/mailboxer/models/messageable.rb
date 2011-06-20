@@ -20,21 +20,21 @@ module Mailboxer
         #Returning any kind of indentification you want for the model
         def name
           super
-        rescue
+        rescue NameError
           return "You should add method :name in your Messageable model"
           end
 
         #Returning the email address of the model
         def email
           super
-        rescue
+        rescue NameError
           return "define_email@on_your.model"
           end
 
         #Returning whether an email should be sent for this object (Message or Notification)
         def should_email?(object)
           super
-        rescue
+        rescue NameError
           return true
           end
 

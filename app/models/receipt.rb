@@ -16,7 +16,7 @@ class Receipt < ActiveRecord::Base
     where(:notification_id => notification.id)
   }
 	scope :conversation, lambda { |conversation|
-    joins(:notification).where('notifications.conversation_id' => conversation.id)
+    joins(:message).where('notifications.conversation_id' => conversation.id)
   }
 	scope :sentbox, where(:mailbox_type => "sentbox")
 	scope :inbox, where(:mailbox_type => "inbox")

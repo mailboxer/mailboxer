@@ -3,7 +3,7 @@ class Message < Notification
   belongs_to :conversation, :validate => true, :autosave => true
   validates_presence_of :sender
 
-  class_inheritable_accessor :on_deliver_callback
+  class_attribute :on_deliver_callback
   protected :on_deliver_callback
   scope :conversation, lambda { |conversation|
     where(:conversation_id => conversation.id)
