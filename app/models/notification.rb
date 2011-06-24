@@ -78,7 +78,7 @@ class Notification < ActiveRecord::Base
   #Returns if the participant have read the Notification
   def is_unread?(participant)
     return false if participant.nil?
-    return self.receipt_for(participant).first.read
+    return !self.receipt_for(participant).first.read
   end
 
   #Returns if the participant have trashed the Notification
