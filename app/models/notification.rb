@@ -66,7 +66,7 @@ class Notification < ActiveRecord::Base
   #Returns if the participant have read the Notification
   def is_unread?(participant)
     return false if participant.nil?
-    return self.receipt_for(participant).unread.count!=0
+    return self.receipt_for(participant).read
   end
 
   include ActionView::Helpers::SanitizeHelper
