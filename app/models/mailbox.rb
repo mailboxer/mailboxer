@@ -9,7 +9,7 @@ class Mailbox
   #Returns the notifications for the messageable
   def notifications(options = {})
     #:type => nil is a hack not to give Messages as Notifications
-    return Notification.receiver(@messageable).where(:type => nil) 
+    return Notification.recipient(@messageable).where(:type => nil) 
   end
 
   #Returns the conversations for the messageable
@@ -71,7 +71,7 @@ class Mailbox
 
   #Returns all the receipts of messageable, from Messages and Notifications
   def receipts(options = {})
-    return Receipt.where(options).receiver(@messageable)
+    return Receipt.where(options).recipient(@messageable)
   end
 
   #Deletes all the messages in the trash of messageable. NOT IMPLEMENTED.
@@ -95,20 +95,22 @@ class Mailbox
     return conversation.is_completely_trashed?(@messageable)
   end
 
-  #Returns the receipts of object for messageable
+  #Returns the receipts of object for messageable as a ActiveRecord::Relation
   #
   #Object can be:
   #* A Message
   #* A Notification
   #* A Conversation
+  #
+  #If object isn't one of the above, a nil will be returned
   def receipts_for(object)
     case object
-    when Message,Notification
-      return [object.receipt_for(@messageable)]
+    when Message, Notification
+      return object.receipt_for(@messageable)
     when Conversation
       return object.receipts_for(@messageable)
     else
-    return Array.new
+    return nil
     end
   end
 

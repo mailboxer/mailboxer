@@ -6,8 +6,8 @@ class Notification < ActiveRecord::Base
   validates_presence_of :subject, :body
   has_many :receipts
   
-  scope :receiver, lambda { |receiver|
-    joins(:receipts).where('receipts.receiver_id' => receiver.id,'receipts.receiver_type' => receiver.class.to_s)
+  scope :recipient, lambda { |recipient|
+    joins(:receipts).where('receipts.receiver_id' => recipient.id,'receipts.receiver_type' => recipient.class.to_s)
   }
   
   class << self
@@ -66,7 +66,7 @@ class Notification < ActiveRecord::Base
   #Returns if the participant have read the Notification
   def is_unread?(participant)
     return false if participant.nil?
-    return self.receipt_for(participant).read
+    return self.receipt_for(participant).first.read
   end
 
   include ActionView::Helpers::SanitizeHelper

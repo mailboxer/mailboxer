@@ -87,7 +87,7 @@ class Conversation < ActiveRecord::Base
 
   #Returns the receipts of the conversation for one participants
 	def receipts_for(participant)
-	  return Receipt.conversation(self).receiver(participant)
+	  return Receipt.conversation(self).recipient(participant)
 	end
 
   #Returns the number of messages of the conversation
