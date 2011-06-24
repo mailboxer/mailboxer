@@ -60,7 +60,7 @@ class Notification < ActiveRecord::Base
 
   #Returns the receipt for the participant
   def receipt_for(participant)
-    return Receipt.notification(self).receiver(participant)
+    return Receipt.notification(self).recipient(participant)
   end
 
   #Returns if the participant have read the Notification
