@@ -65,12 +65,13 @@ class Receipt < ActiveRecord::Base
       where(options).each do |rcp|
         ids << rcp.id
       end
-      temp_ids = ids.clone
+      return if ids.empty?      
+      conditions = [""].concat(ids)
       condition = "id = ? "
-      temp_ids.drop(1).each do
+      ids.drop(1).each do
         condition << "OR id = ? "
       end
-      conditions = [condition].concat(ids)
+      conditions[0] = condition
       Receipt.except(:where).except(:joins).where(conditions).update_all(updates)
     end
   end
@@ -111,6 +112,17 @@ class Receipt < ActiveRecord::Base
     return nil
   end
 
+  #Returns if the participant have read the Notification
+  def is_unread?
+    return !self.read
+  end
+
+  #Returns if the participant have trashed the Notification
+  def is_trashed?
+    return self.trashed
+  end  
+
+  
   protected
 
   #Removes the duplicate error about not present subject from Conversation if it has been already

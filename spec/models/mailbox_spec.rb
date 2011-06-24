@@ -97,4 +97,5 @@ describe Mailbox do
     @entity2.mailbox.receipts.trash.count.should==0    
   end
   
+  
 end

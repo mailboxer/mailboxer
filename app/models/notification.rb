@@ -8,6 +8,12 @@ class Notification < ActiveRecord::Base
   
   scope :recipient, lambda { |recipient|
     joins(:receipts).where('receipts.receiver_id' => recipient.id,'receipts.receiver_type' => recipient.class.to_s)
+  }  
+  scope :not_trashed, lambda {
+    joins(:receipts).where('receipts.trashed' => false)
+  }
+  scope :unread,  lambda {
+    joins(:receipts).where('receipts.read' => false)
   }
   
   class << self
@@ -43,7 +49,8 @@ class Notification < ActiveRecord::Base
       temp_receipts.each(&:save!)   #Save receipts
       self.recipients=nil
     end
-    return temp_receipts
+    return temp_receipts if temp_receipts.size > 1
+    return temp_receipts.first
   end
   
   #Returns the recipients of the Notification
@@ -62,12 +69,48 @@ class Notification < ActiveRecord::Base
   def receipt_for(participant)
     return Receipt.notification(self).recipient(participant)
   end
+  
+  #Returns the receipt for the participant. Alias for receipt_for(participant)
+  def receipts_for(participant)
+    return receipt_for(participant)
+  end
 
   #Returns if the participant have read the Notification
   def is_unread?(participant)
     return false if participant.nil?
     return self.receipt_for(participant).first.read
   end
+
+  #Returns if the participant have trashed the Notification
+  def is_trashed?(participant)
+    return false if participant.nil?
+    return self.receipt_for(participant).first.trashed
+  end  
+
+  #Mark the notification as read
+  def mark_as_read(participant)
+    return if participant.nil?
+    return self.receipt_for(participant).mark_as_read
+  end
+
+  #Mark the notification as unread
+  def mark_as_unread(participant)
+    return if participant.nil?
+    return self.receipt_for(participant).mark_as_unread
+  end
+
+  #Move the notification to the trash
+  def move_to_trash(participant)
+    return if participant.nil?
+    return self.receipt_for(participant).move_to_trash
+  end
+
+  #Takes the notification out of the trash 
+  def untrash(participant)
+    return if participant.nil?
+    return self.receipt_for(participant).untrash
+  end
+
 
   include ActionView::Helpers::SanitizeHelper
 

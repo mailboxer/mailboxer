@@ -107,11 +107,9 @@ module Mailboxer
           when Receipt
             return obj.mark_as_read if obj.receiver == self
           when Message, Notification
-            receipt = obj.receipt_for(self)
-            return receipt.mark_as_read
+            obj.mark_as_read(self)
           when Conversation
-            receipts = obj.receipts_for(self)
-            return receipts.mark_as_read
+            obj.mark_as_read(self)
           when Array
             obj.map{ |sub_obj| read(sub_obj) }
           else
@@ -132,13 +130,58 @@ module Mailboxer
           when Receipt
             return obj.mark_as_unread if obj.receiver == self
           when Message, Notification
-            receipt = obj.receipt_for(self)
-            return receipt.mark_as_unread
+            obj.mark_as_unread(self)
           when Conversation
-            receipts = obj.receipts_for(self)
-            return receipts.mark_as_unread
+            obj.mark_as_unread(self)
           when Array
             obj.map{ |sub_obj| unread(sub_obj) }
+          else
+          return nil
+          end
+        end
+        
+        
+        #Mark the object as trashed for messageable.
+        #
+        #Object can be:
+        #* A Receipt
+        #* A Message
+        #* A Notification
+        #* A Conversation
+        #* An array with any of them
+        def trash(obj)
+          case obj
+          when Receipt
+            return obj.move_to_trash if obj.receiver == self
+          when Message, Notification
+            obj.move_to_trash(self)
+          when Conversation
+            obj.move_to_trash(self)
+          when Array
+            obj.map{ |sub_obj| trash(sub_obj) }
+          else
+          return nil
+          end
+        end
+
+        #Mark the object as not trashed for messageable.
+        #
+        #Object can be:
+        #* A Receipt
+        #* A Message
+        #* A Notification
+        #* A Conversation
+        #* An array with any of them
+        def untrash(obj)
+          case obj
+          when Receipt
+            return obj.untrash if obj.receiver == self
+          when Message, Notification
+            obj.untrash(self)
+          when Conversation
+            obj.untrash(self)
+          when Array
+            obj.map{ |sub_obj| untrash(sub_obj) }
           else
           return nil
           end
