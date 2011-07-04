@@ -17,7 +17,9 @@ class MessageMailer < ActionMailer::Base
   def new_message_email(message,receiver)
     @message = message
     @receiver = receiver
-    mail(:to => receiver.email, :subject => "You have a new message: " + strip_tags(message.subject)) do |format|
+    subject = message.subject.to_s
+    subject = strip_tags(subject) unless  subject.html_safe?
+    mail(:to => receiver.email, :subject => "You have a new message: " + subject) do |format|
       format.html {render __method__}
       format.text {render __method__}
     end
@@ -27,7 +29,9 @@ class MessageMailer < ActionMailer::Base
   def reply_message_email(message,receiver)
     @message = message
     @receiver = receiver
-    mail(:to => receiver.email, :subject => "You have a new reply: " + strip_tags(message.subject)) do |format|
+    subject = message.subject.to_s
+    subject = strip_tags(subject) unless  subject.html_safe?
+    mail(:to => receiver.email, :subject => "You have a new reply: " + subject) do |format|
       format.html {render __method__}
       format.text {render __method__}
     end

@@ -12,7 +12,9 @@ class NotificationMailer < ActionMailer::Base
   def new_notification_email(notification,receiver)
     @notification = notification
     @receiver = receiver
-    mail(:to => receiver.email, :subject => "You have a new notification: " + strip_tags(notification.subject)) do |format|
+    subject = message.subject.to_s
+    subject = strip_tags(subject) unless subject.html_safe?
+    mail(:to => receiver.email, :subject => "You have a new notification: " + subject) do |format|
       format.html {render __method__}
       format.text {render __method__}
     end

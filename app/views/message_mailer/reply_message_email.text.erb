@@ -1,10 +1,10 @@
-You have a new reply: <%= strip_tags(@message.subject) %>
+You have a new reply: <%= @message.subject.html_safe? ? @message.subject : strip_tags(@message.subject) %>
 ===============================================
  
 You have received a new reply:
 
 -----------------------------------------------
-<%= strip_tags @message.body %>
+<%= @message.body.html_safe? ? @message.body : strip_tags(@message.body) %>
 -----------------------------------------------
 
 Visit <%= root_url %> and go to your inbox for more info.
