@@ -10,7 +10,7 @@ module Mailboxer
         #receive notifications
         def acts_as_messageable
           has_many :messages
-          has_many :receipts, :order => 'created_at DESC', :dependent => :delete_all
+          has_many :receipts, :order => 'created_at DESC', :dependent => :destroy
 
           include Mailboxer::Models::Messageable::InstanceMethods
         end

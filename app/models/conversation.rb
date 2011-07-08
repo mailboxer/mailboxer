@@ -1,5 +1,5 @@
 class Conversation < ActiveRecord::Base
-	has_many :messages
+	has_many :messages, :dependent => :destroy
 	has_many :receipts, :through => :messages
 
 	validates_presence_of :subject

@@ -4,11 +4,14 @@ class Notification < ActiveRecord::Base
   belongs_to :sender, :polymorphic => :true
   belongs_to :object, :polymorphic => :true
   validates_presence_of :subject, :body
-  has_many :receipts
+  has_many :receipts, :dependent => :destroy
   
   scope :recipient, lambda { |recipient|
     joins(:receipts).where('receipts.receiver_id' => recipient.id,'receipts.receiver_type' => recipient.class.to_s)
-  }  
+  }
+  scope :find_by_object, lambda { |object|
+    where('object_id' => object.id,'object_type' => object.class.to_s)
+  }    
   scope :not_trashed, lambda {
     joins(:receipts).where('receipts.trashed' => false)
   }
