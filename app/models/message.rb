@@ -29,7 +29,7 @@ class Message < Notification
       msg_receipt.mailbox_type = "inbox"
       temp_receipts << msg_receipt
       #Should send an email?
-      if Mailboxer.uses_emails and r.should_email? self
+      if Mailboxer.uses_emails and r.send(Mailboxer.should_email_method,self)
         MessageMailer.send_email(self,r).deliver
       end
     end

@@ -16,28 +16,29 @@ module Mailboxer
         end
       end
 
-      module InstanceMethods
-        #Returning any kind of indentification you want for the model
-        def name
-          super
-        rescue NameError
-          return "You should add method :name in your Messageable model"
-          end
+      module InstanceMethods        
+          eval <<-EOM
+           #Returning any kind of indentification you want for the model
+           def #{Mailboxer.name_method}
+             super
+           rescue NameError
+             return "You should add method :name in your Messageable model"
+           end
 
-        #Returning the email address of the model
-        def email
-          super
-        rescue NameError
-          return "define_email@on_your.model"
-          end
+           #Returning the email address of the model
+           def #{Mailboxer.email_method}
+             super
+           rescue NameError
+             return "define_email@on_your.model"
+           end
 
-        #Returning whether an email should be sent for this object (Message or Notification)
-        def should_email?(object)
-          super
-        rescue NameError
-          return true
-          end
-
+           #Returning whether an email should be sent for this object (Message or Notification)
+           def #{Mailboxer.should_email_method}(object)
+             super
+           rescue NameError
+            return true
+            end
+           EOM
         #Gets the mailbox of the messageable
         def mailbox
           @mailbox = Mailbox.new(self) if @mailbox.nil?
@@ -139,8 +140,7 @@ module Mailboxer
           return nil
           end
         end
-        
-        
+
         #Mark the object as trashed for messageable.
         #
         #Object can be:

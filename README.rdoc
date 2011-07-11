@@ -27,6 +27,7 @@ And don't forget to migrate you database:
   
 = Requirements
 
+OUTDATED - It will be documented in the next days
 We are now adding support for sending emails when a Notification or a Message is sent to one o more recipients. So that, we mus assure that Messageable models have some specific methods. This methods are:
 
   #Returning any kind of indentification you want for the model
@@ -45,7 +46,7 @@ We are now adding support for sending emails when a Notification or a Message is
   end
 
 If these methods are not present, default ones will be created (the ones above).
-
+/OUTDATED
 
 = Usage
 
