@@ -9,8 +9,8 @@ class Notification < ActiveRecord::Base
   scope :recipient, lambda { |recipient|
     joins(:receipts).where('receipts.receiver_id' => recipient.id,'receipts.receiver_type' => recipient.class.to_s)
   }
-  scope :find_by_object, lambda { |object|
-    where('object_id' => object.id,'object_type' => object.class.to_s)
+  scope :with_object, lambda { |obj|
+    where('object_id' => obj.id,'object_type' => obj.class.to_s)
   }    
   scope :not_trashed, lambda {
     joins(:receipts).where('receipts.trashed' => false)
