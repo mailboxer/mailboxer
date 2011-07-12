@@ -27,7 +27,6 @@ And don't forget to migrate you database:
   
 = Requirements
 
-OUTDATED - It will be documented in the next days
 We are now adding support for sending emails when a Notification or a Message is sent to one o more recipients. So that, we mus assure that Messageable models have some specific methods. This methods are:
 
   #Returning any kind of indentification you want for the model
@@ -45,8 +44,22 @@ We are now adding support for sending emails when a Notification or a Message is
     return true
   end
 
-If these methods are not present, default ones will be created (the ones above).
-/OUTDATED
+These names are explicit enough to not collide with other methods, but as long as you need to change them you can do it by using mailboxer intializer. Just add or uncomment the following lines:
+
+  #Configures the methods needed by mailboxer
+  config.email_method = :email
+  config.name_method = :name
+  config.should_email_method = :should_email?
+  
+You may change to whatever you want or need. For example:
+  
+  config.email_method = :notifications_email
+  config.name_method = :display_name
+  config.should_email_method = :do_you_want_this_to_be_mailed?
+  
+Will use the method "notification_email" instead of "email", "display_name" for "name" and "do_you_want_this_to_be_mailed?" for "should_email?" 
+
+Using default or custom method names, if your model doesn't implement them, Mailboxer will use dummy methods not to crash but notify you the missing methods.
 
 = Usage
 
