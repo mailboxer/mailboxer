@@ -68,3 +68,13 @@ In your model:
   class User < ActiveRecord::Base      
     acts_as_messageable
   end
+
+You are not limited to User model. You can use Mailboxer in any other model and use it in serveral different models. If you have ducks and cylons in your application and you want to interchange messages as if they where the same, just use act_as_messageable in each one and you will be able to send duck-duck, duck-cylon, cylon-duck and cylon-cylon messages. Of course, you can extend it for as many clases as you need. Example:
+
+  class Duck < ActiveRecord::Base      
+    acts_as_messageable
+  end
+
+  class Cylon < ActiveRecord::Base      
+    acts_as_messageable
+  end
