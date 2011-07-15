@@ -30,7 +30,9 @@ class Message < Notification
       temp_receipts << msg_receipt
       #Should send an email?
       if Mailboxer.uses_emails and r.send(Mailboxer.should_email_method,self)
-        MessageMailer.send_email(self,r).deliver
+        unless r.send(Mailboxer.email_method).blank?
+          MessageMailer.send_email(self,r).deliver
+        end
       end
     end
     #Sender receipt
@@ -45,9 +47,9 @@ class Message < Notification
     if temp_receipts.all? { |t| t.errors.empty? }
       temp_receipts.each(&:save!) 	#Save receipts
       if reply
-      self.conversation.update_attribute(:updated_at, Time.now)
+        self.conversation.update_attribute(:updated_at, Time.now)
       end
-    self.recipients=nil
+      self.recipients=nil
     self.on_deliver_callback.call(self) unless self.on_deliver_callback.nil?
     end
     return sender_receipt

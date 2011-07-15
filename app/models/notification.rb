@@ -44,7 +44,9 @@ class Notification < ActiveRecord::Base
       temp_receipts << msg_receipt      
       #Should send an email?
       if Mailboxer.uses_emails and r.send(Mailboxer.should_email_method,self)
-        NotificationMailer.send_email(self,r).deliver
+        unless r.send(Mailboxer.email_method).blank?
+          NotificationMailer.send_email(self,r).deliver
+        end
       end
     end
     temp_receipts.each(&:valid?)
