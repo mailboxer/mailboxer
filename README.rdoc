@@ -1,4 +1,5 @@
-= Mailboxer {https://secure.travis-ci.org/travis-ci/travis-ci.png}[http://travis-ci.org/ging/mailboxer]
+= Mailboxer link:https://secure.travis-ci.org/travis-ci/travis-ci.png 
+{See on Travis CI}[link:http://travis-ci.org/ging/mailboxer]
 
 This project is based on the need of a private message system for {ging / social_stream}[https://github.com/ging/social_stream]. Instead of creating our core message system heavily dependent on our development we are trying to implement a generic and potent messaging gem.
 
