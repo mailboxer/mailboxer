@@ -12,3 +12,4 @@ Gemfile.lock
 .document
 .settings/
 rdoc/
+doc/

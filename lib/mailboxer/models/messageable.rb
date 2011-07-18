@@ -18,7 +18,7 @@ module Mailboxer
 
       module InstanceMethods        
           eval <<-EOM
-           #Returning any kind of indentification you want for the model
+           #Returning any kind of identification you want for the model
            def #{Mailboxer.name_method}
              super
            rescue NameError
