@@ -1,24 +1,14 @@
 h1. Mailboxer "!https://secure.travis-ci.org/ging/mailboxer.png!":http://travis-ci.org/ging/mailboxer
 
-This project is based on the need of a private message system for "ging / social_stream":https://github.com/ging/social_stream. 
-Instead of creating our core message system heavily dependent on our development we are trying to implement a generic and potent 
-messaging gem.
+This project is based on the need of a private message system for "ging / social_stream":https://github.com/ging/social_stream. Instead of creating our core message system heavily dependent on our development we are trying to implement a generic and potent messaging gem.
 
-After looking for a good gem to use we notice the lack of messaging gems and functionality in them. Mailboxer tries to fill this
-emptiness giving a powerfull and generic message system. It supports the use of conversations with two or more recipients, 
-send notification to a recipient (intended to be used as system notifications "Your picture has new comments", "John Doe has
-updated its document", etc.), emails the messageable model (if configured to do so). It has a complete use of a @Mailbox@ object
-for each messageable with @inbox@, @sentbox@ and @trash@. 
+After looking for a good gem to use we notice the lack of messaging gems and functionality in them. Mailboxer tries to fill this emptiness giving a powerfull and generic message system. It supports the use of conversations with two or more recipients, send notification to a recipient (intended to be used as system notifications "Your picture has new comments", "John Doe has updated its document", etc.), emails the messageable model (if configured to do so). It has a complete use of a @Mailbox@ object for each messageable with @inbox@, @sentbox@ and @trash@. 
 
-The gem is constantly growing and improving its functionality. As it is used with our paralell development "(ging / social_stream)":https://github.com/ging/social_stream
-we are finding and fixing bugs continously. If you want some functionality not supported yet or marked as TODO, you can create 
-an "issue":https://github.com/ging/mailboxer/issues to ask for it. It will be a great feedback for us, and we will know what you
-may find useful of the gem.
+The gem is constantly growing and improving its functionality. As it is used with our paralell development "(ging / social_stream)":https://github.com/ging/social_stream we are finding and fixing bugs continously. If you want some functionality not supported yet or marked as TODO, you can create an "issue":https://github.com/ging/mailboxer/issues to ask for it. It will be a great feedback for us, and we will know what you may find useful of the gem.
 
 Mailboxer was born from the great, but outdated, code from "lpsergi / acts_as_messageable":https://github.com/psergi/acts_as_messageable.
 
-We are now working to make an exhaustive documentation and some wiki pages in order to make even easier to use the gem at its 
-full potencial. Please, give us some time if you find something missing or "ask for it":https://github.com/ging/mailboxer/issues.
+We are now working to make an exhaustive documentation and some wiki pages in order to make even easier to use the gem at its full potencial. Please, give us some time if you find something missing or "ask for it":https://github.com/ging/mailboxer/issues.
 
 h2. Installation
 
@@ -101,21 +91,8 @@ h2. License
 
 Copyright (c) 2011 Eduardo Casanova Cuesta
 
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
