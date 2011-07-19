@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110719092838) do
+ActiveRecord::Schema.define(:version => 20110719121059) do
 
   create_table "conversations", :force => true do |t|
     t.string   "subject",    :default => ""
@@ -38,8 +38,6 @@ ActiveRecord::Schema.define(:version => 20110719092838) do
     t.string   "subject",              :default => ""
     t.integer  "sender_id"
     t.string   "sender_type"
-    t.integer  "object_id"
-    t.string   "object_type"
     t.integer  "conversation_id"
     t.boolean  "draft",                :default => false
     t.datetime "updated_at",                              :null => false
