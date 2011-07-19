@@ -14,6 +14,8 @@ class Mailboxer::InstallGenerator < Rails::Generators::Base #:nodoc:
   end
   
   def create_migration_file
-    migration_template 'migration.rb', 'db/migrate/create_mailboxer.rb'
+    require 'rake'
+    Rails.application.load_tasks
+    Rake::Task['mailboxer_engine:install:migrations'].invoke
   end
 end

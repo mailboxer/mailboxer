@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
 	s.name = "mailboxer"
-	s.version = "0.3.3"
+	s.version = "0.4.0"
 	s.authors = ["Eduardo Casanova Cuesta"]
 	s.summary = "Messaging system for rails apps."
 	s.description = "A Rails engine that allows any model to act as messageable, allowing it to exchange messages " +
@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
 
 	# Development Gem dependencies
 	#
-  s.add_runtime_dependency('rails', '~> 3.0.0')
+  s.add_runtime_dependency('rails', '~> 3.1.0.rc4')
 	# Testing database
 	s.add_development_dependency('sqlite3-ruby')
 	# Debugging

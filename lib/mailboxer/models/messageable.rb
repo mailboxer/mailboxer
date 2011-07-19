@@ -47,10 +47,10 @@ module Mailboxer
         end
 
         #Sends a notification to the messageable
-        def notify(subject,body,object = nil)
+        def notify(subject,body,obj = nil)
           notification = Notification.new({:body => body, :subject => subject})
           notification.recipients = [self]
-          notification.object = object if object.present?
+          notification.notified_object = obj if obj.present?
           return notification.deliver
         end
 

@@ -14,7 +14,7 @@ class NotificationMailer < ActionMailer::Base
     @receiver = receiver
     subject = message.subject.to_s
     subject = strip_tags(subject) unless subject.html_safe?
-    mail(:to => receiver.send(Mailboxer.email_method), :subject => "You have a new notification: " + subject) do |format|
+    mail(:to => receiver.send(Mailboxer.email_method), :subject => t('mailboxer.notification_mailere.subject', :subject => subject)) do |format|
       format.html {render __method__}
       format.text {render __method__}
     end

@@ -2,7 +2,7 @@ class Notification < ActiveRecord::Base
 
   attr_accessor :recipients
   belongs_to :sender, :polymorphic => :true
-  belongs_to :object, :polymorphic => :true
+  belongs_to :notified_object, :polymorphic => :true
   validates_presence_of :subject, :body
   has_many :receipts, :dependent => :destroy
   
@@ -10,7 +10,7 @@ class Notification < ActiveRecord::Base
     joins(:receipts).where('receipts.receiver_id' => recipient.id,'receipts.receiver_type' => recipient.class.to_s)
   }
   scope :with_object, lambda { |obj|
-    where('object_id' => obj.id,'object_type' => obj.class.to_s)
+    where('notified_object_id' => obj.id,'notified_object_type' => obj.class.to_s)
   }    
   scope :not_trashed, lambda {
     joins(:receipts).where('receipts.trashed' => false)
@@ -21,11 +21,11 @@ class Notification < ActiveRecord::Base
   
   class << self
     #Sends a Notification to all the recipients
-    def notify_all(recipients,subject,body,object = nil)
+    def notify_all(recipients,subject,body,obj = nil)
       notification = Notification.new({:body => body, :subject => subject})
       notification.recipients = recipients.is_a?(Array) ? recipients : [recipients]
       notification.recipients = notification.recipients.uniq
-      notification.object = object if object.present?
+      notification.notified_object = obj if obj.present?
       return notification.deliver
     end
   end
