@@ -42,16 +42,18 @@ class Notification < ActiveRecord::Base
       msg_receipt.read = false
       msg_receipt.receiver = r
       temp_receipts << msg_receipt      
-      #Should send an email?
-      if Mailboxer.uses_emails and r.send(Mailboxer.should_email_method,self)
-        unless r.send(Mailboxer.email_method).blank?
-          NotificationMailer.send_email(self,r).deliver
-        end
-      end
     end
     temp_receipts.each(&:valid?)
     if temp_receipts.all? { |t| t.errors.empty? }
       temp_receipts.each(&:save!)   #Save receipts
+      self.recipients.each do |r|
+        #Should send an email?
+        if Mailboxer.uses_emails and r.send(Mailboxer.should_email_method,self)
+          unless r.send(Mailboxer.email_method).blank?
+            NotificationMailer.send_email(self,r).deliver
+          end
+        end
+      end
       self.recipients=nil
     end
     return temp_receipts if temp_receipts.size > 1

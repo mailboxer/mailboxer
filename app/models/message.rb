@@ -28,12 +28,6 @@ class Message < Notification
       msg_receipt.receiver = r
       msg_receipt.mailbox_type = "inbox"
       temp_receipts << msg_receipt
-      #Should send an email?
-      if Mailboxer.uses_emails and r.send(Mailboxer.should_email_method,self)
-        unless r.send(Mailboxer.email_method).blank?
-          MessageMailer.send_email(self,r).deliver
-        end
-      end
     end
     #Sender receipt
     sender_receipt = Receipt.new
@@ -46,6 +40,14 @@ class Message < Notification
     temp_receipts.each(&:valid?)
     if temp_receipts.all? { |t| t.errors.empty? }
       temp_receipts.each(&:save!) 	#Save receipts
+      self.recipients.each do |r|
+      #Should send an email?
+        if Mailboxer.uses_emails and r.send(Mailboxer.should_email_method,self)
+          unless r.send(Mailboxer.email_method).blank?
+            MessageMailer.send_email(self,r).deliver
+          end
+        end
+      end
       if reply
         self.conversation.update_attribute(:updated_at, Time.now)
       end
