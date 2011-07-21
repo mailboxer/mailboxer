@@ -4,7 +4,7 @@ class MessageMailer < ActionMailer::Base
   #It calls new_message_email if notifing a new message and reply_message_email
   #when indicating a reply to an already created conversation.
   def send_email(message,receiver)    
-    if message.conversation.messages.size > 0
+    if message.conversation.messages.size > 1 
       reply_message_email(message,receiver)
     else
       new_message_email(message,receiver)
