@@ -12,7 +12,7 @@ class NotificationMailer < ActionMailer::Base
   def new_notification_email(notification,receiver)
     @notification = notification
     @receiver = receiver
-    subject = message.subject.to_s
+    subject = notification.subject.to_s
     subject = strip_tags(subject) unless subject.html_safe?
     mail(:to => receiver.send(Mailboxer.email_method), :subject => t('mailboxer.notification_mailer.subject', :subject => subject)) do |format|
       format.text {render __method__}
