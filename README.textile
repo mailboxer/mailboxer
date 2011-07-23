@@ -1,5 +1,7 @@
 h1. Mailboxer 0.4.x "!https://secure.travis-ci.org/ging/mailboxer.png!":http://travis-ci.org/ging/mailboxer
 
+h2. IMPORTANT: This README is only valid for 'master' branch.
+
 This project is based on the need of a private message system for "ging / social_stream":https://github.com/ging/social_stream. Instead of creating our core message system heavily dependent on our development we are trying to implement a generic and potent messaging gem.
 
 After looking for a good gem to use we notice the lack of messaging gems and functionality in them. Mailboxer tries to fill this emptiness giving a powerfull and generic message system. It supports the use of conversations with two or more recipients, send notification to a recipient (intended to be used as system notifications "Your picture has new comments", "John Doe has updated its document", etc.), emails the messageable model (if configured to do so). It has a complete use of a @Mailbox@ object for each messageable with @inbox@, @sentbox@ and @trash@. 
