@@ -1,7 +1,6 @@
 class Cylon < ActiveRecord::Base
   acts_as_messageable
-    
-  def should_email?(object)
-    return false
+  def mailboxer_email(object)
+    return nil
   end
 end

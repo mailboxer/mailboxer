@@ -7,7 +7,6 @@ Mailboxer.setup do |config|
   config.default_from = "no-reply@mailboxer.com"
   
   #Configures the methods needed by mailboxer
-  #config.email_method = :email
+  #config.email_method = :mailboxer_email
   #config.name_method = :name
-  #config.should_email_method = :should_email?
 end
