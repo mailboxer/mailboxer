@@ -6,11 +6,9 @@ module Mailboxer
   mattr_accessor :default_from
   mattr_accessor :uses_emails
   mattr_accessor :email_method
-  @@email_method = :email
+  @@email_method = :mailboxer_email
   mattr_accessor :name_method
   @@name_method = :name
-  mattr_accessor :should_email_method
-  @@should_email_method = :should_email?
   
    class << self
     def setup

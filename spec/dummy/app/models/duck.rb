@@ -1,12 +1,11 @@
 class Duck < ActiveRecord::Base
   acts_as_messageable
-  
-  def should_email?(object)
+  def mailboxer_email(object)
     case object
     when Message
-      return false
+      return nil
     when Notification
-      return true
+      return email
     end
   end
 end

@@ -25,19 +25,17 @@ module Mailboxer
              return "You should add method :name in your Messageable model"
            end
 
-           #Returning the email address of the model
-           def #{Mailboxer.email_method}
+           #Returning the email address of the model if an email should be sent for this object (Message or Notification).
+           #If no mail has to be sent, return nil. 
+           def #{Mailboxer.email_method}(object)
              super
            rescue NameError
+             #Check if an email should be sent for that object
+             #if true
              return "define_email@on_your.model"
+             #if false
+             #return nil
            end
-
-           #Returning whether an email should be sent for this object (Message or Notification)
-           def #{Mailboxer.should_email_method}(object)
-             super
-           rescue NameError
-            return true
-            end
            EOM
         #Gets the mailbox of the messageable
         def mailbox
