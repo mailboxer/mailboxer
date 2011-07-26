@@ -1,6 +1,4 @@
-h1. Mailboxer 0.4.x "!https://secure.travis-ci.org/ging/mailboxer.png!":http://travis-ci.org/ging/mailboxer
-
-h2. IMPORTANT: This README is only valid for 'master' branch.
+h1. Mailboxer 0.5.x "!https://secure.travis-ci.org/ging/mailboxer.png!":http://travis-ci.org/ging/mailboxer
 
 This project is based on the need of a private message system for "ging / social_stream":https://github.com/ging/social_stream. Instead of creating our core message system heavily dependent on our development we are trying to implement a generic and potent messaging gem.
 
@@ -39,29 +37,28 @@ We are now adding support for sending emails when a Notification or a Message is
   def name
     return "You should add method :name in your Messageable model"
   end
-  #Returning the email address of the model
-  def email
+  #Returning the email address of the model if an email should be sent for this object (Message or Notification).
+  #If no mail has to be sent, return nil. 
+  def mailboxer_email(object)
+    #Check if an email should be sent for that object
+    #if true
     return "define_email@on_your.model"
-  end
-  #Returning whether an email should be sent for this object (Message or Notification)
-  def should_email?(object)
-    return true
+    #if false
+    #return nil
   end
 </code></pre>
 These names are explicit enough to avoid colliding with other methods, but as long as you need to change them you can do it by using mailboxer initializer. Just add or uncomment the following lines:
 <pre><code>
   #Configures the methods needed by mailboxer
-  config.email_method = :email
+  config.email_method = :mailboxer_email
   config.name_method = :name
-  config.should_email_method = :should_email?
 </code></pre>
 You may change whatever you want or need. For example:
 <pre><code>
   config.email_method = :notifications_email
   config.name_method = :display_name
-  config.should_email_method = :do_you_want_this_to_be_mailed?
 </code></pre>
-Will use the method @notification_email@ instead of @email@, @display_name@ for @name@ and @do_you_want_this_to_be_mailed?@ for @should_email?@ 
+Will use the method @notification_email(object)@ instead of @mailboxer_email(object)@ and @display_name@ for @name@ 
 
 Using default or custom method names, if your model doesn't implement them, Mailboxer will use dummy methods not to crash but notify you the missing methods.
 

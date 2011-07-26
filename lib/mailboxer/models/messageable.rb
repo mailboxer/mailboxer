@@ -30,11 +30,7 @@ module Mailboxer
            def #{Mailboxer.email_method}(object)
              super
            rescue NameError
-             #Check if an email should be sent for that object
-             #if true
              return "define_email@on_your.model"
-             #if false
-             #return nil
            end
            EOM
         #Gets the mailbox of the messageable
