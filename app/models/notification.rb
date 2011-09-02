@@ -28,6 +28,21 @@ class Notification < ActiveRecord::Base
       notification.notified_object = obj if obj.present?
       return notification.deliver
     end
+    
+    #Takes a +Receipt+ or an +Array+ of them and returns +true+ if the delivery was
+    #successful or +false+ if some error raised
+    def successful_delivery receipts
+      case receipts
+      when Receipt
+        receipts.valid?
+        return receipts.errors.empty?
+       when Array
+         receipts.each(&:valid?)
+         return receipts.all? { |t| t.errors.empty? }
+       else
+         return false
+       end      
+    end
   end
 
   #Delivers a Notification. USE NOT RECOMENDED.
