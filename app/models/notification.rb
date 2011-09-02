@@ -21,17 +21,17 @@ class Notification < ActiveRecord::Base
   
   class << self
     #Sends a Notification to all the recipients
-    def notify_all(recipients,subject,body,obj = nil)
+    def notify_all(recipients,subject,body,obj = nil,sanitize_text = true)
       notification = Notification.new({:body => body, :subject => subject})
       notification.recipients = recipients.is_a?(Array) ? recipients : [recipients]
       notification.recipients = notification.recipients.uniq
       notification.notified_object = obj if obj.present?
-      return notification.deliver
+      return notification.deliver sanitize_text
     end
     
     #Takes a +Receipt+ or an +Array+ of them and returns +true+ if the delivery was
     #successful or +false+ if some error raised
-    def successful_delivery receipts
+    def successful_delivery? receipts
       case receipts
       when Receipt
         receipts.valid?
