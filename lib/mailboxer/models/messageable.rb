@@ -9,8 +9,8 @@ module Mailboxer
         #Converts the model into messageable allowing it to interchange messages and
         #receive notifications
         def acts_as_messageable
-          has_many :messages
-          has_many :receipts, :order => 'created_at DESC', :dependent => :destroy
+          has_many :messages, :as => :sender
+          has_many :receipts, :order => 'created_at DESC', :dependent => :destroy, :as => :receiver
 
           include Mailboxer::Models::Messageable::InstanceMethods
         end
