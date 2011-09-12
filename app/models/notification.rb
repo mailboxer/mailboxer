@@ -21,11 +21,12 @@ class Notification < ActiveRecord::Base
   
   class << self
     #Sends a Notification to all the recipients
-    def notify_all(recipients,subject,body,obj = nil,sanitize_text = true)
+    def notify_all(recipients,subject,body,obj = nil,sanitize_text = true,notification_code=nil)
       notification = Notification.new({:body => body, :subject => subject})
       notification.recipients = recipients.is_a?(Array) ? recipients : [recipients]
       notification.recipients = notification.recipients.uniq
       notification.notified_object = obj if obj.present?
+      notification.notification_code = notification_code if notification_code.present?
       return notification.deliver sanitize_text
     end
     

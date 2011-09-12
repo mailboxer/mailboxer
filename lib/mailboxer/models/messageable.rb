@@ -41,11 +41,8 @@ module Mailboxer
         end
 
         #Sends a notification to the messageable
-        def notify(subject,body,obj = nil,sanitize_text=true)
-          notification = Notification.new({:body => body, :subject => subject})
-          notification.recipients = [self]
-          notification.notified_object = obj if obj.present?
-          return notification.deliver sanitize_text
+        def notify(subject,body,obj = nil,sanitize_text=true,notification_code=nil)
+          return Notification.notify_all([self],subject,body,obj,sanitize_text,notification_code)
         end
 
         #Sends a messages, starting a new conversation, with the messageable
