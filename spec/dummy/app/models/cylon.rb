@@ -4,3 +4,4 @@ class Cylon < ActiveRecord::Base
     return nil
   end
 end
+
