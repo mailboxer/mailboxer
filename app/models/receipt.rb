@@ -136,8 +136,12 @@ class Receipt < ActiveRecord::Base
   end
 
   searchable do
-    text :subject, boost: 5
-    text :body
+    text :subject, boost: 5 do
+      message.subject
+    end
+    text :body do
+      message.body
+    end
     integer :receiver_id
   end
 
