@@ -181,10 +181,10 @@ module Mailboxer
         def search_messages(query)
           @search = Receipt.search do
             fulltext query
-            with(:receiver_id) == self.id
+            with :receiver_id, self.id
           end
 
-          @search.results.map { |r| r.conversation }
+          @search.results.map { |r| r.conversation }.uniq
         end
       end
     end
