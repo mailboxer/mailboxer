@@ -177,6 +177,15 @@ module Mailboxer
           return nil
           end
         end
+
+        def search(query)
+          @search = Receipt.search do
+            fulltext query
+            with(:receiver_id) == self.id
+          end
+
+          @search.results
+        end
       end
     end
   end
