@@ -5,6 +5,7 @@ module Mailboxer
   
   mattr_accessor :default_from
   mattr_accessor :uses_emails
+  mattr_accessor :search_enabled
   mattr_accessor :email_method
   @@email_method = :mailboxer_email
   mattr_accessor :name_method

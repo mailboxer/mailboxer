@@ -135,14 +135,16 @@ class Receipt < ActiveRecord::Base
     end
   end
 
-  searchable do
-    text :subject, boost: 5 do
-      message.subject if message
+  if Mailboxer.search_enabled
+    searchable do
+      text :subject, boost: 5 do
+        message.subject if message
+      end
+      text :body do
+        message.body if message
+      end
+      integer :receiver_id
     end
-    text :body do
-      message.body if message
-    end
-    integer :receiver_id
   end
 
 end
