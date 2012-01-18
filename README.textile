@@ -29,14 +29,32 @@ And don't forget to migrate you database:
   rake db:migrate
 </code></pre>
 
-h2. Requirements
+h2. Requirements & Settings
 
-We are now adding support for sending emails when a Notification or a Message is sent to one o more recipients. So that, we must assure that Messageable models have some specific methods. These methods are:
+h3. Emails
+
+We are now adding support for sending emails when a Notification or a Message is sent to one o more recipients. You should modify mailboxer initializer (/config/initializer/mailboxer.rb) to edit this settings.
+<pre><code>
+Mailboxer.setup do |config|
+  ...
+  #Configures if you applications uses or no the email sending for Notifications and Messages
+  config.uses_emails = true  
+  #Configures the default from for the email sent for Messages and Notifications of Mailboxer
+  config.default_from = "no-reply@dit.upm.es"
+  ...
+end
+</code></pre>
+
+h3. User identities
+
+Users must have an identity defined by a @name@ and an @email@. So that, we must assure that Messageable models have some specific methods. These methods are:
 <pre><code>
   #Returning any kind of identification you want for the model
   def name
     return "You should add method :name in your Messageable model"
   end
+</code></pre>
+<pre><code>
   #Returning the email address of the model if an email should be sent for this object (Message or Notification).
   #If no mail has to be sent, return nil. 
   def mailboxer_email(object)
@@ -47,16 +65,25 @@ We are now adding support for sending emails when a Notification or a Message is
     #return nil
   end
 </code></pre>
-These names are explicit enough to avoid colliding with other methods, but as long as you need to change them you can do it by using mailboxer initializer. Just add or uncomment the following lines:
+These names are explicit enough to avoid colliding with other methods, but as long as you need to change them you can do it by using mailboxer initializer (/config/initializer/mailboxer.rb). Just add or uncomment the following lines:
 <pre><code>
+Mailboxer.setup do |config|
+  ...
   #Configures the methods needed by mailboxer
   config.email_method = :mailboxer_email
   config.name_method = :name
+  ...
+end  
 </code></pre>
 You may change whatever you want or need. For example:
 <pre><code>
-  config.email_method = :notifications_email
-  config.name_method = :display_name
+Mailboxer.setup do |config|
+  ...
+  #Configures the methods needed by mailboxer
+  config.email_method = :notifications_email  #instead of :mailboxer_email
+  config.name_method = :display_name          #instead of :display_name
+  ...
+end  
 </code></pre>
 Will use the method @notification_email(object)@ instead of @mailboxer_email(object)@ and @display_name@ for @name@ 
 
@@ -82,13 +109,69 @@ You are not limited to User model. You can use Mailboxer in any other model and 
   end
 </code></pre>
 
-h2. Using Mailboxer. API
+h2. Mailboxer API
 
-In order to mantain the README in a proper size and simplicity, all the API is available in "Mailboxer wiki":https://github.com/ging/mailboxer/wiki
+h3. How can I send a message?
+
+<pre><code>
+  #alfa wants to send a message to beta
+  alfa.send_message(beta, "Body", "subject")
+</code></pre>
+
+h3. How can I reply a message?
+
+<pre><code>
+  #alfa wants to reply to all in a conversation
+  #using a receipt
+  alfa.reply_to_all(receipt, "Reply body")
+  #using a conversation
+  alfa.reply_to_conversation(conversation, "Reply body")
+</code></pre>
+<pre><code>
+  #alfa wants to reply to the sender of a message (and ONLY the sender)
+  #using a receipt
+  alfa.reply_to_sender(receipt, "Reply body")
+</code></pre>
+
+h3. How can I retrieve my conversations?
+
+<pre><code>
+  #alfa wants to retrieve all his conversations
+  alfa.mailbox.conversations
+  #A wants to retrieve his inbox
+  alfa.mailbox.inbox
+  #A wants to retrieve his sent conversations
+  alfa.mailbox.sentbox
+  #alfa wants to retrieve his trashed conversations
+  alfa.mailbox.trash  
+</code></pre>
+
+h3. How can I read the messages of a conversation?
+
+As a messageable, what you receive receipts wich are linked with the message itself. You should retrieve your receipts for the conversation a get the message associated to them.
+
+This is done this way because receipts save the information about the relation between messageable and the messages: is it read?, is it trashed?, etc.
+<pre><code>
+  #alfa gets the last conversation (chronologically, the first in the inbox)
+  conversation = alfa.mailbox.inbox.first
+  #alfa gets it receipts chronologically ordered.
+  receipts = conversation.receipts_for alfa
+  #using the receipts (i.e. in the view)
+  receipts.each do |receipt|
+    ...
+    message = receipt.message
+    read = receipt.is_unread? #or message.is_unread?(alfa)
+    ...
+  end  
+</code></pre>
+
+h3. Any other thing ...
+
+You can take a look at the full documentation of Mailboxer in "rubydoc.info":http://rubydoc.info/gems/mailboxer/frames.
 
 h2. License
 
-Copyright (c) 2011 Eduardo Casanova Cuesta
+Copyright (c) 2012 Eduardo Casanova Cuesta
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
