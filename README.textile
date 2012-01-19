@@ -146,6 +146,20 @@ h3. How can I retrieve my conversations?
   alfa.mailbox.trash  
 </code></pre>
 
+h3. How can I paginate conversations?
+
+<pre><code>
+  #Using Kaminari to paginate the differents sets of conversations
+  #Paginating all conversations using :page parameter and 9 per page
+  conversations = Kaminari.paginate_array(alfa.mailbox.conversations).page(params[:page]).per(9)
+  #Paginating received conversations using :page parameter and 9 per page
+  conversations = Kaminari.paginate_array(alfa.mailbox.inbox).page(params[:page]).per(9)
+  #Paginating sent conversations using :page parameter and 9 per page
+  conversations = Kaminari.paginate_array(alfa.mailbox.sentbox).page(params[:page]).per(9)
+  #Paginating trashed conversations using :page parameter and 9 per page
+  conversations = Kaminari.paginate_array(alfa.mailbox.trash).page(params[:page]).per(9) 
+</code></pre>
+
 h3. How can I read the messages of a conversation?
 
 As a messageable, what you receive receipts wich are linked with the message itself. You should retrieve your receipts for the conversation a get the message associated to them.
