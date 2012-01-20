@@ -46,7 +46,7 @@ class Mailbox
       conv = conv.unread(@messageable)
     end
 
-    return conv.uniq
+    return conv
   end
 
   #Returns the conversations in the inbox of messageable
