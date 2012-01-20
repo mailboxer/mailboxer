@@ -22,7 +22,7 @@ module Mailboxer
            def #{Mailboxer.name_method}
              super
            rescue NameError
-             return "You should add method :name in your Messageable model"
+             return "You should add method :#{Mailboxer.name_method} in your Messageable model"
            end
 
            #Returning the email address of the model if an email should be sent for this object (Message or Notification).
@@ -30,7 +30,7 @@ module Mailboxer
            def #{Mailboxer.email_method}(object)
              super
            rescue NameError
-             return "define_email@on_your.model"
+             return "You should add method :#{Mailboxer.email_method} in your Messageable model"
            end
            EOM
         #Gets the mailbox of the messageable
