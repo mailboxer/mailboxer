@@ -297,6 +297,10 @@ describe "Mailboxer::Models::Messageable through User" do
     @conversation.receipts_for(@entity1).first.trashed.should==true
   end
 
+  it "should be able to read attachment" do
+    @receipt = @entity1.send_message(@entity2, "Body", "Subject", nil, File.open('spec/testfile.txt'))
+    @conversation = @receipt.conversation
+    @conversation.messages.first.attachment_identifier.should=='testfile.txt'
+  end
 
-  
 end

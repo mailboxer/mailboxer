@@ -20,6 +20,8 @@ Gem::Specification.new do |s|
 	# Development Gem dependencies
 	#
   s.add_runtime_dependency('rails', '>= 3.1.0')
+  s.add_runtime_dependency('carrierwave', '>= 0.5.8')
+  s.add_runtime_dependency('sunspot_rails', '>= 1.3.0')
 	# Testing database
 	s.add_development_dependency('sqlite3-ruby')
 	# Debugging
