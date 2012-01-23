@@ -9,4 +9,6 @@ Mailboxer.setup do |config|
   #Configures the methods needed by mailboxer
   #config.email_method = :mailboxer_email
   #config.name_method = :name
+
+  config.search_enabled = true
 end
