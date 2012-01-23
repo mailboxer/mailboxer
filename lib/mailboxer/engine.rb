@@ -1,5 +1,7 @@
 # Database foreign keys
 require 'foreigner'
+require 'carrierwave'
+require 'sunspot_rails'
 
 module Mailboxer
   class Engine < Rails::Engine

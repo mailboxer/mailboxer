@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
 
 	# Development Gem dependencies
 	#
-  s.add_runtime_dependency('rails', '>= 3.1.0')
+  s.add_runtime_dependency('rails', '~> 3.0.0')
   s.add_runtime_dependency('carrierwave', '>= 0.5.8')
   s.add_runtime_dependency('sunspot_rails', '>= 1.3.0')
 	# Testing database
@@ -34,7 +34,9 @@ Gem::Specification.new do |s|
 	s.add_development_dependency('factory_girl', '>= 1.3.2')
 	# Population
 	s.add_development_dependency('forgery', '>= 0.3.6')
-	# Integration testing
-	s.add_development_dependency('capybara', '>= 0.3.9')
+  # Integration testing
+  s.add_development_dependency('capybara', '>= 0.3.9')
+  # 
+  s.add_development_dependency('sunspot_solr', '>= 1.3.0')
 end
 

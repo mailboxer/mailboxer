@@ -137,7 +137,7 @@ class Receipt < ActiveRecord::Base
 
   if Mailboxer.search_enabled
     searchable do
-      text :subject, boost: 5 do
+      text :subject, :boost => 5 do
         message.subject if message
       end
       text :body do
