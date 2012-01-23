@@ -10,5 +10,5 @@ Mailboxer.setup do |config|
   #config.email_method = :mailboxer_email
   #config.name_method = :name
 
-  config.search_enabled = true
+  config.search_enabled = false
 end
