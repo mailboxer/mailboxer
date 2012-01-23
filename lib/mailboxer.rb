@@ -4,8 +4,13 @@ module Mailboxer
   end  
   
   mattr_accessor :default_from
+  @@default_from = "no-reply@mailboxer.com"
   mattr_accessor :uses_emails
+  @@uses_emails = true
   mattr_accessor :search_enabled
+  @@search_enabled = false
+  mattr_accessor :search_engine
+  @@search_engine = :solr
   mattr_accessor :email_method
   @@email_method = :mailboxer_email
   mattr_accessor :name_method
