@@ -18,42 +18,42 @@ messageable model (if configured to do so). It has a complete use of a
 The gem is constantly growing and improving its functionality. As it is
 used with our parallel development [ging / social\_stream](https://github.com/ging/social_stream) we are finding and fixing bugs continously. If you want
 some functionality not supported yet or marked as TODO, you can create
-an [issue][] to ask for it. It will be a great feedback for us, and we
+an [issue](https://github.com/ging/mailboxer/issues) to ask for it. It will be a great feedback for us, and we
 will know what you may find useful of the gem.
 
 Mailboxer was born from the great, but outdated, code from [lpsergi /
-acts*as*messageable][].
+acts*as*messageable](https://github.com/psergi/acts_as_messageable).
 
 We are now working to make an exhaustive documentation and some wiki
 pages in order to make even easier to use the gem at its full potencial.
 Please, give us some time if you find something missing or [ask for
-it][issue].
+it](https://github.com/ging/mailboxer/issues).
 
 Installation
 ------------
 
 Add to your Gemfile:
 
-````ruby
+````
 gem ‘mailboxer’
 ````
 
 Then run:
 
 ````
-bundle update
+$ bundle update
 ````
 
 Run install script:
 
 ````
-rails g mailboxer:install
+$ rails g mailboxer:install
 ````
 
 And don't forget to migrate you database:
 
 ````
-rake db:migrate
+$ rake db:migrate
 ````
 
 Requirements
@@ -127,7 +127,7 @@ end
 ## Using The Mailboxer API
 
 In order to mantain the README in a proper size and simplicity, all the
-API is available in [Mailboxer wiki](wiki)
+API is available in [Mailboxer wiki](http://rubydoc.info/gems/mailboxer/frames)
 
 ##License
 
