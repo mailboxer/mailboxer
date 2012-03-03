@@ -146,14 +146,14 @@ end
 
 ## Mailboxer API
 
-h3. How can I send a message?
+### How can I send a message?
 
 ````ruby
   #alfa wants to send a message to beta
   alfa.send_message(beta, "Body", "subject")
 ````
 
-h3. How can I reply a message?
+### How can I reply a message?
 
 ````ruby
   #alfa wants to reply to all in a conversation
@@ -169,7 +169,7 @@ h3. How can I reply a message?
   alfa.reply_to_sender(receipt, "Reply body")
 ````
 
-h3. How can I retrieve my conversations?
+### How can I retrieve my conversations?
 
 ````ruby
   #alfa wants to retrieve all his conversations
@@ -182,7 +182,7 @@ h3. How can I retrieve my conversations?
   alfa.mailbox.trash
 ````
 
-h3. How can I paginate conversations?
+### How can I paginate conversations?
 
 ````ruby
   #Using Kaminari to paginate the differents sets of conversations
@@ -196,7 +196,7 @@ h3. How can I paginate conversations?
   conversations = Kaminari.paginate_array(alfa.mailbox.trash).page(params[:page]).per(9)
 ````
 
-h3. How can I read the messages of a conversation?
+### How can I read the messages of a conversation?
 
 As a messageable, what you receive receipts wich are linked with the message itself. You should retrieve your receipts for the conversation a get the message associated to them.
 
