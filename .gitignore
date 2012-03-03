@@ -8,7 +8,6 @@ spec/dummy/tmp/
 spec/dummy/.project
 spec/dummy/solr
 **.tmp_*
-Gemfile.lock
 .idea
 .project
 .document
