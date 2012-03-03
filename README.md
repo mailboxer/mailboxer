@@ -63,7 +63,7 @@ We are now adding support for sending emails when a Notification or a
 Message is sent to one o more recipients. So that, we must assure that
 Messageable models have some specific methods. These methods are:
 
-````
+````ruby
 #Returning any kind of identification you want for the model
 def name
   return "You should add method :name in your Messageable model"
@@ -81,7 +81,7 @@ end
 
 These names are explicit enough to avoid colliding with other methods, but as long as you need to change them you can do it by using mailboxer initializer. Just add or uncomment the following lines:
 
-````
+````ruby
 #Configures the methods needed by mailboxer
 config.email_method = :mailboxer_email
 config.name_method = :name
@@ -89,7 +89,7 @@ config.name_method = :name
 
 You may change whatever you want or need. For example:
 
-````
+````ruby
 config.email_method = :notifications_email
 config.name_method = :display_name
 ````
@@ -102,7 +102,7 @@ Using default or custom method names, if your model doesn't implement them, Mail
 
 In your model:
 
-````
+````ruby
 class User < ActiveRecord::Base
   acts_as_messageable
 end
@@ -112,13 +112,13 @@ You are not limited to User model. You can use Mailboxer in any other model and 
 
 Example:
 
-````
+````ruby
 class Duck < ActiveRecord::Base
   acts_as_messageable
 end
 ````
 
-````
+````ruby
 class Cylon < ActiveRecord::Base
   acts_as_messageable
 end
