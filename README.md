@@ -1,4 +1,4 @@
-# Mailboxer 0.6.x [![](https://secure.travis-ci.org/ging/mailboxer.png)](http://travis-ci.org/ging/mailboxer)
+# Mailboxer 0.6.x [![](https://secure.travis-ci.org/ging/mailboxer.png)](http://travis-ci.org/ging/mailboxer) [![](https://gemnasium.com/ging/mailboxer.png)](https://gemnasium.com/ging/mailboxer)
 
 This project is based on the need of a private message system for [ging
 / social\_stream](https://github.com/ging/social_stream). Instead of creating our core message system heavily
@@ -56,18 +56,34 @@ And don't forget to migrate you database:
 $ rake db:migrate
 ````
 
-Requirements
-------------
+## Requirements & Settings
 
-We are now adding support for sending emails when a Notification or a
-Message is sent to one o more recipients. So that, we must assure that
-Messageable models have some specific methods. These methods are:
+### Emails
+
+We are now adding support for sending emails when a Notification or a Message is sent to one o more recipients. You should modify mailboxer initializer (/config/initializer/mailboxer.rb) to edit this settings.
+
+````ruby
+Mailboxer.setup do |config|
+  #Configures if you applications uses or no the email sending for Notifications and Messages
+  config.uses_emails = true  
+  #Configures the default from for the email sent for Messages and Notifications of Mailboxer
+  config.default_from = "no-reply@dit.upm.es"
+  ...
+end
+````
+
+### User identities
+
+Users must have an identity defined by a `name` and an `email`. We must assure that Messageable models have some specific methods. These methods are:
 
 ````ruby
 #Returning any kind of identification you want for the model
 def name
   return "You should add method :name in your Messageable model"
 end
+````
+
+````ruby
 #Returning the email address of the model if an email should be sent for this object (Message or Notification).
 #If no mail has to be sent, return nil.
 def mailboxer_email(object)
@@ -79,12 +95,16 @@ def mailboxer_email(object)
 end
 ````
 
-These names are explicit enough to avoid colliding with other methods, but as long as you need to change them you can do it by using mailboxer initializer. Just add or uncomment the following lines:
+These names are explicit enough to avoid colliding with other methods, but as long as you need to change them you can do it by using mailboxer initializer (/config/initializer/mailboxer.rb). Just add or uncomment the following lines:
 
 ````ruby
-#Configures the methods needed by mailboxer
-config.email_method = :mailboxer_email
-config.name_method = :name
+Mailboxer.setup do |config|
+  # ...
+  #Configures the methods needed by mailboxer
+  config.email_method = :mailboxer_email
+  config.name_method = :name
+  # ...
+end
 ````
 
 You may change whatever you want or need. For example:
@@ -124,10 +144,79 @@ class Cylon < ActiveRecord::Base
 end
 ````
 
-## Using The Mailboxer API
+## Mailboxer API
 
-In order to mantain the README in a proper size and simplicity, all the
-API is available in [Mailboxer wiki](http://rubydoc.info/gems/mailboxer/frames)
+h3. How can I send a message?
+
+````ruby
+  #alfa wants to send a message to beta
+  alfa.send_message(beta, "Body", "subject")
+````
+
+h3. How can I reply a message?
+
+````ruby
+  #alfa wants to reply to all in a conversation
+  #using a receipt
+  alfa.reply_to_all(receipt, "Reply body")
+  #using a conversation
+  alfa.reply_to_conversation(conversation, "Reply body")
+````
+
+````ruby
+  #alfa wants to reply to the sender of a message (and ONLY the sender)
+  #using a receipt
+  alfa.reply_to_sender(receipt, "Reply body")
+````
+
+h3. How can I retrieve my conversations?
+
+````ruby
+  #alfa wants to retrieve all his conversations
+  alfa.mailbox.conversations
+  #A wants to retrieve his inbox
+  alfa.mailbox.inbox
+  #A wants to retrieve his sent conversations
+  alfa.mailbox.sentbox
+  #alfa wants to retrieve his trashed conversations
+  alfa.mailbox.trash
+````
+
+h3. How can I paginate conversations?
+
+````ruby
+  #Using Kaminari to paginate the differents sets of conversations
+  #Paginating all conversations using :page parameter and 9 per page
+  conversations = Kaminari.paginate_array(alfa.mailbox.conversations).page(params[:page]).per(9)
+  #Paginating received conversations using :page parameter and 9 per page
+  conversations = Kaminari.paginate_array(alfa.mailbox.inbox).page(params[:page]).per(9)
+  #Paginating sent conversations using :page parameter and 9 per page
+  conversations = Kaminari.paginate_array(alfa.mailbox.sentbox).page(params[:page]).per(9)
+  #Paginating trashed conversations using :page parameter and 9 per page
+  conversations = Kaminari.paginate_array(alfa.mailbox.trash).page(params[:page]).per(9)
+````
+
+h3. How can I read the messages of a conversation?
+
+As a messageable, what you receive receipts wich are linked with the message itself. You should retrieve your receipts for the conversation a get the message associated to them.
+
+This is done this way because receipts save the information about the relation between messageable and the messages: is it read?, is it trashed?, etc.
+
+````ruby
+  #alfa gets the last conversation (chronologically, the first in the inbox)
+  conversation = alfa.mailbox.inbox.first
+  #alfa gets it receipts chronologically ordered.
+  receipts = conversation.receipts_for alfa
+  #using the receipts (i.e. in the view)
+  receipts.each do |receipt|
+    ...
+    message = receipt.message
+    read = receipt.is_unread? #or message.is_unread?(alfa)
+    ...
+  end
+````
+
+You can take a look at the full documentation of Mailboxer in [rubydoc.info](http://rubydoc.info/gems/mailboxer/frames).
 
 ## I need a GUI!
 Check out the [rails-messaging](https://github.com/frodefi/rails-messaging) project.
@@ -141,7 +230,7 @@ Check out the [rails-messaging](https://github.com/frodefi/rails-messaging) proj
 
 ## License
 
-Copyright © 2011 Eduardo Casanova Cuesta
+Copyright © 2012 Eduardo Casanova Cuesta
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
