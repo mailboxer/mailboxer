@@ -1,4 +1,4 @@
-# Mailboxer 0.5.x [![](https://secure.travis-ci.org/ging/mailboxer.png)](http://travis-ci.org/ging/mailboxer)
+# Mailboxer 0.6.x [![](https://secure.travis-ci.org/ging/mailboxer.png)](http://travis-ci.org/ging/mailboxer)
 
 This project is based on the need of a private message system for [ging
 / social\_stream](https://github.com/ging/social_stream). Instead of creating our core message system heavily
@@ -129,7 +129,14 @@ end
 In order to mantain the README in a proper size and simplicity, all the
 API is available in [Mailboxer wiki](http://rubydoc.info/gems/mailboxer/frames)
 
-##License
+## Contributors
+[Roendal](https://github.com/ging/mailboxer/commits/master?author=Roendal) (Eduardo Casanova)
+[dickeyxxx](https://github.com/ging/mailboxer/commits/master?author=dickeyxxx) (Jeff Dickey)
+[tonydewan](https://github.com/ging/mailboxer/commits/master?author=tonydewan) (Tony Dewan)
+[plentz](https://github.com/ging/mailboxer/commits/master?author=plentz) (Diego Plentz)
+[laserlemon](https://github.com/ging/mailboxer/commits/master?author=laserlemon) (Steve Richert)
+
+## License
 
 Copyright © 2011 Eduardo Casanova Cuesta
 
