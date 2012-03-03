@@ -130,11 +130,11 @@ In order to mantain the README in a proper size and simplicity, all the
 API is available in [Mailboxer wiki](http://rubydoc.info/gems/mailboxer/frames)
 
 ## Contributors
-[Roendal](https://github.com/ging/mailboxer/commits/master?author=Roendal) (Eduardo Casanova)
-[dickeyxxx](https://github.com/ging/mailboxer/commits/master?author=dickeyxxx) (Jeff Dickey)
-[tonydewan](https://github.com/ging/mailboxer/commits/master?author=tonydewan) (Tony Dewan)
-[plentz](https://github.com/ging/mailboxer/commits/master?author=plentz) (Diego Plentz)
-[laserlemon](https://github.com/ging/mailboxer/commits/master?author=laserlemon) (Steve Richert)
+* [Roendal](https://github.com/ging/mailboxer/commits/master?author=Roendal) (Eduardo Casanova)
+* [dickeyxxx](https://github.com/ging/mailboxer/commits/master?author=dickeyxxx) (Jeff Dickey)
+* [tonydewan](https://github.com/ging/mailboxer/commits/master?author=tonydewan) (Tony Dewan)
+* [plentz](https://github.com/ging/mailboxer/commits/master?author=plentz) (Diego Plentz)
+* [laserlemon](https://github.com/ging/mailboxer/commits/master?author=laserlemon) (Steve Richert)
 
 ## License
 
