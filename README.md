@@ -129,6 +129,9 @@ end
 In order to mantain the README in a proper size and simplicity, all the
 API is available in [Mailboxer wiki](http://rubydoc.info/gems/mailboxer/frames)
 
+## I need a GUI!
+Check out the [rails-messaging](https://github.com/frodefi/rails-messaging) project.
+
 ## Contributors
 * [Roendal](https://github.com/ging/mailboxer/commits/master?author=Roendal) (Eduardo Casanova)
 * [dickeyxxx](https://github.com/ging/mailboxer/commits/master?author=dickeyxxx) (Jeff Dickey)
