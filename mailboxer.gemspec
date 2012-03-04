@@ -18,10 +18,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('foreigner', '>= 0.9.1')
 
   # Development Gem dependencies
-  #
   s.add_runtime_dependency('rails', '> 3.0.0')
   s.add_runtime_dependency('carrierwave', '>= 0.5.8')
-  s.add_runtime_dependency('sunspot_rails', '>= 1.3.0')
   # Debugging
   if RUBY_VERSION < '1.9'
     s.add_development_dependency('ruby-debug', '>= 0.10.3')
@@ -35,6 +33,7 @@ Gem::Specification.new do |s|
   # Integration testing
   s.add_development_dependency('capybara', '>= 0.3.9')
   # Searching
+  s.add_development_dependency('sunspot_rails', '>= 1.3.0')
   s.add_development_dependency('sunspot_solr', '>= 1.3.0')
   # Testing database
   s.add_development_dependency('sqlite3-ruby') unless RUBY_PLATFORM == 'java'
