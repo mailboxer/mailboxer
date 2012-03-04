@@ -3,7 +3,7 @@ Gem::Specification.new do |s|
   s.version = "0.6.2"
   s.authors = ["Eduardo Casanova Cuesta"]
   s.summary = "Messaging system for rails apps."
-  s.description = "A Rails engine that allows any model to act as messageable, allowing it to exchange messages " +
+  s.description = "A Rails engine that allows any model to act as messageable, adding the ability to exchange messages " +
                    "with any other messageable model, even different ones. It supports the use of conversations with " +
                    "two or more recipients to organize the messages. You have a complete use of a mailbox object for " + 
                    "each messageable model that manages an inbox, sentbox and trash for conversations. It also supports " + 
