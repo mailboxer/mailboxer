@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   # Specs
   s.add_development_dependency('rspec-rails', '>= 2.6.1')
   # Fixtures
-  s.add_development_dependency('factory_girl', '>= 1.3.2')
+  s.add_development_dependency('factory_girl', '>= 2.6.0')
   # Population
   s.add_development_dependency('forgery', '>= 0.3.6')
   # Integration testing
