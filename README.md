@@ -184,16 +184,17 @@ end
 
 ### How can I paginate conversations?
 
+You can use Kaminari to paginate the conversations as normal. Please, make sure you use the last version as mailboxer uses @select('DISTINCT conversations.*')@ which was not respected before Kaminari 0.12.4 according to its changelog. Working corretly on Kaminari 0.13.0.
+
 ````ruby
-  #Using Kaminari to paginate the differents sets of conversations
   #Paginating all conversations using :page parameter and 9 per page
-  conversations = Kaminari.paginate_array(alfa.mailbox.conversations).page(params[:page]).per(9)
+  conversations = alfa.mailbox.conversations.page(params[:page]).per(9)
   #Paginating received conversations using :page parameter and 9 per page
-  conversations = Kaminari.paginate_array(alfa.mailbox.inbox).page(params[:page]).per(9)
+  conversations = alfa.mailbox.inbox.page(params[:page]).per(9)
   #Paginating sent conversations using :page parameter and 9 per page
-  conversations = Kaminari.paginate_array(alfa.mailbox.sentbox).page(params[:page]).per(9)
+  conversations = alfa.mailbox.sentbox.page(params[:page]).per(9)
   #Paginating trashed conversations using :page parameter and 9 per page
-  conversations = Kaminari.paginate_array(alfa.mailbox.trash).page(params[:page]).per(9)
+  conversations = alfa.mailbox.trash.page(params[:page]).per(9) 
 ````
 
 ### How can I read the messages of a conversation?
