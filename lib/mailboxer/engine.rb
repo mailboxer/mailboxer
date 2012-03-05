@@ -1,7 +1,11 @@
 # Database foreign keys
 require 'foreigner'
 require 'carrierwave'
-require 'sunspot_rails'
+begin 
+  require 'sunspot_rails'
+rescue LoadError
+  puts 'Not loading sunspot_rails. Gem not present.'
+end
 
 module Mailboxer
   class Engine < Rails::Engine
