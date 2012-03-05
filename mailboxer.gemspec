@@ -32,9 +32,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency('forgery', '>= 0.3.6')
   # Integration testing
   s.add_development_dependency('capybara', '>= 0.3.9')
-  # Searching
-  s.add_development_dependency('sunspot_rails', '>= 1.3.0')
-  s.add_development_dependency('sunspot_solr', '>= 1.3.0')
   # Testing database
   s.add_development_dependency('sqlite3-ruby') unless RUBY_PLATFORM == 'java'
   s.add_development_dependency('jdbc-sqlite3') if RUBY_PLATFORM == 'java'

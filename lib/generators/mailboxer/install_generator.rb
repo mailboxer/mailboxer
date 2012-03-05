@@ -17,16 +17,16 @@ class Mailboxer::InstallGenerator < Rails::Generators::Base #:nodoc:
   end
 
   def copy_migrations
-    migrations = ["20110511145103_create_mailboxer.rb",
-                  "20110719110700_add_notified_object.rb",
-                  "20110912163911_add_notification_code.rb",
-                  "20111204163911_add_attachments.rb"]
+    migrations = [["20110511145103_create_mailboxer.rb","create_mailboxer.rb"],
+                  ["20110719110700_add_notified_object.rb","add_notified_object.rb"],
+                  ["20110912163911_add_notification_code.rb","add_notification_code.rb"],
+                  ["20111204163911_add_attachments.rb","add_attachments.rb"]]
     migrations.each do |migration|
-      begin
-        migration_template "db/migrate/" + migration, "db/migrate/" + migration
-      rescue
-        puts "Another migration is already named '" + migration + "'. Moving to next one."
-      end
+    #  begin
+        migration_template "../../../../db/migrate/" + migration[0], "db/migrate/" + migration[1]
+     # rescue
+     #   puts "Another migration is already named '" + migration + "'. Moving to next one."
+     # end
     end
   end
 end
