@@ -184,7 +184,7 @@ end
 
 ### How can I paginate conversations?
 
-You can use Kaminari to paginate the conversations as normal. Please, make sure you use the last version as mailboxer uses @select('DISTINCT conversations.*')@ which was not respected before Kaminari 0.12.4 according to its changelog. Working corretly on Kaminari 0.13.0.
+You can use Kaminari to paginate the conversations as normal. Please, make sure you use the last version as mailboxer uses `select('DISTINCT conversations.*')` which was not respected before Kaminari 0.12.4 according to its changelog. Working corretly on Kaminari 0.13.0.
 
 ````ruby
   #Paginating all conversations using :page parameter and 9 per page
@@ -220,7 +220,9 @@ This is done this way because receipts save the information about the relation b
 You can take a look at the full documentation of Mailboxer in [rubydoc.info](http://rubydoc.info/gems/mailboxer/frames).
 
 ## I need a GUI!
+
 If you need a GUI you should take a look a this links:
+
 * The [rails-messaging](https://github.com/frodefi/rails-messaging) project.
 * The wiki page [GUI Example on a real application](https://github.com/ging/mailboxer/wiki/GUI-Example-on-a-real-application).
 
