@@ -3,8 +3,8 @@ require 'foreigner'
 require 'carrierwave'
 begin 
   require 'sunspot_rails'
+  puts 'sunspot_rails gem present. Loading it into mailboxer. You can know use Solr search engine.'
 rescue LoadError
-  puts 'Not loading sunspot_rails. Gem not present.'
 end
 
 module Mailboxer
