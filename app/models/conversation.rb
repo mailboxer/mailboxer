@@ -116,7 +116,7 @@ class Conversation < ActiveRecord::Base
   #Returns true if the participant has at least one unread message of the conversation
 	def is_unread?(participant)
 		return false if participant.nil?
-		return self.receipts_for(participant).unread.count!=0
+		return self.receipts_for(participant).not_trash.unread.count!=0
 	end
 
 	protected
