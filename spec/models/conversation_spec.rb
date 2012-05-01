@@ -45,5 +45,11 @@ describe Conversation do
     @conversation.move_to_trash(@entity1)
     @conversation.untrash(@entity1)
   end
-  
+
+  describe "#is_completely_trashed?" do
+    it "returns true if all receipts in conversation are trashed for participant" do
+      @conversation.move_to_trash(@entity1)
+      @conversation.is_completely_trashed?(@entity1).should be_true
+    end
+  end
 end
