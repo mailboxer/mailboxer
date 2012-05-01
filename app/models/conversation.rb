@@ -110,7 +110,7 @@ class Conversation < ActiveRecord::Base
   #Returns true if the participant has trashed all the messages of the conversation
 	def is_completely_trashed?(participant)
 		return false if participant.nil?
-		return self.receipts_for(participant).trash.count==self.receipts(participant).count
+		return self.receipts_for(participant).trash.count == self.receipts_for(participant).count
 	end
 
   #Returns true if the participant has at least one unread message of the conversation
