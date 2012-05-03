@@ -1,4 +1,6 @@
 class Conversation < ActiveRecord::Base
+  attr_accessible :subject
+
 	has_many :messages, :dependent => :destroy
 	has_many :receipts, :through => :messages
 
@@ -55,7 +57,7 @@ class Conversation < ActiveRecord::Base
 		end
 		return []
 	end
-	
+
   #Returns an array of participants
 	def participants
 	  return recipients
