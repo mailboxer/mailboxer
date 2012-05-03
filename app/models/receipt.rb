@@ -59,13 +59,13 @@ class Receipt < ActiveRecord::Base
 
     #This methods helps to do a update_all with table joins, not currently supported by rails.
     #Acording to the github ticket https://github.com/rails/rails/issues/522 it should be
-    #supported with 3.2. 
+    #supported with 3.2.
     def update_receipts(updates,options={})
       ids = Array.new
       where(options).each do |rcp|
         ids << rcp.id
       end
-      return if ids.empty?      
+      return if ids.empty?
       conditions = [""].concat(ids)
       condition = "id = ? "
       ids.drop(1).each do
@@ -120,9 +120,9 @@ class Receipt < ActiveRecord::Base
   #Returns if the participant have trashed the Notification
   def is_trashed?
     return self.trashed
-  end  
+  end
 
-  
+
   protected
 
   #Removes the duplicate error about not present subject from Conversation if it has been already

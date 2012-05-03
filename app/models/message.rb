@@ -1,5 +1,6 @@
 class Message < Notification
-  #
+  attr_accessible :attachment
+
   belongs_to :conversation, :validate => true, :autosave => true
   validates_presence_of :sender
 
@@ -45,7 +46,7 @@ class Message < Notification
       temp_receipts.each(&:save!) 	#Save receipts
       self.recipients.each do |r|
       #Should send an email?
-        if Mailboxer.uses_emails 
+        if Mailboxer.uses_emails
           email_to = r.send(Mailboxer.email_method,self)
           unless email_to.blank?
             MessageMailer.send_email(self,r).deliver
