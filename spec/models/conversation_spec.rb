@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Conversation do
-  
+
   before do
     @entity1 = Factory(:user)
     @entity2 = Factory(:user)
@@ -13,34 +13,34 @@ describe Conversation do
     @message4 = @receipt4.notification
     @conversation = @message1.conversation
   end
-  
+
   it "should have proper original message" do
     @conversation.original_message.should==@message1
   end
-  
+
   it "should have proper originator (first sender)" do
     @conversation.originator.should==@entity1
   end
-  
+
   it "should have proper last message" do
     @conversation.last_message.should==@message4
   end
-  
+
   it "should have proper last sender" do
     @conversation.last_sender.should==@entity2
   end
-  
-  it "should have all conversation users" do   
+
+  it "should have all conversation users" do
     @conversation.recipients.count.should==2
     @conversation.recipients.count.should==2
     @conversation.recipients.count(@entity1).should==1
     @conversation.recipients.count(@entity2).should==1
   end
-  
+
   it "should be able to be marked as read" do
     @conversation.move_to_trash(@entity1)
   end
-  
+
   it "should be able to be marked as unread" do
     @conversation.move_to_trash(@entity1)
     @conversation.untrash(@entity1)
