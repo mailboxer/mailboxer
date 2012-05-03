@@ -8,20 +8,23 @@ class Conversation < ActiveRecord::Base
 
 	before_validation :clean
 
-	scope :participant, lambda {|participant|
-    joins(:receipts).select('DISTINCT conversations.*').where('notifications.type'=> Message.to_s,'receipts.receiver_id' => participant.id,'receipts.receiver_type' => participant.class.to_s).order("conversations.updated_at DESC")
+  scope :participant, lambda {|participant|
+    select('DISTINCT conversations.*').
+    where('notifications.type'=> Message.name).
+    order("conversations.updated_at DESC").
+    joins(:receipts).merge(Receipt.recipient(participant))
   }
-	scope :inbox, lambda {|participant|
-    joins(:receipts).select('DISTINCT conversations.*').where('notifications.type'=> Message.to_s,'receipts.receiver_id' => participant.id,'receipts.receiver_type' => participant.class.to_s, 'receipts.mailbox_type' => 'inbox','receipts.trashed' => false).order("conversations.updated_at DESC")
+  scope :inbox, lambda {|participant|
+    participant(participant).merge(Receipt.inbox.not_trash)
   }
-	scope :sentbox, lambda {|participant|
-    joins(:receipts).select('DISTINCT conversations.*').where('notifications.type'=> Message.to_s,'receipts.receiver_id' => participant.id,'receipts.receiver_type' => participant.class.to_s, 'receipts.mailbox_type' => 'sentbox','receipts.trashed' => false).order("conversations.updated_at DESC")
+  scope :sentbox, lambda {|participant|
+    participant(participant).merge(Receipt.sentbox.not_trash)
   }
-	scope :trash, lambda {|participant|
-    joins(:receipts).select('DISTINCT conversations.*').where('notifications.type'=> Message.to_s,'receipts.receiver_id' => participant.id,'receipts.receiver_type' => participant.class.to_s,'receipts.trashed' => true).order("conversations.updated_at DESC")
+  scope :trash, lambda {|participant|
+    participant(participant).merge(Receipt.trash)
   }
-	scope :unread,  lambda {|participant|
-    joins(:receipts).select('DISTINCT conversations.*').where('notifications.type'=> Message.to_s,'receipts.receiver_id' => participant.id,'receipts.receiver_type' => participant.class.to_s,'receipts.read' => false).order("conversations.updated_at DESC")
+  scope :unread,  lambda {|participant|
+    participant(participant).merge(Receipt.unread)
   }
 
   #Mark the conversation as read for one of the participants
