@@ -221,7 +221,7 @@ You can take a look at the full documentation of Mailboxer in [rubydoc.info](htt
 
 ## Do you want to test Mailboxer?
 
-Thanks to [Roman Kushnir (@RKushnir)](https://github.com/RKushnir/) you can test Mailboxer with this [testing app](https://github.com/RKushnir/mailboxer-app).
+Thanks to [Roman Kushnir (@RKushnir)](https://github.com/RKushnir/) you can test Mailboxer with this [sample app](https://github.com/RKushnir/mailboxer-app).
 
 ## I need a GUI!
 
