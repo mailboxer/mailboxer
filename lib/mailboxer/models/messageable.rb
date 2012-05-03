@@ -16,7 +16,7 @@ module Mailboxer
         end
       end
 
-      module InstanceMethods        
+      module InstanceMethods
           eval <<-EOM
            #Returning any kind of identification you want for the model
            def #{Mailboxer.name_method}
@@ -26,7 +26,7 @@ module Mailboxer
            end
 
            #Returning the email address of the model if an email should be sent for this object (Message or Notification).
-           #If no mail has to be sent, return nil. 
+           #If no mail has to be sent, return nil.
            def #{Mailboxer.email_method}(object)
              super
            rescue NameError

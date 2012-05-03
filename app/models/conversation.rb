@@ -55,7 +55,7 @@ class Conversation < ActiveRecord::Base
 		end
 		return []
 	end
-	
+
   #Returns an array of participants
 	def participants
 	  return recipients
