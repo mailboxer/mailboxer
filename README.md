@@ -219,6 +219,10 @@ This is done this way because receipts save the information about the relation b
 
 You can take a look at the full documentation of Mailboxer in [rubydoc.info](http://rubydoc.info/gems/mailboxer/frames).
 
+## Do you want to test Mailboxer?
+
+Thanks to [Roman Kushnir (@RKushnir)](https://github.com/RKushnir/) you can test Mailboxer with this [testing app](https://github.com/RKushnir/mailboxer-app).
+
 ## I need a GUI!
 
 If you need a GUI you should take a look a this links:
