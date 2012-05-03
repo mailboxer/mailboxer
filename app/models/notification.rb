@@ -1,6 +1,7 @@
 class Notification < ActiveRecord::Base
-
   attr_accessor :recipients
+  attr_accessible :body, :subject
+
   belongs_to :sender, :polymorphic => :true
   belongs_to :notified_object, :polymorphic => :true
   validates_presence_of :subject, :body
