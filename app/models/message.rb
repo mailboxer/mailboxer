@@ -54,7 +54,7 @@ class Message < Notification
         end
       end
       if reply
-        self.conversation.update_attribute(:updated_at, Time.now)
+        self.conversation.touch
       end
       self.recipients=nil
     self.on_deliver_callback.call(self) unless self.on_deliver_callback.nil?
