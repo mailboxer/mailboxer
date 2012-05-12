@@ -15,7 +15,8 @@ module Mailboxer
   @@email_method = :mailboxer_email
   mattr_accessor :name_method
   @@name_method = :name
-  
+  mattr_accessor :notification_mailer
+
    class << self
     def setup
       yield self

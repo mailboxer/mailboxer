@@ -68,7 +68,7 @@ class Notification < ActiveRecord::Base
         if Mailboxer.uses_emails
           email_to = r.send(Mailboxer.email_method,self)
           unless email_to.blank?
-            NotificationMailer.send_email(self,r).deliver
+            get_mailer.send_email(self,r).deliver
           end
         end
       end
@@ -76,6 +76,9 @@ class Notification < ActiveRecord::Base
     end
     return temp_receipts if temp_receipts.size > 1
     return temp_receipts.first
+  end
+  def get_mailer
+    Mailboxer.notification_mailer || NotificationMailer
   end
 
   #Returns the recipients of the Notification
