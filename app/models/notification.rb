@@ -20,6 +20,8 @@ class Notification < ActiveRecord::Base
     joins(:receipts).where('receipts.read' => false)
   }
 
+  include Concerns::ConfigurableMailer
+
   class << self
     #Sends a Notification to all the recipients
     def notify_all(recipients,subject,body,obj = nil,sanitize_text = true,notification_code=nil)
@@ -76,9 +78,6 @@ class Notification < ActiveRecord::Base
     end
     return temp_receipts if temp_receipts.size > 1
     return temp_receipts.first
-  end
-  def get_mailer
-    Mailboxer.notification_mailer || NotificationMailer
   end
 
   #Returns the recipients of the Notification

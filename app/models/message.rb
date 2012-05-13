@@ -11,6 +11,8 @@ class Message < Notification
   }
 
   mount_uploader :attachment, AttachmentUploader
+  
+  include Concerns::ConfigurableMailer
 
   class << self
     #Sets the on deliver callback method.
@@ -49,7 +51,7 @@ class Message < Notification
         if Mailboxer.uses_emails
           email_to = r.send(Mailboxer.email_method,self)
           unless email_to.blank?
-            MessageMailer.send_email(self,r).deliver
+            get_mailer.send_email(self,r).deliver
           end
         end
       end
