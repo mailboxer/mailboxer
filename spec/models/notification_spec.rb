@@ -61,17 +61,4 @@ describe Message do
           
   end
 
-  describe "#get_mailer obtains mailer from config" do
-    before { Mailboxer.notification_mailer.should be_nil }
-
-    it "defaults to NotificationMailer" do
-      subject.get_mailer.should eq NotificationMailer
-    end
-    it "can be overriden on Mailboxer" do
-      Mailboxer.notification_mailer = 'foo'
-      subject.get_mailer.should eq 'foo'
-    end
-
-    after { Mailboxer.notification_mailer = nil }
-  end
 end

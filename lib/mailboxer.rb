@@ -16,6 +16,7 @@ module Mailboxer
   mattr_accessor :name_method
   @@name_method = :name
   mattr_accessor :notification_mailer
+  mattr_accessor :message_mailer
 
    class << self
     def setup
@@ -27,3 +28,4 @@ end
 # reopen ActiveRecord and include all the above to make
 # them available to all our models if they want it
 require 'mailboxer/engine' 
+require 'mailboxer/concerns/configurable_mailer'
