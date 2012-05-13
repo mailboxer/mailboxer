@@ -72,6 +72,16 @@ Mailboxer.setup do |config|
 end
 ````
 
+You can change the way in which emails are delivered by specifying a custom implementation for notification and message mailer 
+
+````ruby
+Mailboxer.setup do |config|
+  config.notification_mailer = CustomNotificationMailer
+  config.message_mailer = CustomMessageMailer
+  ...
+end
+````
+
 ### User identities
 
 Users must have an identity defined by a `name` and an `email`. We must assure that Messageable models have some specific methods. These methods are:
