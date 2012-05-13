@@ -244,6 +244,7 @@ If you need a GUI you should take a look a this links:
 * [Roendal](https://github.com/ging/mailboxer/commits/master?author=Roendal) (Eduardo Casanova)
 * [dickeyxxx](https://github.com/ging/mailboxer/commits/master?author=dickeyxxx) (Jeff Dickey)
 * [RKushnir](https://github.com/ging/mailboxer/commits/master?author=RKushnir) (Roman Kushnir)
+* [amaierhofer](https://github.com/ging/mailboxer/commits/master?author=amaierhofer) (Andreas Maierhofer)
 * [tonydewan](https://github.com/ging/mailboxer/commits/master?author=tonydewan) (Tony Dewan)
 * [plentz](https://github.com/ging/mailboxer/commits/master?author=plentz) (Diego Plentz)
 * [laserlemon](https://github.com/ging/mailboxer/commits/master?author=laserlemon) (Steve Richert)
