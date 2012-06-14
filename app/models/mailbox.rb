@@ -42,7 +42,7 @@ class Mailbox
       end
     end
 
-    if (options[:read].present? and options[:read]==false) or (options[:unread].present? and options[:unread]==true)
+    if (options.has_key?(:read) && options[:read]==false) || (options.has_key?(:unread) && options[:unread]==true)
       conv = conv.unread(@messageable)
     end
 
