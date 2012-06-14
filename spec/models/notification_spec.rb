@@ -3,9 +3,9 @@ require 'spec_helper'
 describe Message do
   
   before do
-    @entity1 = Factory(:user)
-    @entity2 = Factory(:user)
-    @entity3 = Factory(:user)
+    @entity1 = FactoryGirl.create(:user)
+    @entity2 = FactoryGirl.create(:user)
+    @entity3 = FactoryGirl.create(:user)
   end  
   
   it "should notify one user" do

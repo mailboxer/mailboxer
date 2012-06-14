@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Receipt do
   
   before do
-    @entity1 = Factory(:user)
-    @entity2 = Factory(:user)
+    @entity1 = FactoryGirl.create(:user)
+    @entity2 = FactoryGirl.create(:user)
     @mail1 = @entity1.send_message(@entity2,"Body","Subject")   
   end
   
