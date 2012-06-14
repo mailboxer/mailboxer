@@ -3,10 +3,10 @@ require 'spec_helper'
 describe MessageMailer do
   describe "when sending new message" do
     before do
-      @sender = Factory(:user)
-      @entity1 = Factory(:user)
-      @entity2 = Factory(:duck)
-      @entity3 = Factory(:cylon)
+      @sender = FactoryGirl.create(:user)
+      @entity1 = FactoryGirl.create(:user)
+      @entity2 = FactoryGirl.create(:duck)
+      @entity3 = FactoryGirl.create(:cylon)
       @receipt1 = @sender.send_message([@entity1,@entity2,@entity3], "Body Body Body Body Body Body Body Body Body Body Body Body","Subject")
     end
 
@@ -48,10 +48,10 @@ describe MessageMailer do
 
   describe "when replying" do
     before do
-      @sender = Factory(:user)
-      @entity1 = Factory(:user)
-      @entity2 = Factory(:duck)
-      @entity3 = Factory(:cylon)
+      @sender = FactoryGirl.create(:user)
+      @entity1 = FactoryGirl.create(:user)
+      @entity2 = FactoryGirl.create(:duck)
+      @entity3 = FactoryGirl.create(:cylon)
       @receipt1 = @sender.send_message([@entity1,@entity2,@entity3], "Body","Subject")
       @receipt2 = @sender.reply_to_all(@receipt1, "Body")
     end
