@@ -4,8 +4,8 @@ describe "Messages And Receipts" do
   
   describe "two equal entities" do
     before do
-      @entity1 = Factory(:user)
-      @entity2 = Factory(:user)
+      @entity1 = FactoryGirl.create(:user)
+      @entity2 = FactoryGirl.create(:user)
     end
     
     describe "message sending" do    
@@ -190,8 +190,8 @@ describe "Messages And Receipts" do
   
   describe "two different entities" do
     before do
-      @entity1 = Factory(:user)
-      @entity2 = Factory(:duck)
+      @entity1 = FactoryGirl.create(:user)
+      @entity2 = FactoryGirl.create(:duck)
     end
     
     describe "message sending" do    
@@ -352,9 +352,9 @@ describe "Messages And Receipts" do
   
   describe "three equal entities" do
     before do
-      @entity1 = Factory(:user)
-      @entity2 = Factory(:user)
-      @entity3 = Factory(:user)
+      @entity1 = FactoryGirl.create(:user)
+      @entity2 = FactoryGirl.create(:user)
+      @entity3 = FactoryGirl.create(:user)
       @recipients = Array.new
       @recipients << @entity2
       @recipients << @entity3
@@ -534,9 +534,9 @@ describe "Messages And Receipts" do
   
   describe "three different entities" do
     before do
-      @entity1 = Factory(:user)
-      @entity2 = Factory(:duck)
-      @entity3 = Factory(:cylon)
+      @entity1 = FactoryGirl.create(:user)
+      @entity2 = FactoryGirl.create(:duck)
+      @entity3 = FactoryGirl.create(:cylon)
       @recipients = Array.new
       @recipients << @entity2
       @recipients << @entity3
