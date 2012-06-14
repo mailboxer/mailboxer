@@ -108,6 +108,10 @@ class Notification < ActiveRecord::Base
     return !self.receipt_for(participant).first.read
   end
 
+  def is_read?(participant)
+    !self.is_unread?(participant)
+  end
+
   #Returns if the participant have trashed the Notification
   def is_trashed?(participant)
     return false if participant.nil?
