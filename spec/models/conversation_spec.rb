@@ -38,12 +38,15 @@ describe Conversation do
   end
 
   it "should be able to be marked as read" do
-    @conversation.move_to_trash(@entity1)
+    #@conversation.move_to_trash(@entity1)
+    @conversation.mark_as_read(@entity1)
+    @conversation.should be_is_read(@entity)
   end
 
   it "should be able to be marked as unread" do
-    @conversation.move_to_trash(@entity1)
-    @conversation.untrash(@entity1)
+    @conversation.mark_as_read(@entity1)
+    @conversation.mark_as_unread(@entity1)
+    @conversation.should be_is_unread(@entity1)
   end
 
   describe "scopes" do
