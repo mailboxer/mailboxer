@@ -67,6 +67,12 @@ describe Mailbox do
     @entity2.mailbox.receipts.inbox[0].should==Receipt.recipient(@entity2).inbox.conversation(@conversation)[0]
     @entity2.mailbox.receipts.inbox[1].should==Receipt.recipient(@entity2).inbox.conversation(@conversation)[1]
   end
+
+  it "should understand the read option" do
+    @entity1.mailbox.inbox(read: false).count.should_not == 0
+    @conversation.mark_as_read(@entity1)
+    @entity1.mailbox.inbox(read: false).count.should == 0
+  end
   
   it "should return trashed mails" do 
     @entity1.mailbox.receipts.move_to_trash
