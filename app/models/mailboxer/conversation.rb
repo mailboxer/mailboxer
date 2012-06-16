@@ -1,4 +1,6 @@
 class Mailboxer::Conversation < ActiveRecord::Base
+  self.table_name = :mailboxer_conversations
+
   attr_accessible :subject
 
 	has_many :messages, :class_name => "Mailboxer::Message", :dependent => :destroy

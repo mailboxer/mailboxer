@@ -1,4 +1,6 @@
 class Mailboxer::Receipt < ActiveRecord::Base
+  self.table_name = :mailboxer_receipts
+
   belongs_to :notification, :class_name => "Mailboxer::Notification", :validate => true, :autosave => true
   belongs_to :receiver, :polymorphic => :true
   belongs_to :message, :class_name => "Mailboxer::Message", :foreign_key => "notification_id"

@@ -1,4 +1,6 @@
 class Mailboxer::Message < Mailboxer::Notification
+  self.table_name = :mailboxer_notifications
+
   attr_accessible :attachment
 
   belongs_to :conversation, :class_name => "Mailboxer::Conversation", :validate => true, :autosave => true

@@ -1,4 +1,6 @@
 class Mailboxer::Notification < ActiveRecord::Base
+  self.table_name = :mailboxer_notifications
+
   attr_accessor :recipients
   attr_accessible :body, :subject
 
