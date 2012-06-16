@@ -10,16 +10,16 @@ class Mailboxer::Notification < ActiveRecord::Base
   has_many :receipts, :class_name => "Mailboxer::Receipt", :dependent => :destroy
 
   scope :recipient, lambda { |recipient|
-    joins(:receipts).where('receipts.receiver_id' => recipient.id,'receipts.receiver_type' => recipient.class.to_s)
+    joins(:receipts).where('mailboxer_receipts.receiver_id' => recipient.id,'mailboxer_receipts.receiver_type' => recipient.class.to_s)
   }
   scope :with_object, lambda { |obj|
     where('notified_object_id' => obj.id,'notified_object_type' => obj.class.to_s)
   }
   scope :not_trashed, lambda {
-    joins(:receipts).where('receipts.trashed' => false)
+    joins(:receipts).where('mailboxer_receipts.trashed' => false)
   }
   scope :unread,  lambda {
-    joins(:receipts).where('receipts.is_read' => false)
+    joins(:receipts).where('mailboxer_receipts.read' => false)
   }
 
   include Concerns::ConfigurableMailer
