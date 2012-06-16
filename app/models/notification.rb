@@ -1,4 +1,4 @@
-class Notification < ActiveRecord::Base
+class Mailboxer::Notification < ActiveRecord::Base
   attr_accessor :recipients
   attr_accessible :body, :subject
 
@@ -25,7 +25,7 @@ class Notification < ActiveRecord::Base
   class << self
     #Sends a Notification to all the recipients
     def notify_all(recipients,subject,body,obj = nil,sanitize_text = true,notification_code=nil)
-      notification = Notification.new({:body => body, :subject => subject})
+      notification = Mailboxer::Notification.new({:body => body, :subject => subject})
       notification.recipients = recipients.respond_to?(:each) ? recipients : [recipients]
       notification.recipients = notification.recipients.uniq if recipients.respond_to?(:uniq)
       notification.notified_object = obj if obj.present?
@@ -37,7 +37,7 @@ class Notification < ActiveRecord::Base
     #successful or +false+ if some error raised
     def successful_delivery? receipts
       case receipts
-      when Receipt
+      when Mailboxer::Receipt
         receipts.valid?
         return receipts.errors.empty?
        when Array
@@ -56,7 +56,7 @@ class Notification < ActiveRecord::Base
     temp_receipts = Array.new
     #Receiver receipts
     self.recipients.each do |r|
-      msg_receipt = Receipt.new
+      msg_receipt = Mailboxer::Receipt.new
       msg_receipt.notification = self
       msg_receipt.is_read = false
       msg_receipt.receiver = r
@@ -94,7 +94,7 @@ class Notification < ActiveRecord::Base
 
   #Returns the receipt for the participant
   def receipt_for(participant)
-    return Receipt.notification(self).recipient(participant)
+    return Mailboxer::Receipt.notification(self).recipient(participant)
   end
 
   #Returns the receipt for the participant. Alias for receipt_for(participant)
