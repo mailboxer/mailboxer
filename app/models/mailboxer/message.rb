@@ -1,7 +1,7 @@
 class Mailboxer::Message < Mailboxer::Notification
   attr_accessible :attachment
 
-  belongs_to :conversation, :validate => true, :autosave => true
+  belongs_to :conversation, :class_name => "Mailboxer::Conversation", :validate => true, :autosave => true
   validates_presence_of :sender
 
   class_attribute :on_deliver_callback

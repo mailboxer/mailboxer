@@ -5,7 +5,7 @@ class Mailboxer::Notification < ActiveRecord::Base
   belongs_to :sender, :polymorphic => :true
   belongs_to :notified_object, :polymorphic => :true
   validates_presence_of :subject, :body
-  has_many :receipts, :dependent => :destroy
+  has_many :receipts, :class_name => "Mailboxer::Receipt", :dependent => :destroy
 
   scope :recipient, lambda { |recipient|
     joins(:receipts).where('receipts.receiver_id' => recipient.id,'receipts.receiver_type' => recipient.class.to_s)

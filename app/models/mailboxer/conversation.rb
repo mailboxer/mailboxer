@@ -1,8 +1,8 @@
 class Mailboxer::Conversation < ActiveRecord::Base
   attr_accessible :subject
 
-	has_many :messages, :dependent => :destroy
-	has_many :receipts, :through => :messages
+	has_many :messages, :class_name => "Mailboxer::Message", :dependent => :destroy
+	has_many :receipts, :class_name => "Mailboxer::Receipt", :through => :messages
 
 	validates_presence_of :subject
 
