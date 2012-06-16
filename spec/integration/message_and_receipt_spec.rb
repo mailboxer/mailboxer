@@ -24,7 +24,7 @@ describe "Messages And Receipts" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = Receipt.recipient(@entity1).notification(@message1).first
+        mail = Mailboxer::Receipt.recipient(@entity1).notification(@message1).first
         assert mail
         if mail
           mail.is_read.should==true
@@ -32,7 +32,7 @@ describe "Messages And Receipts" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = Receipt.recipient(@entity2).notification(@message1).first
+        mail = Mailboxer::Receipt.recipient(@entity2).notification(@message1).first
         assert mail
         if mail
           mail.is_read.should==false
@@ -67,7 +67,7 @@ describe "Messages And Receipts" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = Receipt.recipient(@entity2).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
           mail.is_read.should==true
@@ -75,7 +75,7 @@ describe "Messages And Receipts" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = Receipt.recipient(@entity1).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
           mail.is_read.should==false
@@ -113,7 +113,7 @@ describe "Messages And Receipts" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = Receipt.recipient(@entity2).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
           mail.is_read.should==true
@@ -121,7 +121,7 @@ describe "Messages And Receipts" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = Receipt.recipient(@entity1).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
           mail.is_read.should==false
@@ -158,7 +158,7 @@ describe "Messages And Receipts" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = Receipt.recipient(@entity2).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
           mail.is_read.should==true
@@ -166,7 +166,7 @@ describe "Messages And Receipts" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = Receipt.recipient(@entity1).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
           mail.is_read.should==false
@@ -210,7 +210,7 @@ describe "Messages And Receipts" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = Receipt.recipient(@entity1).notification(@message1).first
+        mail = Mailboxer::Receipt.recipient(@entity1).notification(@message1).first
         assert mail
         if mail
           mail.is_read.should==true
@@ -218,7 +218,7 @@ describe "Messages And Receipts" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = Receipt.recipient(@entity2).notification(@message1).first
+        mail = Mailboxer::Receipt.recipient(@entity2).notification(@message1).first
         assert mail
         if mail
           mail.is_read.should==false
@@ -253,7 +253,7 @@ describe "Messages And Receipts" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = Receipt.recipient(@entity2).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
           mail.is_read.should==true
@@ -261,7 +261,7 @@ describe "Messages And Receipts" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = Receipt.recipient(@entity1).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
           mail.is_read.should==false
@@ -299,7 +299,7 @@ describe "Messages And Receipts" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = Receipt.recipient(@entity2).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
           mail.is_read.should==true
@@ -307,7 +307,7 @@ describe "Messages And Receipts" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = Receipt.recipient(@entity1).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
           mail.is_read.should==false
@@ -376,7 +376,7 @@ describe "Messages And Receipts" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = Receipt.recipient(@entity1).notification(@message1).first
+        mail = Mailboxer::Receipt.recipient(@entity1).notification(@message1).first
         assert mail
         if mail
           mail.is_read.should==true
@@ -385,7 +385,7 @@ describe "Messages And Receipts" do
         end      
         #Receiver Mails
         @recipients.each do |receiver|
-          mail = Receipt.recipient(receiver).notification(@message1).first
+          mail = Mailboxer::Receipt.recipient(receiver).notification(@message1).first
           assert mail
           if mail
             mail.is_read.should==false
@@ -422,7 +422,7 @@ describe "Messages And Receipts" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = Receipt.recipient(@entity2).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
           mail.is_read.should==true
@@ -430,7 +430,7 @@ describe "Messages And Receipts" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = Receipt.recipient(@entity1).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
           mail.is_read.should==false
@@ -439,7 +439,7 @@ describe "Messages And Receipts" do
         end
         
         #No Receiver, No Mail
-        mail = Receipt.recipient(@entity3).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity3).notification(@message2).first
         assert mail.nil?
         
       end
@@ -478,7 +478,7 @@ describe "Messages And Receipts" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = Receipt.recipient(@entity2).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
           mail.is_read.should==true
@@ -487,7 +487,7 @@ describe "Messages And Receipts" do
         end      
         #Receiver Mails
         @recipients2.each do |receiver|
-          mail = Receipt.recipient(receiver).notification(@message2).first
+          mail = Mailboxer::Receipt.recipient(receiver).notification(@message2).first
           assert mail
           if mail
             mail.is_read.should==false
@@ -558,7 +558,7 @@ describe "Messages And Receipts" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = Receipt.recipient(@entity1).notification(@message1).first
+        mail = Mailboxer::Receipt.recipient(@entity1).notification(@message1).first
         assert mail
         if mail
           mail.is_read.should==true
@@ -567,7 +567,7 @@ describe "Messages And Receipts" do
         end      
         #Receiver Mails
         @recipients.each do |receiver|
-          mail = Receipt.recipient(receiver).notification(@message1).first
+          mail = Mailboxer::Receipt.recipient(receiver).notification(@message1).first
           assert mail
           if mail
             mail.is_read.should==false
@@ -604,7 +604,7 @@ describe "Messages And Receipts" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = Receipt.recipient(@entity2).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
           mail.is_read.should==true
@@ -612,7 +612,7 @@ describe "Messages And Receipts" do
           mail.mailbox_type.should=="sentbox"
         end      
         #Receiver Mail
-        mail = Receipt.recipient(@entity1).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
           mail.is_read.should==false
@@ -621,7 +621,7 @@ describe "Messages And Receipts" do
         end
         
         #No Receiver, No Mail
-        mail = Receipt.recipient(@entity3).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity3).notification(@message2).first
         assert mail.nil?
         
       end
@@ -660,7 +660,7 @@ describe "Messages And Receipts" do
       
       it "should create proper mails" do
         #Sender Mail
-        mail = Receipt.recipient(@entity2).notification(@message2).first
+        mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
           mail.is_read.should==true
@@ -669,7 +669,7 @@ describe "Messages And Receipts" do
         end      
         #Receiver Mails
         @recipients2.each do |receiver|
-          mail = Receipt.recipient(receiver).notification(@message2).first
+          mail = Mailboxer::Receipt.recipient(receiver).notification(@message2).first
           assert mail
           if mail
             mail.is_read.should==false

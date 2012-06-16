@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Message do
+describe Mailboxer::Message do
   
   before do
     @entity1 = FactoryGirl.create(:user)
@@ -42,7 +42,7 @@ describe Message do
   
   it "should notify several users" do
     recipients = Set.new [@entity1,@entity2,@entity3]
-    Notification.notify_all(recipients,"Subject","Body")
+    Mailboxer::Notification.notify_all(recipients,"Subject","Body")
     
     #Check getting ALL receipts
     @entity1.mailbox.receipts.size.should==1
