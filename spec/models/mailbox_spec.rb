@@ -69,9 +69,9 @@ describe Mailbox do
   end
 
   it "should understand the read option" do
-    @entity1.mailbox.inbox(read: false).count.should_not == 0
+    @entity1.mailbox.inbox({:read => false}).count.should_not == 0
     @conversation.mark_as_read(@entity1)
-    @entity1.mailbox.inbox(read: false).count.should == 0
+    @entity1.mailbox.inbox({:read => false}).count.should == 0
   end
   
   it "should return trashed mails" do 
