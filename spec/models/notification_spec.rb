@@ -41,7 +41,8 @@ describe Message do
   end
   
   it "should notify several users" do
-    Notification.notify_all([@entity1,@entity2,@entity3],"Subject","Body")
+    recipients = Set.new [@entity1,@entity2,@entity3]
+    Notification.notify_all(recipients,"Subject","Body")
     
     #Check getting ALL receipts
     @entity1.mailbox.receipts.size.should==1
@@ -74,6 +75,23 @@ describe Message do
     notification.subject.should=="Subject"
     notification.body.should=="Body"
           
+  end
+
+  it "should notify a single recipient" do
+    Notification.notify_all(@entity1,"Subject","Body")
+
+    #Check getting ALL receipts
+    @entity1.mailbox.receipts.size.should==1
+    receipt = @entity1.mailbox.receipts.first
+    notification = receipt.notification
+    notification.subject.should=="Subject"
+    notification.body.should=="Body"
+
+    #Check getting NOTIFICATION receipts only
+    @entity1.mailbox.notifications.size.should==1
+    notification = @entity1.mailbox.notifications.first
+    notification.subject.should=="Subject"
+    notification.body.should=="Body"
   end
 
 end
