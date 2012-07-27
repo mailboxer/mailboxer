@@ -12,11 +12,12 @@ module Mailboxer
           has_many :messages, :as => :sender
           has_many :receipts, :order => 'created_at DESC', :dependent => :destroy, :as => :receiver
 
-          include Mailboxer::Models::Messageable::InstanceMethods
+          include Mailboxer::Models::Messageable::MyMethods
         end
       end
 
-      module InstanceMethods
+      module MyMethods
+#      module InstanceMethods
           eval <<-EOM
            #Returning any kind of identification you want for the model
            def #{Mailboxer.name_method}
