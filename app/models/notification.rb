@@ -17,7 +17,7 @@ class Notification < ActiveRecord::Base
     joins(:receipts).where('receipts.trashed' => false)
   }
   scope :unread,  lambda {
-    joins(:receipts).where('receipts.read' => false)
+    joins(:receipts).where('receipts.is_read' => false)
   }
 
   include Concerns::ConfigurableMailer
@@ -58,7 +58,7 @@ class Notification < ActiveRecord::Base
     self.recipients.each do |r|
       msg_receipt = Receipt.new
       msg_receipt.notification = self
-      msg_receipt.read = false
+      msg_receipt.is_read = false
       msg_receipt.receiver = r
       temp_receipts << msg_receipt
     end
@@ -105,7 +105,7 @@ class Notification < ActiveRecord::Base
   #Returns if the participant have read the Notification
   def is_unread?(participant)
     return false if participant.nil?
-    return !self.receipt_for(participant).first.read
+    return !self.receipt_for(participant).first.is_read
   end
 
   def is_read?(participant)

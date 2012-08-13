@@ -27,11 +27,12 @@ Gem::Specification.new do |s|
   # Specs
   s.add_development_dependency('rspec-rails', '>= 2.6.1')
   # Fixtures
-  if RUBY_VERSION >= '1.9.2'
-    s.add_development_dependency('factory_girl', '>= 3.0.0')
-  else
-    s.add_development_dependency('factory_girl', '~> 2.6.0')
-  end
+  #if RUBY_VERSION >= '1.9.2'
+   # s.add_development_dependency('factory_girl', '>= 3.0.0')
+  #else
+    #s.add_development_dependency('factory_girl', '~> 2.6.0')
+  #end
+  s.add_development_dependency('factory_girl', '~> 2.6.0')
   # Population
   s.add_development_dependency('forgery', '>= 0.3.6')
   # Integration testing
