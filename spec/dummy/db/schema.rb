@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(:version => 20120305103203) do
     t.integer  "receiver_id"
     t.string   "receiver_type"
     t.integer  "notification_id",                                  :null => false
-    t.boolean  "read",                          :default => false
+    t.boolean  "is_read",                       :default => false
     t.boolean  "trashed",                       :default => false
     t.boolean  "deleted",                       :default => false
     t.string   "mailbox_type",    :limit => 25

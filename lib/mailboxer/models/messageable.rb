@@ -96,7 +96,7 @@ module Mailboxer
         #* A Notification
         #* A Conversation
         #* An array with any of them
-        def read(obj)
+        def mark_as_read(obj)
           case obj
           when Receipt
             return obj.mark_as_read if obj.receiver == self
@@ -105,9 +105,9 @@ module Mailboxer
           when Conversation
             obj.mark_as_read(self)
           when Array
-            obj.map{ |sub_obj| read(sub_obj) }
+            obj.map{ |sub_obj| mark_as_read(sub_obj) }
           else
-          return nil
+            return nil
           end
         end
 
@@ -119,7 +119,7 @@ module Mailboxer
         #* A Notification
         #* A Conversation
         #* An array with any of them
-        def unread(obj)
+        def mark_as_unread(obj)
           case obj
           when Receipt
             return obj.mark_as_unread if obj.receiver == self
@@ -128,7 +128,7 @@ module Mailboxer
           when Conversation
             obj.mark_as_unread(self)
           when Array
-            obj.map{ |sub_obj| unread(sub_obj) }
+            obj.map{ |sub_obj| mark_as_unread(sub_obj) }
           else
           return nil
           end

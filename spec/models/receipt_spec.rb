@@ -17,16 +17,16 @@ describe Receipt do
   end
   
   it "should be able to be marked as unread" do
-    @mail1.read.should==true
+    @mail1.is_read.should==true
     @mail1.mark_as_unread
-    @mail1.read.should==false
+    @mail1.is_read.should==false
   end
   
   it "should be able to be marked as read" do
-    @mail1.read.should==true
+    @mail1.is_read.should==true
     @mail1.mark_as_unread
     @mail1.mark_as_read
-    @mail1.read.should==true    
+    @mail1.is_read.should==true    
   end
   
   

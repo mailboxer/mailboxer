@@ -27,7 +27,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity1).notification(@message1).first
         assert mail
         if mail
-          mail.read.should==true
+          mail.is_read.should==true
           mail.trashed.should==false
           mail.mailbox_type.should=="sentbox"
         end      
@@ -35,7 +35,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity2).notification(@message1).first
         assert mail
         if mail
-          mail.read.should==false
+          mail.is_read.should==false
           mail.trashed.should==false
           mail.mailbox_type.should=="inbox"
         end
@@ -70,7 +70,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.read.should==true
+          mail.is_read.should==true
           mail.trashed.should==false
           mail.mailbox_type.should=="sentbox"
         end      
@@ -78,7 +78,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.read.should==false
+          mail.is_read.should==false
           mail.trashed.should==false
           mail.mailbox_type.should=="inbox"
         end
@@ -116,7 +116,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.read.should==true
+          mail.is_read.should==true
           mail.trashed.should==false
           mail.mailbox_type.should=="sentbox"
         end      
@@ -124,7 +124,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.read.should==false
+          mail.is_read.should==false
           mail.trashed.should==false
           mail.mailbox_type.should=="inbox"
         end
@@ -161,7 +161,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.read.should==true
+          mail.is_read.should==true
           mail.trashed.should==false
           mail.mailbox_type.should=="sentbox"
         end      
@@ -169,7 +169,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.read.should==false
+          mail.is_read.should==false
           mail.trashed.should==false
           mail.mailbox_type.should=="inbox"
         end
@@ -213,7 +213,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity1).notification(@message1).first
         assert mail
         if mail
-          mail.read.should==true
+          mail.is_read.should==true
           mail.trashed.should==false
           mail.mailbox_type.should=="sentbox"
         end      
@@ -221,7 +221,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity2).notification(@message1).first
         assert mail
         if mail
-          mail.read.should==false
+          mail.is_read.should==false
           mail.trashed.should==false
           mail.mailbox_type.should=="inbox"
         end
@@ -256,7 +256,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.read.should==true
+          mail.is_read.should==true
           mail.trashed.should==false
           mail.mailbox_type.should=="sentbox"
         end      
@@ -264,7 +264,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.read.should==false
+          mail.is_read.should==false
           mail.trashed.should==false
           mail.mailbox_type.should=="inbox"
         end
@@ -302,7 +302,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.read.should==true
+          mail.is_read.should==true
           mail.trashed.should==false
           mail.mailbox_type.should=="sentbox"
         end      
@@ -310,7 +310,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.read.should==false
+          mail.is_read.should==false
           mail.trashed.should==false
           mail.mailbox_type.should=="inbox"
         end
@@ -379,7 +379,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity1).notification(@message1).first
         assert mail
         if mail
-          mail.read.should==true
+          mail.is_read.should==true
           mail.trashed.should==false
           mail.mailbox_type.should=="sentbox"
         end      
@@ -388,7 +388,7 @@ describe "Messages And Receipts" do
           mail = Receipt.recipient(receiver).notification(@message1).first
           assert mail
           if mail
-            mail.read.should==false
+            mail.is_read.should==false
             mail.trashed.should==false
             mail.mailbox_type.should=="inbox"
           end
@@ -425,7 +425,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.read.should==true
+          mail.is_read.should==true
           mail.trashed.should==false
           mail.mailbox_type.should=="sentbox"
         end      
@@ -433,7 +433,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.read.should==false
+          mail.is_read.should==false
           mail.trashed.should==false
           mail.mailbox_type.should=="inbox"
         end
@@ -481,7 +481,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.read.should==true
+          mail.is_read.should==true
           mail.trashed.should==false
           mail.mailbox_type.should=="sentbox"
         end      
@@ -490,7 +490,7 @@ describe "Messages And Receipts" do
           mail = Receipt.recipient(receiver).notification(@message2).first
           assert mail
           if mail
-            mail.read.should==false
+            mail.is_read.should==false
             mail.trashed.should==false
             mail.mailbox_type.should=="inbox"
           end
@@ -561,7 +561,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity1).notification(@message1).first
         assert mail
         if mail
-          mail.read.should==true
+          mail.is_read.should==true
           mail.trashed.should==false
           mail.mailbox_type.should=="sentbox"
         end      
@@ -570,7 +570,7 @@ describe "Messages And Receipts" do
           mail = Receipt.recipient(receiver).notification(@message1).first
           assert mail
           if mail
-            mail.read.should==false
+            mail.is_read.should==false
             mail.trashed.should==false
             mail.mailbox_type.should=="inbox"
           end
@@ -607,7 +607,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.read.should==true
+          mail.is_read.should==true
           mail.trashed.should==false
           mail.mailbox_type.should=="sentbox"
         end      
@@ -615,7 +615,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.read.should==false
+          mail.is_read.should==false
           mail.trashed.should==false
           mail.mailbox_type.should=="inbox"
         end
@@ -663,7 +663,7 @@ describe "Messages And Receipts" do
         mail = Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.read.should==true
+          mail.is_read.should==true
           mail.trashed.should==false
           mail.mailbox_type.should=="sentbox"
         end      
@@ -672,7 +672,7 @@ describe "Messages And Receipts" do
           mail = Receipt.recipient(receiver).notification(@message2).first
           assert mail
           if mail
-            mail.read.should==false
+            mail.is_read.should==false
             mail.trashed.should==false
             mail.mailbox_type.should=="inbox"
           end
