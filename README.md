@@ -1,4 +1,4 @@
-# Mailboxer 0.7.x [![](https://secure.travis-ci.org/ging/mailboxer.png)](http://travis-ci.org/ging/mailboxer) [![](https://gemnasium.com/ging/mailboxer.png)](https://gemnasium.com/ging/mailboxer)
+# Mailboxer 0.8.x [![](https://secure.travis-ci.org/ging/mailboxer.png)](http://travis-ci.org/ging/mailboxer) [![](https://gemnasium.com/ging/mailboxer.png)](https://gemnasium.com/ging/mailboxer)
 
 This project is based on the need of a private message system for [ging
 / social\_stream](https://github.com/ging/social_stream). Instead of creating our core message system heavily
@@ -156,6 +156,9 @@ end
 
 ## Mailboxer API
 
+### Warning for version 0.8.0
+Version 0.8.0 sees `Messageable#read` and `Messageable#unread` renamed to `mark_as_(un)read`, and `Receipt#read` and `Receipt#unread` to `is_(un)read`. This may break existing applications, but `read` is a reserved name for Active Record, and the best pratice in this case is simply avoid using it.
+
 ### How can I send a message?
 
 ```ruby
@@ -258,3 +261,4 @@ If you need a GUI you should take a look a this links:
 * [plentz](https://github.com/ging/mailboxer/commits/master?author=plentz) (Diego Plentz)
 * [laserlemon](https://github.com/ging/mailboxer/commits/master?author=laserlemon) (Steve Richert)
 * [daveworth](https://github.com/ging/mailboxer/commits/master?author=daveworth) (Dave Worth)
+* [rafaelgg](https://github.com/ging/mailboxer/commits/master?author=rafaelgg) (Rafael Garcia)
