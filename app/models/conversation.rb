@@ -24,7 +24,7 @@ class Conversation < ActiveRecord::Base
     participant(participant).merge(Receipt.trash)
   }
   scope :unread,  lambda {|participant|
-    participant(participant).merge(Receipt.unread)
+    participant(participant).merge(Receipt.is_unread)
   }
 
   #Mark the conversation as read for one of the participants
@@ -125,7 +125,7 @@ class Conversation < ActiveRecord::Base
   #Returns true if the participant has at least one unread message of the conversation
 	def is_unread?(participant)
 		return false if participant.nil?
-		return self.receipts_for(participant).not_trash.unread.count!=0
+		return self.receipts_for(participant).not_trash.is_unread.count!=0
 	end
 
 	protected
