@@ -122,7 +122,7 @@ module Mailboxer
       #* A Notification
       #* A Conversation
       #* An array with any of them
-      def read(obj)
+      def mark_as_read(obj)
         case obj
         when Receipt
           return obj.mark_as_read if obj.receiver == self
