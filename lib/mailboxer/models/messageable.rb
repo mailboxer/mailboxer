@@ -99,6 +99,29 @@ module Mailboxer
       #* A Notification
       #* A Conversation
       #* An array with any of them
+      def mark_as_read(obj=nil)
+        case obj
+          when Receipt
+            return obj.mark_as_read if obj.receiver == self
+          when Message, Notification
+            obj.mark_as_read(self)
+          when Conversation
+            obj.mark_as_read(self)
+          when Array
+            obj.map{ |sub_obj| mark_as_read(sub_obj) }
+          else
+            return nil
+        end
+      end
+
+      #Mark the object as read for messageable.
+      #
+      #Object can be:
+      #* A Receipt
+      #* A Message
+      #* A Notification
+      #* A Conversation
+      #* An array with any of them
       def read(obj)
         case obj
         when Receipt
@@ -110,9 +133,31 @@ module Mailboxer
         when Array
           obj.map{ |sub_obj| read(sub_obj) }
         else
-        return nil
+          return nil
         end
       end
+        #Mark the object as unread for messageable.
+        #
+        #Object can be:
+        #* A Receipt
+        #* A Message
+        #* A Notification
+        #* A Conversation
+        #* An array with any of them
+        def mark_as_unread(obj)
+          case obj
+          when Receipt
+            return obj.mark_as_unread if obj.receiver == self
+          when Message, Notification
+            obj.mark_as_unread(self)
+          when Conversation
+            obj.mark_as_unread(self)
+          when Array
+            obj.map{ |sub_obj| mark_as_unread(sub_obj) }
+          else
+          return nil
+          end
+        end
 
       #Mark the object as unread for messageable.
       #

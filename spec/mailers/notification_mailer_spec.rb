@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe NotificationMailer do
   before do
-    @entity1 = Factory(:user)
-    @entity2 = Factory(:duck)
-    @entity3 = Factory(:cylon)
+    @entity1 = FactoryGirl.create(:user)
+    @entity2 = FactoryGirl.create(:duck)
+    @entity3 = FactoryGirl.create(:cylon)
     @receipt1 = Notification.notify_all([@entity1,@entity2,@entity3],"Subject", "Body Body Body Body Body Body Body Body Body Body Body Body")
   end
 

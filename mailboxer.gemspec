@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "mailboxer"
-  s.version = "0.6.5"
+  s.version = "0.8.0"
   s.authors = ["Eduardo Casanova Cuesta"]
   s.summary = "Messaging system for rails apps."
   s.description = "A Rails engine that allows any model to act as messageable, adding the ability to exchange messages " +
@@ -27,11 +27,12 @@ Gem::Specification.new do |s|
   # Specs
   s.add_development_dependency('rspec-rails', '>= 2.6.1')
   # Fixtures
-  if RUBY_VERSION >= '1.9.2'
-    s.add_development_dependency('factory_girl', '>= 3.0.0')
-  else
-    s.add_development_dependency('factory_girl', '~> 2.6.0')
-  end
+  #if RUBY_VERSION >= '1.9.2'
+   # s.add_development_dependency('factory_girl', '>= 3.0.0')
+  #else
+    #s.add_development_dependency('factory_girl', '~> 2.6.0')
+  #end
+  s.add_development_dependency('factory_girl', '~> 2.6.0')
   # Population
   s.add_development_dependency('forgery', '>= 0.3.6')
   # Integration testing

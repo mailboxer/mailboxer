@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Conversation do
 
   before do
-    @entity1 = Factory(:user)
-    @entity2 = Factory(:user)
+    @entity1 = FactoryGirl.create(:user)
+    @entity2 = FactoryGirl.create(:user)
     @receipt1 = @entity1.send_message(@entity2,"Body","Subject")
     @receipt2 = @entity2.reply_to_all(@receipt1,"Reply body 1")
     @receipt3 = @entity1.reply_to_all(@receipt2,"Reply body 2")
@@ -38,16 +38,19 @@ describe Conversation do
   end
 
   it "should be able to be marked as read" do
-    @conversation.move_to_trash(@entity1)
+    #@conversation.move_to_trash(@entity1)
+    @conversation.mark_as_read(@entity1)
+    @conversation.should be_is_read(@entity)
   end
 
   it "should be able to be marked as unread" do
-    @conversation.move_to_trash(@entity1)
-    @conversation.untrash(@entity1)
+    @conversation.mark_as_read(@entity1)
+    @conversation.mark_as_unread(@entity1)
+    @conversation.should be_is_unread(@entity1)
   end
 
   describe "scopes" do
-    let(:participant) { Factory(:user) }
+    let(:participant) { FactoryGirl.create(:user) }
     let!(:inbox_conversation) { @entity1.send_message(participant, "Body", "Subject").notification.conversation }
     let!(:sentbox_conversation) { participant.send_message(@entity1, "Body", "Subject").notification.conversation }
 

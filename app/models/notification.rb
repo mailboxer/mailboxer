@@ -17,7 +17,7 @@ class Notification < ActiveRecord::Base
     joins(:receipts).where('receipts.trashed' => false)
   }
   scope :unread,  lambda {
-    joins(:receipts).where('receipts.read' => false)
+    joins(:receipts).where('receipts.is_read' => false)
   }
 
   include Concerns::ConfigurableMailer
@@ -26,8 +26,8 @@ class Notification < ActiveRecord::Base
     #Sends a Notification to all the recipients
     def notify_all(recipients,subject,body,obj = nil,sanitize_text = true,notification_code=nil)
       notification = Notification.new({:body => body, :subject => subject})
-      notification.recipients = recipients.is_a?(Array) ? recipients : [recipients]
-      notification.recipients = notification.recipients.uniq
+      notification.recipients = recipients.respond_to?(:each) ? recipients : [recipients]
+      notification.recipients = notification.recipients.uniq if recipients.respond_to?(:uniq)
       notification.notified_object = obj if obj.present?
       notification.notification_code = notification_code if notification_code.present?
       return notification.deliver sanitize_text
@@ -58,7 +58,7 @@ class Notification < ActiveRecord::Base
     self.recipients.each do |r|
       msg_receipt = Receipt.new
       msg_receipt.notification = self
-      msg_receipt.read = false
+      msg_receipt.is_read = false
       msg_receipt.receiver = r
       temp_receipts << msg_receipt
     end
@@ -105,7 +105,11 @@ class Notification < ActiveRecord::Base
   #Returns if the participant have read the Notification
   def is_unread?(participant)
     return false if participant.nil?
-    return !self.receipt_for(participant).first.read
+    return !self.receipt_for(participant).first.is_read
+  end
+
+  def is_read?(participant)
+    !self.is_unread?(participant)
   end
 
   #Returns if the participant have trashed the Notification

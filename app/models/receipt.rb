@@ -22,19 +22,19 @@ class Receipt < ActiveRecord::Base
   scope :inbox, where(:mailbox_type => "inbox")
   scope :trash, where(:trashed => true)
   scope :not_trash, where(:trashed => false)
-  scope :read, where(:read => true)
-  scope :unread, where(:read => false)
+  scope :is_read, where(:is_read => true)
+  scope :is_unread, where(:is_read => false)
 
   after_validation :remove_duplicate_errors
   class << self
     #Marks all the receipts from the relation as read
     def mark_as_read(options={})
-      update_receipts({:read => true}, options)
+      update_receipts({:is_read => true}, options)
     end
 
     #Marks all the receipts from the relation as unread
     def mark_as_unread(options={})
-      update_receipts({:read => false}, options)
+      update_receipts({:is_read => false}, options)
     end
 
     #Marks all the receipts from the relation as trashed
@@ -78,12 +78,12 @@ class Receipt < ActiveRecord::Base
 
   #Marks the receipt as read
   def mark_as_read
-    update_attributes(:read => true)
+    update_attributes(:is_read => true)
   end
 
   #Marks the receipt as unread
   def mark_as_unread
-    update_attributes(:read => false)
+    update_attributes(:is_read => false)
   end
 
   #Marks the receipt as trashed
@@ -114,7 +114,7 @@ class Receipt < ActiveRecord::Base
 
   #Returns if the participant have read the Notification
   def is_unread?
-    return !self.read
+    return !self.is_read
   end
 
   #Returns if the participant have trashed the Notification

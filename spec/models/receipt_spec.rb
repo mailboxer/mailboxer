@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Receipt do
   
   before do
-    @entity1 = Factory(:user)
-    @entity2 = Factory(:user)
+    @entity1 = FactoryGirl.create(:user)
+    @entity2 = FactoryGirl.create(:user)
     @mail1 = @entity1.send_message(@entity2,"Body","Subject")   
   end
   
@@ -17,16 +17,16 @@ describe Receipt do
   end
   
   it "should be able to be marked as unread" do
-    @mail1.read.should==true
+    @mail1.is_read.should==true
     @mail1.mark_as_unread
-    @mail1.read.should==false
+    @mail1.is_read.should==false
   end
   
   it "should be able to be marked as read" do
-    @mail1.read.should==true
+    @mail1.is_read.should==true
     @mail1.mark_as_unread
     @mail1.mark_as_read
-    @mail1.read.should==true    
+    @mail1.is_read.should==true    
   end
   
   

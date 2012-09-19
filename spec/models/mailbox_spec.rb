@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Mailbox do
   
   before do
-    @entity1 = Factory(:user)
-    @entity2 = Factory(:user)
+    @entity1 = FactoryGirl.create(:user)
+    @entity2 = FactoryGirl.create(:user)
     @receipt1 = @entity1.send_message(@entity2,"Body","Subject")
     @receipt2 = @entity2.reply_to_all(@receipt1,"Reply body 1")
     @receipt3 = @entity1.reply_to_all(@receipt2,"Reply body 2")
@@ -66,6 +66,12 @@ describe Mailbox do
     @entity2.mailbox.receipts.inbox.count.should==2
     @entity2.mailbox.receipts.inbox[0].should==Receipt.recipient(@entity2).inbox.conversation(@conversation)[0]
     @entity2.mailbox.receipts.inbox[1].should==Receipt.recipient(@entity2).inbox.conversation(@conversation)[1]
+  end
+
+  it "should understand the read option" do
+    @entity1.mailbox.inbox({:read => false}).count.should_not == 0
+    @conversation.mark_as_read(@entity1)
+    @entity1.mailbox.inbox({:read => false}).count.should == 0
   end
   
   it "should return trashed mails" do 
