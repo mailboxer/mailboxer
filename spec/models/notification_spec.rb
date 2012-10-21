@@ -78,7 +78,7 @@ describe Mailboxer::Message do
   end
 
   it "should notify a single recipient" do
-    Notification.notify_all(@entity1,"Subject","Body")
+    Mailboxer::Notification.notify_all(@entity1,"Subject","Body")
 
     #Check getting ALL receipts
     @entity1.mailbox.receipts.size.should==1
