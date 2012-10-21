@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Message do
+describe Mailboxer::Message do
   
   before do
     @entity1 = FactoryGirl.create(:user)

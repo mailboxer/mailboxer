@@ -1,4 +1,4 @@
-class Mailbox
+class Mailboxer::Mailbox
   attr_accessor :type
   attr_reader :messageable
   #Initializer method
@@ -9,7 +9,7 @@ class Mailbox
   #Returns the notifications for the messageable
   def notifications(options = {})
     #:type => nil is a hack not to give Messages as Notifications
-    notifs = Notification.recipient(@messageable).where(:type => nil).order("notifications.created_at DESC")
+    notifs = Mailboxer::Notification.recipient(@messageable).where(:type => nil).order("mailboxer_notifications.created_at DESC")
     if (options[:read].present? and options[:read]==false) or (options[:unread].present? and options[:unread]==true)
       notifs = notifs.unread
     end
@@ -29,16 +29,16 @@ class Mailbox
   #* :unread=true
   #
   def conversations(options = {})
-    conv = Conversation.participant(@messageable)
+    conv = Mailboxer::Conversation.participant(@messageable)
 
     if options[:mailbox_type].present?
       case options[:mailbox_type]
       when 'inbox'
-        conv = Conversation.inbox(@messageable)
+        conv = Mailboxer::Conversation.inbox(@messageable)
       when 'sentbox'
-        conv = Conversation.sentbox(@messageable)
+        conv = Mailboxer::Conversation.sentbox(@messageable)
       when 'trash'
-        conv = Conversation.trash(@messageable)
+        conv = Mailboxer::Conversation.trash(@messageable)
       end
     end
 
@@ -75,7 +75,7 @@ class Mailbox
 
   #Returns all the receipts of messageable, from Messages and Notifications
   def receipts(options = {})
-    return Receipt.where(options).recipient(@messageable)
+    return Mailboxer::Receipt.where(options).recipient(@messageable)
   end
 
   #Deletes all the messages in the trash of messageable. NOT IMPLEMENTED.
@@ -109,9 +109,9 @@ class Mailbox
   #If object isn't one of the above, a nil will be returned
   def receipts_for(object)
     case object
-    when Message, Notification
+    when Mailboxer::Message, Mailboxer::Notification
       return object.receipt_for(@messageable)
-    when Conversation
+    when Mailboxer::Conversation
       return object.receipts_for(@messageable)
     else
     return nil

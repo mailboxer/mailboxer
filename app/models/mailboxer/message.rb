@@ -1,7 +1,9 @@
-class Message < Notification
+class Mailboxer::Message < Mailboxer::Notification
+  self.table_name = :mailboxer_notifications
+
   attr_accessible :attachment
 
-  belongs_to :conversation, :validate => true, :autosave => true
+  belongs_to :conversation, :class_name => "Mailboxer::Conversation", :validate => true, :autosave => true
   validates_presence_of :sender
 
   class_attribute :on_deliver_callback
@@ -28,7 +30,7 @@ class Message < Notification
     temp_receipts = Array.new
     #Receiver receipts
     self.recipients.each do |r|
-      msg_receipt = Receipt.new
+      msg_receipt = Mailboxer::Receipt.new
       msg_receipt.notification = self
       msg_receipt.is_read = false
       msg_receipt.receiver = r
@@ -36,7 +38,7 @@ class Message < Notification
       temp_receipts << msg_receipt
     end
     #Sender receipt
-    sender_receipt = Receipt.new
+    sender_receipt = Mailboxer::Receipt.new
     sender_receipt.notification = self
     sender_receipt.is_read = true
     sender_receipt.receiver = self.sender

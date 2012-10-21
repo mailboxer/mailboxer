@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Mailbox do
+describe Mailboxer::Mailbox do
   
   before do
     @entity1 = FactoryGirl.create(:user)
@@ -31,17 +31,17 @@ describe Mailbox do
   it "should return all mail" do 
     assert @entity1.mailbox.receipts
     @entity1.mailbox.receipts.count.should==4
-    @entity1.mailbox.receipts[0].should==Receipt.recipient(@entity1).conversation(@conversation)[0]
-    @entity1.mailbox.receipts[1].should==Receipt.recipient(@entity1).conversation(@conversation)[1]
-    @entity1.mailbox.receipts[2].should==Receipt.recipient(@entity1).conversation(@conversation)[2]
-    @entity1.mailbox.receipts[3].should==Receipt.recipient(@entity1).conversation(@conversation)[3]
+    @entity1.mailbox.receipts[0].should==Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[0]
+    @entity1.mailbox.receipts[1].should==Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[1]
+    @entity1.mailbox.receipts[2].should==Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[2]
+    @entity1.mailbox.receipts[3].should==Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[3]
     
     assert @entity2.mailbox.receipts
     @entity2.mailbox.receipts.count.should==4
-    @entity2.mailbox.receipts[0].should==Receipt.recipient(@entity2).conversation(@conversation)[0]
-    @entity2.mailbox.receipts[1].should==Receipt.recipient(@entity2).conversation(@conversation)[1]
-    @entity2.mailbox.receipts[2].should==Receipt.recipient(@entity2).conversation(@conversation)[2]
-    @entity2.mailbox.receipts[3].should==Receipt.recipient(@entity2).conversation(@conversation)[3]    
+    @entity2.mailbox.receipts[0].should==Mailboxer::Receipt.recipient(@entity2).conversation(@conversation)[0]
+    @entity2.mailbox.receipts[1].should==Mailboxer::Receipt.recipient(@entity2).conversation(@conversation)[1]
+    @entity2.mailbox.receipts[2].should==Mailboxer::Receipt.recipient(@entity2).conversation(@conversation)[2]
+    @entity2.mailbox.receipts[3].should==Mailboxer::Receipt.recipient(@entity2).conversation(@conversation)[3]    
   end
   
   it "should return sentbox" do
@@ -59,13 +59,13 @@ describe Mailbox do
   it "should return inbox" do
     assert @entity1.mailbox.receipts.inbox
     @entity1.mailbox.receipts.inbox.count.should==2
-    @entity1.mailbox.receipts.inbox[0].should==Receipt.recipient(@entity1).inbox.conversation(@conversation)[0]
-    @entity1.mailbox.receipts.inbox[1].should==Receipt.recipient(@entity1).inbox.conversation(@conversation)[1]
+    @entity1.mailbox.receipts.inbox[0].should==Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[0]
+    @entity1.mailbox.receipts.inbox[1].should==Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[1]
     
     assert @entity2.mailbox.receipts.inbox
     @entity2.mailbox.receipts.inbox.count.should==2
-    @entity2.mailbox.receipts.inbox[0].should==Receipt.recipient(@entity2).inbox.conversation(@conversation)[0]
-    @entity2.mailbox.receipts.inbox[1].should==Receipt.recipient(@entity2).inbox.conversation(@conversation)[1]
+    @entity2.mailbox.receipts.inbox[0].should==Mailboxer::Receipt.recipient(@entity2).inbox.conversation(@conversation)[0]
+    @entity2.mailbox.receipts.inbox[1].should==Mailboxer::Receipt.recipient(@entity2).inbox.conversation(@conversation)[1]
   end
 
   it "should understand the read option" do
@@ -79,10 +79,10 @@ describe Mailbox do
     
     assert @entity1.mailbox.receipts.trash
     @entity1.mailbox.receipts.trash.count.should==4
-    @entity1.mailbox.receipts.trash[0].should==Receipt.recipient(@entity1).conversation(@conversation)[0]
-    @entity1.mailbox.receipts.trash[1].should==Receipt.recipient(@entity1).conversation(@conversation)[1]
-    @entity1.mailbox.receipts.trash[2].should==Receipt.recipient(@entity1).conversation(@conversation)[2]
-    @entity1.mailbox.receipts.trash[3].should==Receipt.recipient(@entity1).conversation(@conversation)[3]
+    @entity1.mailbox.receipts.trash[0].should==Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[0]
+    @entity1.mailbox.receipts.trash[1].should==Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[1]
+    @entity1.mailbox.receipts.trash[2].should==Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[2]
+    @entity1.mailbox.receipts.trash[3].should==Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[3]
     
     assert @entity2.mailbox.receipts.trash
     @entity2.mailbox.receipts.trash.count.should==0    

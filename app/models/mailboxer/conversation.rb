@@ -1,30 +1,32 @@
-class Conversation < ActiveRecord::Base
+class Mailboxer::Conversation < ActiveRecord::Base
+  self.table_name = :mailboxer_conversations
+
   attr_accessible :subject
 
-	has_many :messages, :dependent => :destroy
-	has_many :receipts, :through => :messages
+	has_many :messages, :class_name => "Mailboxer::Message", :dependent => :destroy
+	has_many :receipts, :class_name => "Mailboxer::Receipt", :through => :messages
 
 	validates_presence_of :subject
 
 	before_validation :clean
 
   scope :participant, lambda {|participant|
-    select('DISTINCT conversations.*').
-    where('notifications.type'=> Message.name).
-    order("conversations.updated_at DESC").
-    joins(:receipts).merge(Receipt.recipient(participant))
+    select('DISTINCT mailboxer_conversations.*').
+    where('mailboxer_notifications.type'=> Mailboxer::Message.name).
+    order("mailboxer_conversations.updated_at DESC").
+    joins(:receipts).merge(Mailboxer::Receipt.recipient(participant))
   }
   scope :inbox, lambda {|participant|
-    participant(participant).merge(Receipt.inbox.not_trash)
+    participant(participant).merge(Mailboxer::Receipt.inbox.not_trash)
   }
   scope :sentbox, lambda {|participant|
-    participant(participant).merge(Receipt.sentbox.not_trash)
+    participant(participant).merge(Mailboxer::Receipt.sentbox.not_trash)
   }
   scope :trash, lambda {|participant|
-    participant(participant).merge(Receipt.trash)
+    participant(participant).merge(Mailboxer::Receipt.trash)
   }
   scope :unread,  lambda {|participant|
-    participant(participant).merge(Receipt.is_unread)
+    participant(participant).merge(Mailboxer::Receipt.is_unread)
   }
 
   #Mark the conversation as read for one of the participants
@@ -92,12 +94,12 @@ class Conversation < ActiveRecord::Base
 
   #Returns the receipts of the conversation for one participants
 	def receipts_for(participant)
-	  return Receipt.conversation(self).recipient(participant)
+	  return Mailboxer::Receipt.conversation(self).recipient(participant)
 	end
 
   #Returns the number of messages of the conversation
 	def count_messages
-		return Message.conversation(self).count
+		return Mailboxer::Message.conversation(self).count
 	end
 
   #Returns true if the messageable is a participant of the conversation
