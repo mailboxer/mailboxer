@@ -102,6 +102,23 @@ describe Mailbox do
     assert @entity2.mailbox.receipts.trash
     @entity2.mailbox.receipts.trash.count.should==0    
   end
-  
+
+  context "STI models" do
+    before do
+      @sti_entity1 = FactoryGirl.create(:commander)
+      @sti_entity2 = FactoryGirl.create(:commander)
+      @sti_mail = @sti_entity1.send_message(@sti_entity2, "Body", "Subject")
+    end
+
+    it "should add one to senders sentbox" do
+      @sti_entity1.mailbox.sentbox.count.should==1
+      @sti_entity1.mailbox.sentbox.should include(@sti_mail.conversation)
+    end
+
+    it "should add one to recievers inbox" do
+      @sti_entity2.mailbox.inbox.count.should == 1
+      @sti_entity2.mailbox.inbox.should include(@sti_mail.conversation)
+    end
+  end
   
 end
