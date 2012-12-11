@@ -29,5 +29,16 @@ describe Receipt do
     @mail1.is_read.should==true    
   end
   
+  context "STI models" do
+    before do
+      @entity3 = FactoryGirl.create(:commander)
+      @entity4 = FactoryGirl.create(:commander)
+      @mail2 = @entity3.send_message(@entity4, "Body", "Subject")
+    end
+	
+    it "should refer to the correct base class" do
+      @mail2.receiver_type.should == @entity3.class.base_class.to_s
+    end
+  end
   
 end
