@@ -6,7 +6,7 @@ class Receipt < ActiveRecord::Base
   validates_presence_of :receiver
 
   scope :recipient, lambda { |recipient|
-    where(:receiver_id => recipient.id,:receiver_type => recipient.class.to_s)
+    where(:receiver_id => recipient.id,:receiver_type => recipient.class.base_class.to_s)
   }
   #Notifications Scope checks type to be nil, not Notification because of STI behaviour
   #with the primary class (no type is saved)

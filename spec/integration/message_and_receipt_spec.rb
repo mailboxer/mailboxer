@@ -714,4 +714,190 @@ describe "Messages And Receipts" do
       end           
     end
   end
+
+  describe "two STI entities" do
+    before do
+      @entity1 = FactoryGirl.create(:commander)
+      @entity2 = FactoryGirl.create(:commander)
+    end
+    
+    describe "message sending" do    
+      
+      before do
+        @receipt1 = @entity1.send_message(@entity2,"Body","Subject")
+        @message1 = @receipt1.notification
+      end
+      
+      it "should create proper message" do
+        @message1.sender.id.should == @entity1.id
+        @message1.sender.class.should == @entity1.class
+        assert @message1.body.eql?"Body"
+        assert @message1.subject.eql?"Subject"
+      end
+      
+      it "should create proper mails" do
+        #Sender Mail
+        mail = Receipt.recipient(@entity1).notification(@message1).first
+        assert mail
+        if mail
+          mail.is_read.should==true
+          mail.trashed.should==false
+          mail.mailbox_type.should=="sentbox"
+        end      
+        #Receiver Mail
+        mail = Receipt.recipient(@entity2).notification(@message1).first
+        assert mail
+        if mail
+          mail.is_read.should==false
+          mail.trashed.should==false
+          mail.mailbox_type.should=="inbox"
+        end
+      end
+      
+      it "should have the correct recipients" do
+        recipients = @message1.recipients
+        recipients.count.should==2
+        recipients.count(@entity1).should==1
+        recipients.count(@entity2).should==1
+      end
+      
+    end
+    
+    describe "message replying to sender" do
+      before do
+        @receipt1 = @entity1.send_message(@entity2,"Body","Subject")
+        @receipt2 = @entity2.reply_to_sender(@receipt1,"Reply body")
+        @message1 = @receipt1.notification
+        @message2 = @receipt2.notification
+      end
+      
+      it "should create proper message" do
+        @message2.sender.id.should == @entity2.id
+        @message2.sender.class.should == @entity2.class
+        assert @message2.body.eql?"Reply body"
+        assert @message2.subject.eql?"RE: Subject"
+      end
+      
+      it "should create proper mails" do
+        #Sender Mail
+        mail = Receipt.recipient(@entity2).notification(@message2).first
+        assert mail
+        if mail
+          mail.is_read.should==true
+          mail.trashed.should==false
+          mail.mailbox_type.should=="sentbox"
+        end      
+        #Receiver Mail
+        mail = Receipt.recipient(@entity1).notification(@message2).first
+        assert mail
+        if mail
+          mail.is_read.should==false
+          mail.trashed.should==false
+          mail.mailbox_type.should=="inbox"
+        end
+      end
+      
+      it "should have the correct recipients" do
+        recipients = @message2.recipients
+        recipients.count.should==2
+        recipients.count(@entity1).should==1
+        recipients.count(@entity2).should==1
+      end
+      
+      it "should be associated to the same conversation" do
+        @message1.conversation.id.should==@message2.conversation.id      
+      end           
+    end
+    
+    describe "message replying to all" do
+      before do
+        @receipt1 = @entity1.send_message(@entity2,"Body","Subject")
+        @receipt2 = @entity2.reply_to_all(@receipt1,"Reply body")
+        @message1 = @receipt1.notification
+        @message2 = @receipt2.notification
+      end
+      
+      it "should create proper message" do
+        @message2.sender.id.should == @entity2.id
+        @message2.sender.class.should == @entity2.class
+        assert @message2.body.eql?"Reply body"
+        assert @message2.subject.eql?"RE: Subject"
+      end
+      
+      it "should create proper mails" do
+        #Sender Mail
+        mail = Receipt.recipient(@entity2).notification(@message2).first
+        assert mail
+        if mail
+          mail.is_read.should==true
+          mail.trashed.should==false
+          mail.mailbox_type.should=="sentbox"
+        end      
+        #Receiver Mail
+        mail = Receipt.recipient(@entity1).notification(@message2).first
+        assert mail
+        if mail
+          mail.is_read.should==false
+          mail.trashed.should==false
+          mail.mailbox_type.should=="inbox"
+        end
+      end
+      
+      it "should have the correct recipients" do
+        recipients = @message2.recipients
+        recipients.count.should==2
+        recipients.count(@entity1).should==1
+        recipients.count(@entity2).should==1
+      end
+      
+      it "should be associated to the same conversation" do
+        @message1.conversation.id.should==@message2.conversation.id      
+      end           
+    end
+    describe "message replying to conversation" do
+      before do
+        @receipt1 = @entity1.send_message(@entity2,"Body","Subject")
+        @receipt2 = @entity2.reply_to_conversation(@receipt1.conversation,"Reply body")
+        @message1 = @receipt1.notification
+        @message2 = @receipt2.notification
+      end
+      
+      it "should create proper message" do
+        @message2.sender.id.should == @entity2.id
+        @message2.sender.class.should == @entity2.class
+        assert @message2.body.eql?"Reply body"
+        assert @message2.subject.eql?"RE: Subject"
+      end
+      
+      it "should create proper mails" do
+        #Sender Mail
+        mail = Receipt.recipient(@entity2).notification(@message2).first
+        assert mail
+        if mail
+          mail.is_read.should==true
+          mail.trashed.should==false
+          mail.mailbox_type.should=="sentbox"
+        end      
+        #Receiver Mail
+        mail = Receipt.recipient(@entity1).notification(@message2).first
+        assert mail
+        if mail
+          mail.is_read.should==false
+          mail.trashed.should==false
+          mail.mailbox_type.should=="inbox"
+        end
+      end
+      
+      it "should have the correct recipients" do
+        recipients = @message2.recipients
+        recipients.count.should==2
+        recipients.count(@entity1).should==1
+        recipients.count(@entity2).should==1
+      end
+      
+      it "should be associated to the same conversation" do
+        @message1.conversation.id.should==@message2.conversation.id      
+      end              
+    end
+  end
 end
