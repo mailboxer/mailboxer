@@ -1,4 +1,4 @@
-# Mailboxer 0.8.x [![](https://secure.travis-ci.org/ging/mailboxer.png)](http://travis-ci.org/ging/mailboxer) [![](https://gemnasium.com/ging/mailboxer.png)](https://gemnasium.com/ging/mailboxer)
+# Mailboxer 0.9.x [![](https://secure.travis-ci.org/ging/mailboxer.png)](http://travis-ci.org/ging/mailboxer) [![](https://gemnasium.com/ging/mailboxer.png)](https://gemnasium.com/ging/mailboxer)
 
 This project is based on the need of a private message system for [ging
 / social\_stream](https://github.com/ging/social_stream). Instead of creating our core message system heavily
