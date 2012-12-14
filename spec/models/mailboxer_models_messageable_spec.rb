@@ -302,5 +302,14 @@ describe "Mailboxer::Models::Messageable through User" do
     @conversation = @receipt.conversation
     @conversation.messages.first.attachment_identifier.should=='testfile.txt'
   end
+  
+  it "should be the same message time as passed" do
+    message_time = 5.days.ago.to_time
+    receipt = @entity1.send_message(@entity2, "Body", "Subject", nil, nil, message_time)
+    receipt.message.created_at.should eql(message_time)
+    receipt.message.updated_at.should eql(message_time)
+    receipt.message.conversation.created_at.should eql(message_time)
+    receipt.message.conversation.updated_at.should eql(message_time)
+  end
 
 end
