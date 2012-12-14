@@ -105,8 +105,8 @@ describe Mailbox do
 
   context "STI models" do
     before do
-      @sti_entity1 = FactoryGirl.create(:commander)
-      @sti_entity2 = FactoryGirl.create(:commander)
+      @sti_entity1 = FactoryGirl.create(:user)
+      @sti_entity2 = FactoryGirl.create(:user)
       @sti_mail = @sti_entity1.send_message(@sti_entity2, "Body", "Subject")
     end
 
