@@ -31,8 +31,8 @@ describe Receipt do
   
   context "STI models" do
     before do
-      @entity3 = FactoryGirl.create(:commander)
-      @entity4 = FactoryGirl.create(:commander)
+      @entity3 = FactoryGirl.create(:user)
+      @entity4 = FactoryGirl.create(:user)
       @mail2 = @entity3.send_message(@entity4, "Body", "Subject")
     end
 	

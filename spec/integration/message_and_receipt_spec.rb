@@ -717,8 +717,8 @@ describe "Messages And Receipts" do
 
   describe "two STI entities" do
     before do
-      @entity1 = FactoryGirl.create(:commander)
-      @entity2 = FactoryGirl.create(:commander)
+      @entity1 = FactoryGirl.create(:user)
+      @entity2 = FactoryGirl.create(:user)
     end
     
     describe "message sending" do    
