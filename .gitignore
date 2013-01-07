@@ -16,3 +16,4 @@ Gemfile.lock
 rdoc/
 doc/
 .yardoc/*
+.rvmrc
