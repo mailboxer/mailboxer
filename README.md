@@ -190,13 +190,13 @@ alfa.reply_to_sender(receipt, "Reply body")
 alfa.mailbox.conversations
 
 #A wants to retrieve his inbox
-alfa.mailbox.inbox
+alfa.mailbox.receipts.inbox
 
 #A wants to retrieve his sent conversations
-alfa.mailbox.sentbox
+alfa.mailbox.receipts.sentbox
 
 #alfa wants to retrieve his trashed conversations
-alfa.mailbox.trash
+alfa.mailbox.receipts.trash
 ```
 
 ### How can I paginate conversations?
@@ -208,13 +208,13 @@ You can use Kaminari to paginate the conversations as normal. Please, make sure 
 conversations = alfa.mailbox.conversations.page(params[:page]).per(9)
 
 #Paginating received conversations using :page parameter and 9 per page
-conversations = alfa.mailbox.inbox.page(params[:page]).per(9)
+conversations = alfa.mailbox.receipts.inbox.page(params[:page]).per(9)
   
 #Paginating sent conversations using :page parameter and 9 per page
-conversations = alfa.mailbox.sentbox.page(params[:page]).per(9)
+conversations = alfa.mailbox.receipts.sentbox.page(params[:page]).per(9)
 
 #Paginating trashed conversations using :page parameter and 9 per page
-conversations = alfa.mailbox.trash.page(params[:page]).per(9) 
+conversations = alfa.mailbox.receipts.trash.page(params[:page]).per(9) 
 ```
 
 ### How can I read the messages of a conversation?
@@ -225,7 +225,7 @@ This is done this way because receipts save the information about the relation b
 
 ```ruby
 #alfa gets the last conversation (chronologically, the first in the inbox)
-conversation = alfa.mailbox.inbox.first
+conversation = alfa.mailbox.receipts.inbox.first
 
 #alfa gets it receipts chronologically ordered.
 receipts = conversation.receipts_for alfa
