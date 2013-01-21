@@ -4,6 +4,7 @@ class Receipt < ActiveRecord::Base
   belongs_to :message, :foreign_key => "notification_id"
 
   validates_presence_of :receiver
+  attr_accessible :trashed, :is_read
 
   scope :recipient, lambda { |recipient|
     where(:receiver_id => recipient.id,:receiver_type => recipient.class.base_class.to_s)
