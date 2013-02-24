@@ -60,7 +60,7 @@ $ rake db:migrate
 
 ### Emails
 
-We are now adding support for sending emails when a Notification or a Message is sent to one o more recipients. You should modify mailboxer initializer (/config/initializer/mailboxer.rb) to edit this settings.
+We are now adding support for sending emails when a Notification or a Message is sent to one or more recipients. You should modify mailboxer initializer (/config/initializer/mailboxer.rb) to edit this settings.
 
 ```ruby
 Mailboxer.setup do |config|
