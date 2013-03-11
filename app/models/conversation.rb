@@ -26,6 +26,9 @@ class Conversation < ActiveRecord::Base
   scope :unread,  lambda {|participant|
     participant(participant).merge(Receipt.is_unread)
   }
+  scope :not_trash,  lambda {|participant|
+    participant(participant).merge(Receipt.not_trash)
+  }
 
   #Mark the conversation as read for one of the participants
 	def mark_as_read(participant)
