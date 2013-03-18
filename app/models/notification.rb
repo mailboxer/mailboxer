@@ -21,8 +21,8 @@ class Notification < ActiveRecord::Base
   }
   scope :global, where(:global => true)
 
-  scope :expired, where("notification.expires < ?", Time.now)
-  scope :unexpired, where("notification.expires is NULL OR notification.expires > ?", Time.now)
+  scope :expired, where("notifications.expires < ?", Time.now)
+  scope :unexpired, where("notifications.expires is NULL OR notifications.expires > ?", Time.now)
 
   include Concerns::ConfigurableMailer
 
