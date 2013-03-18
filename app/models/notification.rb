@@ -1,6 +1,6 @@
 class Notification < ActiveRecord::Base
   attr_accessor :recipients
-  attr_accessible :body, :subject
+  attr_accessible :body, :subject, :global, :expires
 
   belongs_to :sender, :polymorphic => :true
   belongs_to :notified_object, :polymorphic => :true
@@ -19,6 +19,10 @@ class Notification < ActiveRecord::Base
   scope :unread,  lambda {
     joins(:receipts).where('receipts.is_read' => false)
   }
+  scope :global, where(:global => true)
+
+  scope :expired, where("notification.expires < ?", Time.now)
+  scope :unexpired, where("notification.expires is NULL OR notification.expires > ?", Time.now)
 
   include Concerns::ConfigurableMailer
 
@@ -46,6 +50,23 @@ class Notification < ActiveRecord::Base
        else
          return false
        end
+    end
+  end
+
+  def expired?
+    return self.expires < Time.now
+  end
+
+  def expire!
+    unless self.expired?
+      self.expire
+      self.save
+    end
+  end
+
+  def expire
+    unless self.expired?
+      self.expires = Time.now - 1.second
     end
   end
 
