@@ -11,20 +11,20 @@ class Receipt < ActiveRecord::Base
   }
   #Notifications Scope checks type to be nil, not Notification because of STI behaviour
   #with the primary class (no type is saved)
-  scope :notifications_receipts, joins(:notification).where('notifications.type' => nil)
-  scope :messages_receipts, joins(:notification).where('notifications.type' => Message.to_s)
+  scope :notifications_receipts, lambda { joins(:notification).where('notifications.type' => nil) }
+  scope :messages_receipts, lambda { joins(:notification).where('notifications.type' => Message.to_s) }
   scope :notification, lambda { |notification|
     where(:notification_id => notification.id)
   }
   scope :conversation, lambda { |conversation|
     joins(:message).where('notifications.conversation_id' => conversation.id)
   }
-  scope :sentbox, where(:mailbox_type => "sentbox")
-  scope :inbox, where(:mailbox_type => "inbox")
-  scope :trash, where(:trashed => true)
-  scope :not_trash, where(:trashed => false)
-  scope :is_read, where(:is_read => true)
-  scope :is_unread, where(:is_read => false)
+  scope :sentbox, lambda { where(:mailbox_type => "sentbox") }
+  scope :inbox, lambda { where(:mailbox_type => "inbox") }
+  scope :trash, lambda { where(:trashed => true) }
+  scope :not_trash, lambda { where(:trashed => false) }
+  scope :is_read, lambda { where(:is_read => true) }
+  scope :is_unread, lambda { where(:is_read => false) }
 
   after_validation :remove_duplicate_errors
   class << self
