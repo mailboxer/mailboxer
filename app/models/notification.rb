@@ -19,10 +19,11 @@ class Notification < ActiveRecord::Base
   scope :unread,  lambda {
     joins(:receipts).where('receipts.is_read' => false)
   }
-  scope :global, where(:global => true)
-
-  scope :expired, where("notifications.expires < ?", Time.now)
-  scope :unexpired, where("notifications.expires is NULL OR notifications.expires > ?", Time.now)
+  scope :global, lambda { where(:global => true) }
+  scope :expired, lambda { where("notifications.expires < ?", Time.now) }
+  scope :unexpired, lambda {
+    where("notifications.expires is NULL OR notifications.expires > ?", Time.now)
+  }
 
   include Concerns::ConfigurableMailer
 

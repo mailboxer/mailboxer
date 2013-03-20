@@ -11,7 +11,7 @@ class Message < Notification
   }
 
   mount_uploader :attachment, AttachmentUploader
-  
+
   include Concerns::ConfigurableMailer
 
   class << self
