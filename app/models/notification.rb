@@ -55,7 +55,7 @@ class Notification < ActiveRecord::Base
   end
 
   def expired?
-    return self.expires < Time.now
+    return self.expires.present? && (self.expires < Time.now)
   end
 
   def expire!
