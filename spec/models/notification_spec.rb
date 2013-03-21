@@ -188,6 +188,13 @@ describe Message do
       end
     end
     
+    context "when the expiration date is not set" do
+      before {subject.stub(:expires => nil)}
+      it 'should not be expired' do
+        subject.expired?.should be_false
+      end
+    end
+    
   end
 
 end
