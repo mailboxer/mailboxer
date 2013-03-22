@@ -30,6 +30,8 @@ class Notification < ActiveRecord::Base
   scope :sent_by, lambda { |sender|
     where(:sender_id => sender.id, :sender_type => sender.class.to_s)
   }
+  scope :deleted, where(:deleted => true)
+  scope :not_deleted, where(:deleted => false)
 
   include Concerns::ConfigurableMailer
 
@@ -169,7 +171,16 @@ class Notification < ActiveRecord::Base
     return if participant.nil?
     return self.receipt_for(participant).untrash
   end
-
+  
+  # Deletes the notification.  Note that this is different than the trash methods in that
+  # it doesn't move the receipts, but the notification itself.
+  def delete!
+    self.update_attribute(:deleted, true)
+  end
+  
+  def undelete!
+    self.update_attribute(:deleted, false)
+  end
 
   include ActionView::Helpers::SanitizeHelper
 
