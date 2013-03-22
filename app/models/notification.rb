@@ -27,6 +27,9 @@ class Notification < ActiveRecord::Base
   scope :unexpired, lambda { 
     where("notifications.expires is NULL OR notifications.expires > ?", Time.zone.now) 
   }
+  scope :sent_by, lambda { |sender|
+    where(:sender_id => sender.id, :sender_type => sender.class.to_s)
+  }
 
   include Concerns::ConfigurableMailer
 
