@@ -30,8 +30,10 @@ class Notification < ActiveRecord::Base
   scope :sent_by, lambda { |sender|
     where(:sender_id => sender.id, :sender_type => sender.class.to_s)
   }
+  scope :drafting, where(:draft => true)
+  scope :not_drafting, where(:draft => false)
   scope :deleted, where(:deleted => true)
-  scope :not_deleted, where(:deleted => false)
+  scope :not_deleted, where("notifications.deleted is NULL OR notifications.deleted = 0")
 
   include Concerns::ConfigurableMailer
 
