@@ -19,10 +19,7 @@ class MessageMailer < ActionMailer::Base
     @receiver = receiver
     subject = message.subject.to_s
     subject = strip_tags(subject) unless subject.html_safe?
-    mail(:to => receiver.send(Mailboxer.email_method,message), :subject => t('mailboxer.message_mailer.subject_new', :subject => subject)) do |format|
-      format.text {render __method__}
-      format.html {render __method__}
-    end
+    mail(:to => receiver.send(Mailboxer.email_method,message), :subject => t('mailboxer.message_mailer.subject_new', :subject => subject))
   end
 
   #Sends and email for indicating a reply in an already created conversation
@@ -31,9 +28,6 @@ class MessageMailer < ActionMailer::Base
     @receiver = receiver
     subject = message.subject.to_s
     subject = strip_tags(subject) unless subject.html_safe?
-    mail(:to => receiver.send(Mailboxer.email_method,message), :subject => t('mailboxer.message_mailer.subject_reply', :subject => subject)) do |format|
-      format.text {render __method__}
-      format.html {render __method__}
-    end
+    mail(:to => receiver.send(Mailboxer.email_method,message), :subject => t('mailboxer.message_mailer.subject_reply', :subject => subject))
   end
 end
