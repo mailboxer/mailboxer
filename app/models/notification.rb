@@ -22,10 +22,10 @@ class Notification < ActiveRecord::Base
   scope :global, where(:global => true)
 
   scope :expired, lambda { 
-    where("notifications.expires < ?", Time.zone.now) 
+    where("notifications.expires < ?", Time.now) 
   }
-  scope :unexpired, lambda { 
-    where("notifications.expires is NULL OR notifications.expires > ?", Time.zone.now) 
+  scope :unexpired, lambda {
+    where("notifications.expires is NULL OR notifications.expires > ?", Time.zone.now)
   }
   scope :sent_by, lambda { |sender|
     where(:sender_id => sender.id, :sender_type => sender.class.to_s)
@@ -33,7 +33,7 @@ class Notification < ActiveRecord::Base
   scope :drafting, where(:draft => true)
   scope :not_drafting, where(:draft => false)
   scope :deleted, where(:deleted => true)
-  scope :not_deleted, where("notifications.deleted is NULL OR notifications.deleted = 0")
+  scope :not_deleted, where(:deleted => false)
 
   include Concerns::ConfigurableMailer
 
@@ -65,7 +65,7 @@ class Notification < ActiveRecord::Base
   end
 
   def expired?
-    return self.expires.present? && (self.expires < Time.zone.now)
+    return self.expires.present? && (self.expires < Time.now)
   end
 
   def expire!
@@ -77,7 +77,7 @@ class Notification < ActiveRecord::Base
 
   def expire
     unless self.expired?
-      self.expires = Time.zone.now - 1.second
+      self.expires = Time.now - 1.second
     end
   end
 

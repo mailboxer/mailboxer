@@ -1,0 +1,1 @@
+../../../../db/migrate/20110719110700_add_notified_object.rb
