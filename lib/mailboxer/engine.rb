@@ -11,7 +11,7 @@ module Mailboxer
     
     initializer "mailboxer.models.messageable" do
       ActiveSupport.on_load(:active_record) do
-        include Mailboxer::Models::Messageable
+        extend Mailboxer::Models::Messageable::ActiveRecord
       end
     end
   end
