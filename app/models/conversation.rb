@@ -71,8 +71,8 @@ class Conversation < ActiveRecord::Base
 
 	#Originator of the conversation.
 	def originator
-		@orignator = self.original_message.sender if @originator.nil?
-		return @orignator
+		@originator = self.original_message.sender if @originator.nil?
+		return @originator
 	end
 
 	#First message of the conversation.
