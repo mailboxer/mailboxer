@@ -49,6 +49,22 @@ describe Conversation do
     @conversation.should be_is_unread(@entity1)
   end
 
+  it "should be able to add a new participant" do
+    new_user = FactoryGirl.create(:user)
+    @conversation.add_participant(new_user)
+    @conversation.participants.count.should == 3
+    @conversation.participants.should include(new_user, @entity1, @entity2)
+    @conversation.receipts_for(new_user).count.should == @conversation.receipts_for(@entity1).count
+  end
+
+  it "should deliver messages to new participants" do
+    new_user = FactoryGirl.create(:user)
+    @conversation.add_participant(new_user)
+    expect{
+      receipt5 = @entity1.reply_to_all(@receipt4,"Reply body 4")
+    }.to change{ @conversation.receipts_for(new_user).count }.by 1
+  end
+
   describe "scopes" do
     let(:participant) { FactoryGirl.create(:user) }
     let!(:inbox_conversation) { @entity1.send_message(participant, "Body", "Subject").notification.conversation }
