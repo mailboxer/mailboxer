@@ -29,13 +29,13 @@ class Notification < ActiveRecord::Base
 
   class << self
     #Sends a Notification to all the recipients
-    def notify_all(recipients,subject,body,obj = nil,sanitize_text = true,notification_code=nil)
+    def notify_all(recipients,subject,body,obj = nil,sanitize_text = true,notification_code=nil,send_mail=true)
       notification = Notification.new({:body => body, :subject => subject})
       notification.recipients = recipients.respond_to?(:each) ? recipients : [recipients]
       notification.recipients = notification.recipients.uniq if recipients.respond_to?(:uniq)
       notification.notified_object = obj if obj.present?
       notification.notification_code = notification_code if notification_code.present?
-      return notification.deliver sanitize_text
+      return notification.deliver sanitize_text, send_mail
     end
 
     #Takes a +Receipt+ or an +Array+ of them and returns +true+ if the delivery was
@@ -73,7 +73,7 @@ class Notification < ActiveRecord::Base
 
   #Delivers a Notification. USE NOT RECOMENDED.
   #Use Mailboxer::Models::Message.notify and Notification.notify_all instead.
-  def deliver(should_clean = true)
+  def deliver(should_clean = true, send_mail = true)
     self.clean if should_clean
     temp_receipts = Array.new
     #Receiver receipts
@@ -91,7 +91,7 @@ class Notification < ActiveRecord::Base
         #Should send an email?
         if Mailboxer.uses_emails
           email_to = r.send(Mailboxer.email_method,self)
-          unless email_to.blank?
+          if send_mail && !email_to.blank?
             get_mailer.send_email(self,r).deliver
           end
         end
