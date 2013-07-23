@@ -25,30 +25,20 @@ class Message < Notification
   #Use Mailboxer::Models::Message.send_message instead.
   def deliver(reply = false, should_clean = true)
     self.clean if should_clean
-    temp_receipts = Array.new
+
     #Receiver receipts
-    self.recipients.each do |r|
-      msg_receipt = Receipt.new
-      msg_receipt.notification = self
-      msg_receipt.is_read = false
-      msg_receipt.receiver = r
-      msg_receipt.mailbox_type = "inbox"
-      temp_receipts << msg_receipt
-    end
+    temp_receipts = recipients.map { |r| build_receipt(r, 'inbox') }
+
     #Sender receipt
-    sender_receipt = Receipt.new
-    sender_receipt.notification = self
-    sender_receipt.is_read = true
-    sender_receipt.receiver = self.sender
-    sender_receipt.mailbox_type = "sentbox"
+    sender_receipt = build_receipt(sender, 'sentbox', true)
     temp_receipts << sender_receipt
 
     temp_receipts.each(&:valid?)
     if temp_receipts.all? { |t| t.errors.empty? }
-      temp_receipts.each(&:save!)	#Save receipts
-      self.recipients.each do |r|
-        #Should send an email?
-        if Mailboxer.uses_emails
+      temp_receipts.each(&:save!) 	#Save receipts
+      #Should send an email?
+      if Mailboxer.uses_emails
+        self.recipients.each do |r|
           email_to = r.send(Mailboxer.email_method,self)
           unless email_to.blank?
             get_mailer.send_email(self,r).deliver
@@ -61,7 +51,16 @@ class Message < Notification
       self.recipients=nil
       self.on_deliver_callback.call(self) unless self.on_deliver_callback.nil?
     end
-
     sender_receipt
+  end
+
+  private
+  def build_receipt(receiver, mailbox_type, is_read = false)
+    Receipt.new.tap do |receipt|
+      receipt.notification = self
+      receipt.is_read = is_read
+      receipt.receiver = receiver
+      receipt.mailbox_type = mailbox_type
+    end
   end
 end
