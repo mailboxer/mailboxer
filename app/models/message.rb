@@ -38,10 +38,12 @@ class Message < Notification
       temp_receipts.each(&:save!) 	#Save receipts
       #Should send an email?
       if Mailboxer.uses_emails
-        self.recipients.each do |r|
-          email_to = r.send(Mailboxer.email_method,self)
-          unless email_to.blank?
-            get_mailer.send_email(self,r).deliver
+        if Mailboxer.mailer_wants_array
+          get_mailer.send_email(self, recipients).deliver
+        else
+          recipients.each do |recipient|
+            email_to = recipient.send(Mailboxer.email_method, self)
+            get_mailer.send_email(self, recipient).deliver if email_to.present?
           end
         end
       end

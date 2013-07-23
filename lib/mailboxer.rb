@@ -7,6 +7,8 @@ module Mailboxer
   @@default_from = "no-reply@mailboxer.com"
   mattr_accessor :uses_emails
   @@uses_emails = true
+  mattr_accessor :mailer_wants_array
+  @@mailer_wants_array = false
   mattr_accessor :search_enabled
   @@search_enabled = false
   mattr_accessor :search_engine
@@ -18,8 +20,7 @@ module Mailboxer
   mattr_accessor :notification_mailer
   mattr_accessor :message_mailer
 
-   class << self
-    
+  class << self
     def setup
       yield self
     end
@@ -27,8 +28,8 @@ module Mailboxer
     def protected_attributes?
       Rails.version < '4' || defined?(ProtectedAttributes)
     end
+  end
 
-   end
 end
 # reopen ActiveRecord and include all the above to make
 # them available to all our models if they want it
