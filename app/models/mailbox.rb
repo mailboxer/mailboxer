@@ -39,6 +39,8 @@ class Mailbox
         conv = Conversation.sentbox(@messageable)
       when 'trash'
         conv = Conversation.trash(@messageable)
+      when  'not_trash'
+        conv = Conversation.not_trash(@messageable)
       end
     end
 
