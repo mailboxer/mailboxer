@@ -28,8 +28,8 @@ module Mailboxer
       end
 
       unless defined?(Mailboxer.email_method)
-      #Returning the email address of the model if an email should be sent for this object (Message or Notification).
-      #If no mail has to be sent, return nil.
+        #Returning the email address of the model if an email should be sent for this object (Message or Notification).
+        #If no mail has to be sent, return nil.
         define_method Mailboxer.email_method do |object|
           begin
             super
@@ -43,12 +43,12 @@ module Mailboxer
       def mailbox
         @mailbox = Mailbox.new(self) if @mailbox.nil?
         @mailbox.type = :all
-        return @mailbox
+        @mailbox
       end
 
       #Sends a notification to the messageable
       def notify(subject,body,obj = nil,sanitize_text=true,notification_code=nil,send_mail=true)
-        return Notification.notify_all([self],subject,body,obj,sanitize_text,notification_code,send_mail)
+        Notification.notify_all([self],subject,body,obj,sanitize_text,notification_code,send_mail)
       end
 
       #Sends a messages, starting a new conversation, with the messageable
@@ -63,7 +63,7 @@ module Mailboxer
         message.conversation = convo
         message.recipients = recipients.is_a?(Array) ? recipients : [recipients]
         message.recipients = message.recipients.uniq
-        return message.deliver false,sanitize_text
+        message.deliver false, sanitize_text
       end
 
       #Basic reply method. USE NOT RECOMENDED.
@@ -75,17 +75,17 @@ module Mailboxer
         response.recipients = recipients.is_a?(Array) ? recipients : [recipients]
         response.recipients = response.recipients.uniq
         response.recipients.delete(self)
-        return response.deliver true, sanitize_text
+        response.deliver true, sanitize_text
       end
 
       #Replies to the sender of the message in the conversation
       def reply_to_sender(receipt, reply_body, subject=nil, sanitize_text=true, attachment=nil)
-        return reply(receipt.conversation, receipt.message.sender, reply_body, subject, sanitize_text, attachment)
+        reply(receipt.conversation, receipt.message.sender, reply_body, subject, sanitize_text, attachment)
       end
 
       #Replies to all the recipients of the message in the conversation
       def reply_to_all(receipt, reply_body, subject=nil, sanitize_text=true, attachment=nil)
-        return reply(receipt.conversation, receipt.message.recipients, reply_body, subject, sanitize_text, attachment)
+        reply(receipt.conversation, receipt.message.recipients, reply_body, subject, sanitize_text, attachment)
       end
 
       #Replies to all the recipients of the last message in the conversation and untrash any trashed message by messageable
@@ -95,7 +95,8 @@ module Mailboxer
         if should_untrash && mailbox.is_trashed?(conversation)
           mailbox.receipts_for(conversation).untrash
         end
-        return reply(conversation, conversation.last_message.recipients, reply_body, subject, sanitize_text, attachment)
+
+        reply(conversation, conversation.last_message.recipients, reply_body, subject, sanitize_text, attachment)
       end
 
       #Mark the object as read for messageable.
@@ -109,15 +110,13 @@ module Mailboxer
       def mark_as_read(obj)
         case obj
         when Receipt
-          return obj.mark_as_read if obj.receiver == self
+          obj.mark_as_read if obj.receiver == self
         when Message, Notification
           obj.mark_as_read(self)
         when Conversation
           obj.mark_as_read(self)
         when Array
           obj.map{ |sub_obj| mark_as_read(sub_obj) }
-        else
-          return nil
         end
       end
 
@@ -132,15 +131,13 @@ module Mailboxer
       def mark_as_unread(obj)
         case obj
         when Receipt
-          return obj.mark_as_unread if obj.receiver == self
+          obj.mark_as_unread if obj.receiver == self
         when Message, Notification
           obj.mark_as_unread(self)
         when Conversation
           obj.mark_as_unread(self)
         when Array
           obj.map{ |sub_obj| mark_as_unread(sub_obj) }
-        else
-        return nil
         end
       end
 
@@ -155,15 +152,13 @@ module Mailboxer
       def trash(obj)
         case obj
         when Receipt
-          return obj.move_to_trash if obj.receiver == self
+          obj.move_to_trash if obj.receiver == self
         when Message, Notification
           obj.move_to_trash(self)
         when Conversation
           obj.move_to_trash(self)
         when Array
           obj.map{ |sub_obj| trash(sub_obj) }
-        else
-        return nil
         end
       end
 
@@ -178,15 +173,13 @@ module Mailboxer
       def untrash(obj)
         case obj
         when Receipt
-          return obj.untrash if obj.receiver == self
+          obj.untrash if obj.receiver == self
         when Message, Notification
           obj.untrash(self)
         when Conversation
           obj.untrash(self)
         when Array
           obj.map{ |sub_obj| untrash(sub_obj) }
-        else
-        return nil
         end
       end
 
