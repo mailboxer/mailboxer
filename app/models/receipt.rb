@@ -1,10 +1,11 @@
 class Receipt < ActiveRecord::Base
+  attr_accessible :trashed, :is_read
+
   belongs_to :notification, :validate => true, :autosave => true
   belongs_to :receiver, :polymorphic => :true
   belongs_to :message, :foreign_key => "notification_id"
 
   validates_presence_of :receiver
-  attr_accessible :trashed, :is_read
 
   scope :recipient, lambda { |recipient|
     where(:receiver_id => recipient.id,:receiver_type => recipient.class.base_class.to_s)
@@ -66,14 +67,15 @@ class Receipt < ActiveRecord::Base
       where(options).each do |rcp|
         ids << rcp.id
       end
-      return if ids.empty?
-      conditions = [""].concat(ids)
-      condition = "id = ? "
-      ids.drop(1).each do
-        condition << "OR id = ? "
+      unless ids.empty?
+        conditions = [""].concat(ids)
+        condition = "id = ? "
+        ids.drop(1).each do
+          condition << "OR id = ? "
+        end
+        conditions[0] = condition
+        Receipt.except(:where).except(:joins).where(conditions).update_all(updates)
       end
-      conditions[0] = condition
-      Receipt.except(:where).except(:joins).where(conditions).update_all(updates)
     end
   end
 
@@ -109,20 +111,18 @@ class Receipt < ActiveRecord::Base
 
   #Returns the conversation associated to the receipt if the notification is a Message
   def conversation
-    return message.conversation if message.is_a? Message
-    return nil
+    message.conversation if message.is_a? Message
   end
 
   #Returns if the participant have read the Notification
   def is_unread?
-    return !self.is_read
+    !self.is_read
   end
 
   #Returns if the participant have trashed the Notification
   def is_trashed?
-    return self.trashed
+    self.trashed
   end
-
 
   protected
 
@@ -147,5 +147,4 @@ class Receipt < ActiveRecord::Base
       integer :receiver_id
     end
   end
-
 end

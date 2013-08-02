@@ -1,6 +1,7 @@
 class Mailbox
   attr_accessor :type
   attr_reader :messageable
+
   #Initializer method
   def initialize(messageable)
     @messageable = messageable
@@ -13,7 +14,8 @@ class Mailbox
     if (options[:read].present? and options[:read]==false) or (options[:unread].present? and options[:unread]==true)
       notifs = notifs.unread
     end
-    return notifs
+
+    notifs
   end
 
   #Returns the conversations for the messageable
@@ -48,7 +50,7 @@ class Mailbox
       conv = conv.unread(@messageable)
     end
 
-    return conv
+    conv
   end
 
   #Returns the conversations in the inbox of messageable
@@ -56,7 +58,7 @@ class Mailbox
   #Same as conversations({:mailbox_type => 'inbox'})
   def inbox(options={})
     options = options.merge(:mailbox_type => 'inbox')
-    return self.conversations(options)
+    self.conversations(options)
   end
 
   #Returns the conversations in the sentbox of messageable
@@ -64,7 +66,7 @@ class Mailbox
   #Same as conversations({:mailbox_type => 'sentbox'})
   def sentbox(options={})
     options = options.merge(:mailbox_type => 'sentbox')
-    return self.conversations(options)
+    self.conversations(options)
   end
 
   #Returns the conversations in the trash of messageable
@@ -72,33 +74,33 @@ class Mailbox
   #Same as conversations({:mailbox_type => 'trash'})
   def trash(options={})
     options = options.merge(:mailbox_type => 'trash')
-    return self.conversations(options)
+    self.conversations(options)
   end
 
   #Returns all the receipts of messageable, from Messages and Notifications
   def receipts(options = {})
-    return Receipt.where(options).recipient(@messageable)
+    Receipt.where(options).recipient(@messageable)
   end
 
   #Deletes all the messages in the trash of messageable. NOT IMPLEMENTED.
   def empty_trash(options = {})
     #TODO
-    return false
+    false
   end
 
   #Returns if messageable is a participant of conversation
   def has_conversation?(conversation)
-    return conversation.is_participant?(@messageable)
+    conversation.is_participant?(@messageable)
   end
 
   #Returns true if messageable has at least one trashed message of the conversation
   def is_trashed?(conversation)
-    return conversation.is_trashed?(@messageable)
+    conversation.is_trashed?(@messageable)
   end
 
   #Returns true if messageable has trashed all the messages of the conversation
   def is_completely_trashed?(conversation)
-    return conversation.is_completely_trashed?(@messageable)
+    conversation.is_completely_trashed?(@messageable)
   end
 
   #Returns the receipts of object for messageable as a ActiveRecord::Relation
@@ -112,12 +114,9 @@ class Mailbox
   def receipts_for(object)
     case object
     when Message, Notification
-      return object.receipt_for(@messageable)
+      object.receipt_for(@messageable)
     when Conversation
-      return object.receipts_for(@messageable)
-    else
-    return nil
+      object.receipts_for(@messageable)
     end
   end
-
 end
