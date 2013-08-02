@@ -45,9 +45,9 @@ class Message < Notification
 
     temp_receipts.each(&:valid?)
     if temp_receipts.all? { |t| t.errors.empty? }
-      temp_receipts.each(&:save!) 	#Save receipts
+      temp_receipts.each(&:save!)	#Save receipts
       self.recipients.each do |r|
-      #Should send an email?
+        #Should send an email?
         if Mailboxer.uses_emails
           email_to = r.send(Mailboxer.email_method,self)
           unless email_to.blank?
@@ -59,8 +59,9 @@ class Message < Notification
         self.conversation.touch
       end
       self.recipients=nil
-    self.on_deliver_callback.call(self) unless self.on_deliver_callback.nil?
+      self.on_deliver_callback.call(self) unless self.on_deliver_callback.nil?
     end
-    return sender_receipt
+
+    sender_receipt
   end
 end
