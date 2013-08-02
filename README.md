@@ -1,31 +1,31 @@
 # Mailboxer 0.10.x [![](https://secure.travis-ci.org/ging/mailboxer.png)](http://travis-ci.org/ging/mailboxer) [![](https://gemnasium.com/ging/mailboxer.png)](https://gemnasium.com/ging/mailboxer)
 
-This project is based on the need of a private message system for [ging
+This project is based on the need for a private message system for [ging
 / social\_stream](https://github.com/ging/social_stream). Instead of creating our core message system heavily
-dependent on our development we are trying to implement a generic and
+dependent on our development, we are trying to implement a generic and
 potent messaging gem.
 
-After looking for a good gem to use we notice the lack of messaging gems
-and functionality in them. Mailboxer tries to fill this emptiness giving
-a powerfull and generic message system. It supports the use of
-conversations with two or more recipients, send notification to a
-recipient (intended to be used as system notifications “Your picture has
-new comments”, “John Doe has updated its document”, etc.), emails the
-messageable model (if configured to do so). It has a complete use of a
-`Mailbox` object for each messageable with `inbox`, `sentbox` and
+After looking for a good gem to use we noticed the lack of messaging gems
+and functionality in them. Mailboxer tries to fill this void delivering
+a powerful and flexible message system. It supports the use of
+conversations with two or more participants, sending notifications to
+recipients (intended to be used as system notifications “Your picture has
+new comments”, “John Doe has updated his document”, etc.), and emailing the
+messageable model (if configured to do so). It has a complete implementation 
+of a `Mailbox` object for each messageable with `inbox`, `sentbox` and
 `trash`.
 
 The gem is constantly growing and improving its functionality. As it is
 used with our parallel development [ging / social\_stream](https://github.com/ging/social_stream) we are finding and fixing bugs continously. If you want
 some functionality not supported yet or marked as TODO, you can create
-an [issue](https://github.com/ging/mailboxer/issues) to ask for it. It will be a great feedback for us, and we
-will know what you may find useful of the gem.
+an [issue](https://github.com/ging/mailboxer/issues) to ask for it. It will be great feedback for us, and we
+will know what you may find useful in the gem.
 
 Mailboxer was born from the great, but outdated, code from [lpsergi /
 acts*as*messageable](https://github.com/psergi/acts_as_messageable).
 
-We are now working to make an exhaustive documentation and some wiki
-pages in order to make even easier to use the gem at its full potencial.
+We are now working to make exhaustive documentation and some wiki
+pages in order to make it even easier to use the gem to its full potencial.
 Please, give us some time if you find something missing or [ask for
 it](https://github.com/ging/mailboxer/issues).
 
@@ -50,7 +50,7 @@ Run install script:
 $ rails g mailboxer:install
 ```
 
-And don't forget to migrate you database:
+And don't forget to migrate your database:
 
 ```sh
 $ rake db:migrate
@@ -60,19 +60,19 @@ $ rake db:migrate
 
 ### Emails
 
-We are now adding support for sending emails when a Notification or a Message is sent to one or more recipients. You should modify mailboxer initializer (/config/initializer/mailboxer.rb) to edit this settings.
+We are now adding support for sending emails when a Notification or a Message is sent to one or more recipients. You should modify the mailboxer initializer (/config/initializer/mailboxer.rb) to edit these settings.
 
 ```ruby
 Mailboxer.setup do |config|
-  #Configures if you applications uses or no the email sending for Notifications and Messages
+  #Enables or disables email sending for Notifications and Messages
   config.uses_emails = true  
-  #Configures the default from for the email sent for Messages and Notifications of Mailboxer
+  #Configures the default `from` address for the email sent for Messages and Notifications of Mailboxer
   config.default_from = "no-reply@dit.upm.es"
   ...
 end
 ```
 
-You can change the way in which emails are delivered by specifying a custom implementation for notification and message mailer 
+You can change the way in which emails are delivered by specifying a custom implementation of notification and message mailers
 
 ```ruby
 Mailboxer.setup do |config|
@@ -84,7 +84,7 @@ end
 
 ### User identities
 
-Users must have an identity defined by a `name` and an `email`. We must assure that Messageable models have some specific methods. These methods are:
+Users must have an identity defined by a `name` and an `email`. We must ensure that Messageable models have some specific methods. These methods are:
 
 ```ruby
 #Returning any kind of identification you want for the model
@@ -126,7 +126,7 @@ config.name_method = :display_name
 
 Will use the method `notification_email(object)` instead of `mailboxer_email(object)` and `display_name` for `name`.
 
-Using default or custom method names, if your model doesn't implement them, Mailboxer will use dummy methods not to crash but notify you the missing methods.
+Using default or custom method names, if your model doesn't implement them, Mailboxer will use dummy methods so as to notify you of missing methods rather than crashing.
 
 ## Preparing your models
 
@@ -138,7 +138,7 @@ class User < ActiveRecord::Base
 end
 ```
 
-You are not limited to User model. You can use Mailboxer in any other model and use it in serveral different models. If you have ducks and cylons in your application and you want to interchange messages as if they where the same, just use act_as_messageable in each one and you will be able to send duck-duck, duck-cylon, cylon-duck and cylon-cylon messages. Of course, you can extend it for as many clases as you need.
+You are not limited to the User model. You can use Mailboxer in any other model and use it in serveral different models. If you have ducks and cylons in your application and you want to exchange messages as if they were the same, just add `acts_as_messageable` to each one and you will be able to send duck-duck, duck-cylon, cylon-duck and cylon-cylon messages. Of course, you can extend it for as many classes as you need.
 
 Example:
 
@@ -219,7 +219,7 @@ conversations = alfa.mailbox.trash.page(params[:page]).per(9)
 
 ### How can I read the messages of a conversation?
 
-As a messageable, what you receive receipts wich are linked with the message itself. You should retrieve your receipts for the conversation a get the message associated to them.
+As a messageable, what you receive are receipts, which are associated with the message itself. You should retrieve your receipts for the conversation a get the message associated with them.
 
 This is done this way because receipts save the information about the relation between messageable and the messages: is it read?, is it trashed?, etc.
 
@@ -239,7 +239,7 @@ receipts.each do |receipt|
 end
 ```
 
-You can take a look at the full documentation of Mailboxer in [rubydoc.info](http://rubydoc.info/gems/mailboxer/frames).
+You can take a look at the full documentation for Mailboxer in [rubydoc.info](http://rubydoc.info/gems/mailboxer/frames).
 
 ## Do you want to test Mailboxer?
 
@@ -247,7 +247,7 @@ Thanks to [Roman Kushnir (@RKushnir)](https://github.com/RKushnir/) you can test
 
 ## I need a GUI!
 
-If you need a GUI you should take a look a this links:
+If you need a GUI you should take a look a these links:
 
 * The [rails-messaging](https://github.com/frodefi/rails-messaging) project.
 * The wiki page [GUI Example on a real application](https://github.com/ging/mailboxer/wiki/GUI-Example-on-a-real-application).
