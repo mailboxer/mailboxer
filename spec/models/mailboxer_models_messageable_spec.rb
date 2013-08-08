@@ -304,12 +304,15 @@ describe "Mailboxer::Models::Messageable through User" do
   end
   
   it "should be the same message time as passed" do
-    message_time = 5.days.ago.to_time
+    message_time = 5.days.ago
     receipt = @entity1.send_message(@entity2, "Body", "Subject", nil, nil, message_time)
-    receipt.message.created_at.should eql(message_time)
-    receipt.message.updated_at.should eql(message_time)
-    receipt.message.conversation.created_at.should eql(message_time)
-    receipt.message.conversation.updated_at.should eql(message_time)
+    # We're going to compare the string representation, because ActiveSupport::TimeWithZone
+    # has microsecond precision in ruby, but some databases don't support this level of precision.
+    expected = message_time.utc.to_s
+    receipt.message.created_at.utc.to_s.should == expected
+    receipt.message.updated_at.utc.to_s.should == expected
+    receipt.message.conversation.created_at.utc.to_s.should == expected
+    receipt.message.conversation.updated_at.utc.to_s.should == expected
   end
 
 end
