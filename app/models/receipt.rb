@@ -1,5 +1,5 @@
 class Receipt < ActiveRecord::Base
-  attr_accessible :trashed, :is_read if Rails::VERSION::MAJOR == 3
+  attr_accessible :trashed, :is_read if Mailboxer.protected_attributes?
 
   belongs_to :notification, :validate => true, :autosave => true
   belongs_to :receiver, :polymorphic => :true
