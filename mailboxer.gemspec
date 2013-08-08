@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
   # Testing database
   if RUBY_PLATFORM == 'java'
     s.add_development_dependency('jdbc-sqlite3')
-    s.add_development_dependency('activerecord-jdbcsqlite3-adapter')
+    s.add_development_dependency('activerecord-jdbcsqlite3-adapter', '1.3.0.rc1')
   else
     s.add_development_dependency('sqlite3')
   end
