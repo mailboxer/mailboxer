@@ -38,7 +38,10 @@ Gem::Specification.new do |s|
   # Integration testing
   s.add_development_dependency('capybara', '>= 0.3.9')
   # Testing database
-  s.add_development_dependency('sqlite3-ruby') unless RUBY_PLATFORM == 'java'
-  s.add_development_dependency('jdbc-sqlite3') if RUBY_PLATFORM == 'java'
-  s.add_development_dependency('activerecord-jdbcsqlite3-adapter') if RUBY_PLATFORM == 'java'
+  if RUBY_PLATFORM == 'java'
+    s.add_development_dependency('jdbc-sqlite3')
+    s.add_development_dependency('activerecord-jdbcsqlite3-adapter')
+  else
+    s.add_development_dependency('sqlite3')
+  end
 end
