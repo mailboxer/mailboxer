@@ -1,5 +1,5 @@
 class Conversation < ActiveRecord::Base
-  attr_accessible :subject
+  attr_accessible :subject if Rails::VERSION::MAJOR == 3
 
   has_many :messages, :dependent => :destroy
   has_many :receipts, :through => :messages
@@ -77,7 +77,7 @@ class Conversation < ActiveRecord::Base
 
   #First message of the conversation.
   def original_message
-    @original_message ||= self.messages.find(:first, :order => 'created_at')
+    @original_message ||= self.messages.order('created_at').first
   end
 
   #Sender of the last message.
@@ -87,7 +87,7 @@ class Conversation < ActiveRecord::Base
 
   #Last message in the conversation.
   def last_message
-    @last_message ||= self.messages.find(:first, :order => 'created_at DESC')
+    @last_message ||= self.messages.order('created_at DESC').first
   end
 
   #Returns the receipts of the conversation for one participants
