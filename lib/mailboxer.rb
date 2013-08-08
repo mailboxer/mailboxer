@@ -19,9 +19,15 @@ module Mailboxer
   mattr_accessor :message_mailer
 
    class << self
+    
     def setup
       yield self
     end
+
+    def protected_attributes?
+      Rails.version < '4' || defined?(ProtectedAttributes)
+    end
+
    end
 end
 # reopen ActiveRecord and include all the above to make

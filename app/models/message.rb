@@ -1,5 +1,5 @@
 class Message < Notification
-  attr_accessible :attachment if Rails::VERSION::MAJOR == 3
+  attr_accessible :attachment if Mailboxer.protected_attributes?
 
   belongs_to :conversation, :validate => true, :autosave => true
   validates_presence_of :sender

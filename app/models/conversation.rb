@@ -1,5 +1,5 @@
 class Conversation < ActiveRecord::Base
-  attr_accessible :subject if Rails::VERSION::MAJOR == 3
+  attr_accessible :subject if Mailboxer.protected_attributes?
 
   has_many :messages, :dependent => :destroy
   has_many :receipts, :through => :messages
