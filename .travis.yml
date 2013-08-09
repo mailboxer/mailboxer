@@ -10,5 +10,6 @@ gemfile:
   - gemfiles/3.1.gemfile
   - gemfiles/3.2.gemfile
   - gemfiles/4.0.gemfile
-
+  
+before_script: "bundle exec rake appraisal:install"
 script: "bundle exec rake spec"
