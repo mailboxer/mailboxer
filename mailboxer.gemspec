@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   end
   # Specs
   s.add_development_dependency('rspec-rails', '>= 2.6.1')
+  s.add_development_dependency("appraisal")
   # Fixtures
   #if RUBY_VERSION >= '1.9.2'
    # s.add_development_dependency('factory_girl', '>= 3.0.0')
