@@ -1,95 +1,94 @@
 require 'spec_helper'
 
 describe MessageMailer do
-  describe "when sending new message" do
-    before do
-      @sender = FactoryGirl.create(:user)
-      @entity1 = FactoryGirl.create(:user)
-      @entity2 = FactoryGirl.create(:duck)
-      @entity3 = FactoryGirl.create(:cylon)
-      @receipt1 = @sender.send_message([@entity1,@entity2,@entity3], "Body Body Body Body Body Body Body Body Body Body Body Body","Subject")
-    end
+  shared_examples 'message_mailer' do
+    let(:sender) { FactoryGirl.create(:user) }
+    let(:entity1) { FactoryGirl.create(:user) }
+    let(:entity2) { FactoryGirl.create(:duck) }
+    let(:entity3) { FactoryGirl.create(:cylon) }
 
-    it "should send emails when should_email? is true (1 out of 3)" do
-      ActionMailer::Base.deliveries.empty?.should==false
-      ActionMailer::Base.deliveries.size.should==1
-    end
-
-    it "should send an email to user entity" do
-      temp = false
-      ActionMailer::Base.deliveries.each do |email|
-        if email.to.first.to_s.eql? @entity1.email
-        temp = true
-        end
+    def sent_to?(entity)
+      ActionMailer::Base.deliveries.any? do |email|
+        email.to.first.to_s == entity.email
       end
-      temp.should==true
     end
 
-    it "shouldn't send an email to duck entity" do
-      temp = false
-      ActionMailer::Base.deliveries.each do |email|
-        if email.to.first.to_s.eql? @entity2.email
-        temp = true
-        end
+    describe "when sending new message" do
+      before do
+        @receipt1 = sender.send_message([entity1, entity2, entity3], "Body", "Subject")
       end
-      temp.should==false
+
+      it "should send emails when should_email? is true (1 out of 3)" do
+        ActionMailer::Base.deliveries.should_not be_empty
+        ActionMailer::Base.deliveries.should have(1).item
+      end
+
+      it "should send an email to user entity" do
+        sent_to?(entity1).should be_true
+      end
+
+      it "shouldn't send an email to duck entity" do
+        sent_to?(entity2).should be_false
+      end
+
+      it "shouldn't send an email to cylon entity" do
+        sent_to?(entity3).should be_false
+      end
     end
 
-    it "shouldn't send an email to cylon entity" do
-      temp = false
-      ActionMailer::Base.deliveries.each do |email|
-        if email.to.first.to_s.eql? @entity3.email
-        temp = true
-        end
+    describe "when replying" do
+      before do
+        @receipt1 = sender.send_message([entity1, entity2, entity3], "Body", "Subject")
+        @receipt2 = sender.reply_to_all(@receipt1, "Body")
       end
-      temp.should==false
+
+      it "should send emails when should_email? is true (1 out of 3)" do
+        ActionMailer::Base.deliveries.should_not be_empty
+        ActionMailer::Base.deliveries.should have(2).items
+      end
+
+      it "should send an email to user entity" do
+        sent_to?(entity1).should be_true
+      end
+
+      it "shouldn't send an email to duck entity" do
+        sent_to?(entity2).should be_false
+      end
+
+      it "shouldn't send an email to cylon entity" do
+        sent_to?(entity3).should be_false
+      end
     end
   end
 
-  describe "when replying" do
-    before do
-      @sender = FactoryGirl.create(:user)
-      @entity1 = FactoryGirl.create(:user)
-      @entity2 = FactoryGirl.create(:duck)
-      @entity3 = FactoryGirl.create(:cylon)
-      @receipt1 = @sender.send_message([@entity1,@entity2,@entity3], "Body","Subject")
-      @receipt2 = @sender.reply_to_all(@receipt1, "Body")
-    end
-    
-    it "should send emails when should_email? is true (1 out of 3)" do
-      ActionMailer::Base.deliveries.empty?.should==false
-      ActionMailer::Base.deliveries.size.should==2
+  context "when mailer_wants_array is false" do
+    it_behaves_like 'message_mailer'
+  end
+
+  context "mailer_wants_array is true" do
+    class ArrayMailer < MessageMailer
+      default template_path: 'message_mailer'
+
+      def new_message_email(message, receivers)
+        receivers.each { |receiver| super(message, receiver) if receiver.mailboxer_email(message).present? }
+      end
+
+      def reply_message_email(message, receivers)
+        receivers.each { |receiver| super(message, receiver) if receiver.mailboxer_email(message).present? }
+      end
     end
 
-    it "should send an email to user entity" do
-      temp = false
-      ActionMailer::Base.deliveries.each do |email|
-        if email.to.first.to_s.eql? @entity1.email
-        temp = true
-        end
-      end
-      temp.should==true
+    before :all do
+      Mailboxer.mailer_wants_array = true
+      Mailboxer.message_mailer = ArrayMailer
     end
 
-    it "shouldn't send an email to duck entity" do
-      temp = false
-      ActionMailer::Base.deliveries.each do |email|
-        if email.to.first.to_s.eql? @entity2.email
-        temp = true
-        end
-      end
-      temp.should==false
+    after :all do
+      Mailboxer.mailer_wants_array = false
+      Mailboxer.message_mailer = MessageMailer
     end
 
-    it "shouldn't send an email to cylon entity" do
-      temp = false
-      ActionMailer::Base.deliveries.each do |email|
-        if email.to.first.to_s.eql? @entity3.email
-        temp = true
-        end
-      end
-      temp.should==false
-    end
+    it_behaves_like 'message_mailer'
   end
 end
 
