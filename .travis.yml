@@ -4,3 +4,12 @@ rvm:
   - 2.0.0
   - rbx-19mode
   - jruby-19mode
+
+gemfile:
+  #- gemfiles/3.0.gemfile
+  - gemfiles/3.1.gemfile
+  - gemfiles/3.2.gemfile
+  - gemfiles/4.0.gemfile
+  
+before_script: "bundle exec rake appraisal:install"
+script: "bundle exec rake spec"
