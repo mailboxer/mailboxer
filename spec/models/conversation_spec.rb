@@ -37,6 +37,12 @@ describe Conversation do
     @conversation.recipients.count(@entity2).should==1
   end
 
+  it "should be able to be marked as deleted" do
+    @conversation.move_to_trash(@entity1)
+    @conversation.mark_as_deleted(@entity1)
+    @conversation.should be_is_deleted(@entity1)
+  end
+
   it "should be able to be marked as read" do
     #@conversation.move_to_trash(@entity1)
     @conversation.mark_as_read(@entity1)

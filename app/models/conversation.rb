@@ -15,10 +15,10 @@ class Conversation < ActiveRecord::Base
       joins(:receipts).merge(Receipt.recipient(participant))
   }
   scope :inbox, lambda {|participant|
-    participant(participant).merge(Receipt.inbox.not_trash)
+    participant(participant).merge(Receipt.inbox.not_trash.not_deleted)
   }
   scope :sentbox, lambda {|participant|
-    participant(participant).merge(Receipt.sentbox.not_trash)
+    participant(participant).merge(Receipt.sentbox.not_trash.not_deleted)
   }
   scope :trash, lambda {|participant|
     participant(participant).merge(Receipt.trash)
@@ -52,6 +52,12 @@ class Conversation < ActiveRecord::Base
   def untrash(participant)
     return if participant.nil?
     self.receipts_for(participant).untrash
+  end
+
+  #Mark the conversation as deleted for one of the participants
+  def mark_as_deleted(participant)
+    return if participant.nil?
+    return self.receipts_for(participant).mark_as_deleted
   end
 
   #Returns an array of participants
@@ -125,6 +131,12 @@ class Conversation < ActiveRecord::Base
   def is_trashed?(participant)
     return false if participant.nil?
     self.receipts_for(participant).trash.count != 0
+  end
+
+  #Returns true if the participant has deleted the conversation
+  def is_deleted?(participant)
+    return false if participant.nil?
+    return self.receipts_for(participant).trash.count==0
   end
 
   #Returns true if the participant has trashed all the messages of the conversation

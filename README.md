@@ -199,6 +199,25 @@ alfa.mailbox.sentbox
 alfa.mailbox.trash
 ```
 
+### How can I delete a message from trash?
+
+```ruby
+#delete conversations forever for one receipt (still in database)
+receipt.mark_as_deleted
+
+#you can mark conversation as deleted for one participant
+conversation.mark_as_deleted participant
+
+#Mark the object as deleted for messageable
+#Object can be:
+  #* A Receipt
+  #* A Conversation
+  #* A Notification
+  #* A Message
+  #* An array with any of them
+alfa.mark_as_deleted conversation
+```
+
 ### How can I paginate conversations?
 
 You can use Kaminari to paginate the conversations as normal. Please, make sure you use the last version as mailboxer uses `select('DISTINCT conversations.*')` which was not respected before Kaminari 0.12.4 according to its changelog. Working corretly on Kaminari 0.13.0.

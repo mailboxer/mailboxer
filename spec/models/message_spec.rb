@@ -20,5 +20,11 @@ describe Message do
   	@receipt3.notification.recipients.count.should==2
   	@receipt4.notification.recipients.count.should==2      
   end
+
+  it "should be able to be marked as deleted" do
+    @receipt1.deleted.should==false
+    @message1.mark_as_deleted @entity1
+    @message1.is_deleted?(@entity1).should==true
+  end
     
 end
