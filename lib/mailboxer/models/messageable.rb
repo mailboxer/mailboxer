@@ -99,6 +99,7 @@ module Mailboxer
         #move conversation to inbox if it is currently in the trash and should_untrash parameter is true.
         if should_untrash && mailbox.is_trashed?(conversation)
           mailbox.receipts_for(conversation).untrash
+          mailbox.receipts_for(conversation).mark_as_not_deleted
         end
 
         reply(conversation, conversation.last_message.recipients, reply_body, subject, sanitize_text, attachment)
@@ -143,6 +144,29 @@ module Mailboxer
           obj.mark_as_unread(self)
         when Array
           obj.map{ |sub_obj| mark_as_unread(sub_obj) }
+        end
+      end
+
+      #Mark the object as deleted for messageable.
+      #
+      #Object can be:
+      #* A Receipt
+      #* A Notification
+      #* A Message
+      #* A Conversation
+      #* An array with any of them
+      def mark_as_deleted(obj)
+        case obj
+          when Receipt
+            return obj.mark_as_deleted if obj.receiver == self
+          when Message, Notification
+            obj.mark_as_deleted(self)
+          when Conversation
+            obj.mark_as_deleted(self)
+          when Array
+            obj.map{ |sub_obj| mark_as_deleted(sub_obj) }
+          else
+            return nil
         end
       end
 
