@@ -1,5 +1,5 @@
 class Receipt < ActiveRecord::Base
-  attr_accessible :trashed, :is_read if Mailboxer.protected_attributes?
+  attr_accessible :trashed, :is_read, :deleted if Mailboxer.protected_attributes?
 
   belongs_to :notification, :validate => true, :autosave => true
   belongs_to :receiver, :polymorphic => :true
@@ -22,8 +22,10 @@ class Receipt < ActiveRecord::Base
   }
   scope :sentbox, lambda { where(:mailbox_type => "sentbox") }
   scope :inbox, lambda { where(:mailbox_type => "inbox") }
-  scope :trash, lambda { where(:trashed => true) }
+  scope :trash, lambda { where(:trashed => true, :deleted => false) }
   scope :not_trash, lambda { where(:trashed => false) }
+  scope :deleted, lambda { where(:deleted => true) }
+  scope :not_deleted, lambda { where(:deleted => false) }
   scope :is_read, lambda { where(:is_read => true) }
   scope :is_unread, lambda { where(:is_read => false) }
 
@@ -47,6 +49,16 @@ class Receipt < ActiveRecord::Base
     #Marks all the receipts from the relation as not trashed
     def untrash(options={})
       update_receipts({:trashed => false}, options)
+    end
+
+    #Marks the receipt as deleted
+    def mark_as_deleted(options={})
+      update_receipts({:deleted => true}, options)
+    end
+
+    #Marks the receipt as not deleted
+    def mark_as_not_deleted
+      update_receipts(:deleted => false)
     end
 
     #Moves all the receipts from the relation to inbox
@@ -77,6 +89,12 @@ class Receipt < ActiveRecord::Base
         Receipt.except(:where).except(:joins).where(conditions).update_all(updates)
       end
     end
+  end
+
+
+  #Marks the receipt as deleted
+  def mark_as_deleted
+    update_attributes(:deleted => true)
   end
 
   #Marks the receipt as read

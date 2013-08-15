@@ -103,6 +103,42 @@ describe Mailbox do
     @entity2.mailbox.receipts.trash.count.should==0    
   end
 
+  it "should deleted messages are not shown in inbox" do
+    assert @entity1.mailbox.receipts.inbox
+    @entity1.mailbox.inbox.count.should==2
+    @entity1.mailbox.receipts.inbox[0].should==Receipt.recipient(@entity1).inbox.conversation(@conversation)[0]
+    @entity1.mailbox.receipts.inbox[1].should==Receipt.recipient(@entity1).inbox.conversation(@conversation)[1]
+
+    assert @entity1.mailbox.receipts.inbox.mark_as_deleted
+    @entity1.mailbox.inbox.count.should==0
+  end
+
+  it "should deleted messages are not shown in sentbox" do
+    assert @entity1.mailbox.receipts.inbox
+    @entity1.mailbox.receipts.sentbox.count.should==2
+    @entity1.mailbox.receipts.sentbox[0].should==@receipt1
+    @entity1.mailbox.receipts.sentbox[1].should==@receipt3
+
+    assert @entity1.mailbox.receipts.sentbox.mark_as_deleted
+    @entity1.mailbox.sentbox.count.should==0
+  end
+
+  it "should reply for deleted messages return to inbox" do
+    assert @entity1.mailbox.receipts.inbox
+    @entity1.mailbox.inbox.count.should==2
+    @entity1.mailbox.receipts.inbox[0].should==Receipt.recipient(@entity1).inbox.conversation(@conversation)[0]
+    @entity1.mailbox.receipts.inbox[1].should==Receipt.recipient(@entity1).inbox.conversation(@conversation)[1]
+
+    assert @entity1.mailbox.receipts.inbox.mark_as_deleted
+    @entity1.mailbox.inbox.count.should==0
+
+    @entity2.reply_to_all(@receipt1,"Reply body 1")
+    @entity1.mailbox.inbox.count.should==1
+
+    @entity2.reply_to_all(@receipt3,"Reply body 3")
+    @entity1.mailbox.inbox.count.should==2
+  end
+
   context "STI models" do
     before do
       @sti_entity1 = FactoryGirl.create(:user)

@@ -143,6 +143,12 @@ class Notification < ActiveRecord::Base
     self.receipt_for(participant).first.trashed
   end
 
+  #Returns if the participant have deleted the Notification
+  def is_deleted?(participant)
+    return false if participant.nil?
+    return self.receipt_for(participant).first.deleted
+  end
+
   #Mark the notification as read
   def mark_as_read(participant)
     return if participant.nil?
@@ -167,6 +173,11 @@ class Notification < ActiveRecord::Base
     self.receipt_for(participant).untrash
   end
 
+  #Mark the notification as deleted for one of the participant
+  def mark_as_deleted(participant)
+    return if participant.nil?
+    return self.receipt_for(participant).mark_as_deleted
+  end
 
   include ActionView::Helpers::SanitizeHelper
 
