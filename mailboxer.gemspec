@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.email = "ecasanovac@gmail.com"
   s.homepage = "https://github.com/ging/mailboxer"
   s.files = `git ls-files`.split("\n")
+  s.license = 'MIT'
 
   # Gem dependencies
   #
