@@ -9,7 +9,7 @@ class Notification < ActiveRecord::Base
   validates_presence_of :subject, :body
 
   scope :recipient, lambda { |recipient|
-    joins(:receipts).where('receipts.receiver_id' => recipient.id,'receipts.receiver_type' => recipient.class.to_s)
+    joins(:receipts).where('receipts.receiver_id' => recipient.id,'receipts.receiver_type' => recipient.class.base_class.to_s)
   }
   scope :with_object, lambda { |obj|
     where('notified_object_id' => obj.id,'notified_object_type' => obj.class.to_s)
