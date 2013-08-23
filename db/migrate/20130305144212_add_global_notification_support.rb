@@ -1,9 +1,7 @@
 class AddGlobalNotificationSupport < ActiveRecord::Migration
 
   def change
-    change_table :notifications do |t|
-      t.boolean :global, default: false
-      t.datetime :expires
-    end
+    add_column :notifications, :global, :boolean, :default => false
+    add_column :notifications, :expires, :datetime
   end
 end
