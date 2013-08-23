@@ -120,4 +120,15 @@ describe Conversation do
       @conversation.is_completely_trashed?(@entity1).should be_true
     end
   end
+
+  describe "is_deleted?" do
+    it "returns false if a recipient has not deleted the conversation" do
+      @conversation.is_deleted?(@entity1).should be_false
+    end
+
+    it "returns true if a recipient has deleted the conversation" do
+      @conversation.mark_as_deleted(@entity1)
+      @conversation.is_deleted?(@entity1).should be_true
+    end
+  end
 end
