@@ -35,6 +35,12 @@ describe Receipt do
     @mail1.deleted.should==true
   end
 
+  it "should be able to be marked as not deleted" do
+    @mail1.deleted=true
+    @mail1.mark_as_not_deleted
+    @mail1.deleted.should==false
+  end
+
   context "STI models" do
     before do
       @entity3 = FactoryGirl.create(:user)

@@ -57,8 +57,8 @@ class Receipt < ActiveRecord::Base
     end
 
     #Marks the receipt as not deleted
-    def mark_as_not_deleted
-      update_receipts(:deleted => false)
+    def mark_as_not_deleted(options={})
+      update_receipts({:deleted => false}, options)
     end
 
     #Moves all the receipts from the relation to inbox
@@ -95,6 +95,11 @@ class Receipt < ActiveRecord::Base
   #Marks the receipt as deleted
   def mark_as_deleted
     update_attributes(:deleted => true)
+  end
+
+  #Marks the receipt as not deleted
+  def mark_as_not_deleted
+    update_attributes(:deleted => false)
   end
 
   #Marks the receipt as read
