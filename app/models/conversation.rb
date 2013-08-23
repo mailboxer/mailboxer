@@ -136,7 +136,7 @@ class Conversation < ActiveRecord::Base
   #Returns true if the participant has deleted the conversation
   def is_deleted?(participant)
     return false if participant.nil?
-    return self.receipts_for(participant).trash.count==0
+    return self.receipts_for(participant).deleted.count == self.receipts_for(participant).count
   end
 
   #Returns true if the participant has trashed all the messages of the conversation
