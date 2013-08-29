@@ -57,7 +57,12 @@ class Conversation < ActiveRecord::Base
   #Mark the conversation as deleted for one of the participants
   def mark_as_deleted(participant)
     return if participant.nil?
-    return self.receipts_for(participant).mark_as_deleted
+    deleted_receipts = self.receipts_for(participant).mark_as_deleted
+    if is_orphaned?
+      self.destroy
+    else
+      deleted_receipts
+    end
   end
 
   #Returns an array of participants
@@ -136,7 +141,14 @@ class Conversation < ActiveRecord::Base
   #Returns true if the participant has deleted the conversation
   def is_deleted?(participant)
     return false if participant.nil?
-    return self.receipts_for(participant).trash.count==0
+    return self.receipts_for(participant).deleted.count == self.receipts_for(participant).count
+  end
+
+  #Returns true if both participants have deleted the conversation
+  def is_orphaned?
+    participants.reduce(true) do |is_orphaned, participant|
+      is_orphaned && is_deleted?(participant)
+    end
   end
 
   #Returns true if the participant has trashed all the messages of the conversation
