@@ -1,7 +1,8 @@
-class Message < Notification
+class Mailboxer::Message < Mailboxer::Notification
   attr_accessible :attachment if Mailboxer.protected_attributes?
+  self.table_name = :mailboxer_notifications
 
-  belongs_to :conversation, :validate => true, :autosave => true
+  belongs_to :conversation, :class_name => "Mailboxer::Conversation", :validate => true, :autosave => true
   validates_presence_of :sender
 
   class_attribute :on_deliver_callback
@@ -31,6 +32,7 @@ class Message < Notification
 
     #Sender receipt
     sender_receipt = build_receipt(sender, 'sentbox', true)
+
     temp_receipts << sender_receipt
 
     temp_receipts.each(&:valid?)
@@ -58,7 +60,7 @@ class Message < Notification
 
   private
   def build_receipt(receiver, mailbox_type, is_read = false)
-    Receipt.new.tap do |receipt|
+    Mailboxer::Receipt.new.tap do |receipt|
       receipt.notification = self
       receipt.is_read = is_read
       receipt.receiver = receiver

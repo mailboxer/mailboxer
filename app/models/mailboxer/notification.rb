@@ -1,24 +1,26 @@
-class Notification < ActiveRecord::Base
+class Mailboxer::Notification < ActiveRecord::Base
+  self.table_name = :mailboxer_notifications
+
   attr_accessor :recipients
   attr_accessible :body, :subject, :global, :expires if Mailboxer.protected_attributes?
 
   belongs_to :sender, :polymorphic => :true
   belongs_to :notified_object, :polymorphic => :true
-  has_many :receipts, :dependent => :destroy
+  has_many :receipts, :dependent => :destroy, :class_name => "Mailboxer::Receipt"
 
   validates_presence_of :subject, :body
 
   scope :recipient, lambda { |recipient|
-    joins(:receipts).where('receipts.receiver_id' => recipient.id,'receipts.receiver_type' => recipient.class.base_class.to_s)
+    joins(:receipts).where('mailboxer_receipts.receiver_id' => recipient.id,'mailboxer_receipts.receiver_type' => recipient.class.base_class.to_s)
   }
   scope :with_object, lambda { |obj|
     where('notified_object_id' => obj.id,'notified_object_type' => obj.class.to_s)
   }
   scope :not_trashed, lambda {
-    joins(:receipts).where('receipts.trashed' => false)
+    joins(:receipts).where('mailboxer_receipts.trashed' => false)
   }
   scope :unread,  lambda {
-    joins(:receipts).where('receipts.is_read' => false)
+    joins(:receipts).where('mailboxer_receipts.read' => false)
   }
   scope :global, lambda { where(:global => true) }
   scope :expired, lambda { where("notifications.expires < ?", Time.now) }
@@ -31,7 +33,7 @@ class Notification < ActiveRecord::Base
   class << self
     #Sends a Notification to all the recipients
     def notify_all(recipients,subject,body,obj = nil,sanitize_text = true,notification_code=nil,send_mail=true)
-      notification = Notification.new({:body => body, :subject => subject})
+      notification = Mailboxer::Notification.new({:body => body, :subject => subject})
       notification.recipients = recipients.respond_to?(:each) ? recipients : [recipients]
       notification.recipients = notification.recipients.uniq if recipients.respond_to?(:uniq)
       notification.notified_object = obj if obj.present?
@@ -43,7 +45,7 @@ class Notification < ActiveRecord::Base
     #successful or +false+ if some error raised
     def successful_delivery? receipts
       case receipts
-      when Receipt
+      when Mailboxer::Receipt
         receipts.valid?
         receipts.errors.empty?
       when Array
@@ -79,7 +81,7 @@ class Notification < ActiveRecord::Base
     temp_receipts = Array.new
     #Receiver receipts
     self.recipients.each do |r|
-      msg_receipt = Receipt.new
+      msg_receipt = Mailboxer::Receipt.new
       msg_receipt.notification = self
       msg_receipt.is_read = false
       msg_receipt.receiver = r
@@ -119,7 +121,7 @@ class Notification < ActiveRecord::Base
 
   #Returns the receipt for the participant
   def receipt_for(participant)
-    Receipt.notification(self).recipient(participant)
+    Mailboxer::Receipt.notification(self).recipient(participant)
   end
 
   #Returns the receipt for the participant. Alias for receipt_for(participant)

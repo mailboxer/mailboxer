@@ -11,13 +11,14 @@ module Mailboxer
         end
       end
 
+
       included do
-        has_many :messages, :as => :sender
+        has_many :messages, :class_name => "Mailboxer::Message", :as => :sender
         if Rails::VERSION::MAJOR == 4
-          has_many :receipts, -> { order 'created_at DESC' }, dependent: :destroy, as: :receiver
+          has_many :receipts, -> { order 'created_at DESC' }, :class_name => "Mailboxer::Receipt", dependent: :destroy,     as: :receiver
         else
           # Rails 3 does it this way
-          has_many :receipts, :order => 'created_at DESC', :dependent => :destroy, :as => :receiver
+          has_many :receipts, :order => 'created_at DESC',    :class_name => "Mailboxer::Receipt", :dependent => :destroy, :as => :receiver
         end
       end
 
@@ -46,20 +47,20 @@ module Mailboxer
 
       #Gets the mailbox of the messageable
       def mailbox
-        @mailbox = Mailbox.new(self) if @mailbox.nil?
+        @mailbox = Mailboxer::Mailbox.new(self) if @mailbox.nil?
         @mailbox.type = :all
         @mailbox
       end
 
       #Sends a notification to the messageable
       def notify(subject,body,obj = nil,sanitize_text=true,notification_code=nil,send_mail=true)
-        Notification.notify_all([self],subject,body,obj,sanitize_text,notification_code,send_mail)
+        Mailboxer::Notification.notify_all([self],subject,body,obj,sanitize_text,notification_code,send_mail)
       end
 
       #Sends a messages, starting a new conversation, with the messageable
       #as originator
       def send_message(recipients, msg_body, subject, sanitize_text=true, attachment=nil, message_timestamp = Time.now)
-        convo = Conversation.new({:subject => subject})
+        convo = Mailboxer::Conversation.new({:subject => subject})
         convo.created_at = message_timestamp
         convo.updated_at = message_timestamp
         message = messages.new({:body => msg_body, :subject => subject, :attachment => attachment})
@@ -115,11 +116,11 @@ module Mailboxer
       #* An array with any of them
       def mark_as_read(obj)
         case obj
-        when Receipt
+        when Mailboxer::Receipt
           obj.mark_as_read if obj.receiver == self
-        when Message, Notification
+        when Mailboxer::Message, Mailboxer::Notification
           obj.mark_as_read(self)
-        when Conversation
+        when Mailboxer::Conversation
           obj.mark_as_read(self)
         when Array
           obj.map{ |sub_obj| mark_as_read(sub_obj) }
@@ -136,11 +137,11 @@ module Mailboxer
       #* An array with any of them
       def mark_as_unread(obj)
         case obj
-        when Receipt
+        when Mailboxer::Receipt
           obj.mark_as_unread if obj.receiver == self
-        when Message, Notification
+        when Mailboxer::Message, Mailboxer::Notification
           obj.mark_as_unread(self)
-        when Conversation
+        when Mailboxer::Conversation
           obj.mark_as_unread(self)
         when Array
           obj.map{ |sub_obj| mark_as_unread(sub_obj) }
@@ -180,11 +181,11 @@ module Mailboxer
       #* An array with any of them
       def trash(obj)
         case obj
-        when Receipt
+        when Mailboxer::Receipt
           obj.move_to_trash if obj.receiver == self
-        when Message, Notification
+        when Mailboxer::Message, Mailboxer::Notification
           obj.move_to_trash(self)
-        when Conversation
+        when Mailboxer::Conversation
           obj.move_to_trash(self)
         when Array
           obj.map{ |sub_obj| trash(sub_obj) }
@@ -201,11 +202,11 @@ module Mailboxer
       #* An array with any of them
       def untrash(obj)
         case obj
-        when Receipt
+        when Mailboxer::Receipt
           obj.untrash if obj.receiver == self
-        when Message, Notification
+        when Mailboxer::Message, Mailboxer::Notification
           obj.untrash(self)
-        when Conversation
+        when Mailboxer::Conversation
           obj.untrash(self)
         when Array
           obj.map{ |sub_obj| untrash(sub_obj) }
@@ -213,7 +214,7 @@ module Mailboxer
       end
 
       def search_messages(query)
-        @search = Receipt.search do
+        @search = Mailboxer::Receipt.search do
           fulltext query
           with :receiver_id, self.id
         end
