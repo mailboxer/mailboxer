@@ -93,7 +93,7 @@ class Notification < ActiveRecord::Base
         if Mailboxer.uses_emails
           email_to = r.send(Mailboxer.email_method,self)
           if send_mail && !email_to.blank?
-            get_mailer.send_email(self,r).deliver
+            send_email(get_mailer,self,r)
           end
         end
       end
@@ -194,4 +194,14 @@ class Notification < ActiveRecord::Base
     warn "DEPRECATION WARNING: use 'notify_object' instead of 'object' to get the object associated with the Notification"
     notified_object
   end
+
+  protected
+  
+  def send_email(mailer,obj,r)
+    if Mailboxer.uses_delayed_job
+      mailer.delay(Mailboxer.delayed_job_options).send_email(obj,r)
+    else
+      mailer.send_email(obj,r).deliver
+    end
+  end  
 end

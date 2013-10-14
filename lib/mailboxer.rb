@@ -19,6 +19,10 @@ module Mailboxer
   @@name_method = :name
   mattr_accessor :notification_mailer
   mattr_accessor :message_mailer
+  @@uses_delayed_job = false
+  mattr_accessor :uses_delayed_job
+  @@delayed_job_options = {} 
+  mattr_accessor :delayed_job_options
 
   class << self
     def setup
