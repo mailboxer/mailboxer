@@ -1,11 +1,11 @@
 class AddGlobalNotificationSupport < ActiveRecord::Migration
 
   def change
-    change_table :notifications do |t|
+    change_table :mailboxer_notifications do |t|
       t.boolean :global
       t.datetime :expires
     end
-    Notification.update_all ["global = ?", false]
+    Mailboxer::Notification.update_all ["global = ?", false]
   end
 
 end

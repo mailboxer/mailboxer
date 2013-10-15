@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Conversation do
+describe Mailboxer::Conversation do
 
   before do
     @entity1 = FactoryGirl.create(:user)
@@ -46,7 +46,7 @@ describe Conversation do
   it "should be removed from the database once deleted by all participants" do
     @conversation.mark_as_deleted(@entity1)
     @conversation.mark_as_deleted(@entity2)
-    Conversation.exists?(@conversation.id).should be_false
+    Mailboxer::Conversation.exists?(@conversation.id).should be_false
   end
 
   it "should be able to be marked as read" do
@@ -85,19 +85,19 @@ describe Conversation do
 
     describe ".participant" do
       it "finds conversations with receipts for participant" do
-        Conversation.participant(participant).should == [sentbox_conversation, inbox_conversation]
+        Mailboxer::Conversation.participant(participant).should == [sentbox_conversation, inbox_conversation]
       end
     end
 
     describe ".inbox" do
       it "finds inbox conversations with receipts for participant" do
-        Conversation.inbox(participant).should == [inbox_conversation]
+        Mailboxer::Conversation.inbox(participant).should == [inbox_conversation]
       end
     end
 
     describe ".sentbox" do
       it "finds sentbox conversations with receipts for participant" do
-        Conversation.sentbox(participant).should == [sentbox_conversation]
+        Mailboxer::Conversation.sentbox(participant).should == [sentbox_conversation]
       end
     end
 
@@ -106,7 +106,7 @@ describe Conversation do
         trashed_conversation = @entity1.send_message(participant, "Body", "Subject").notification.conversation
         trashed_conversation.move_to_trash(participant)
 
-        Conversation.trash(participant).should == [trashed_conversation]
+        Mailboxer::Conversation.trash(participant).should == [trashed_conversation]
       end
     end
 
@@ -115,7 +115,7 @@ describe Conversation do
         [sentbox_conversation, inbox_conversation].each {|c| c.mark_as_read(participant) }
         unread_conversation = @entity1.send_message(participant, "Body", "Subject").notification.conversation
 
-        Conversation.unread(participant).should == [unread_conversation]
+        Mailboxer::Conversation.unread(participant).should == [unread_conversation]
       end
     end
   end

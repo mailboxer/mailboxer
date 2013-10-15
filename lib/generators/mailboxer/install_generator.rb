@@ -18,10 +18,7 @@ class Mailboxer::InstallGenerator < Rails::Generators::Base #:nodoc:
 
   def copy_migrations
     if Rails.version < "3.1"
-      migrations = [["20110511145103_create_mailboxer.rb","create_mailboxer.rb"],
-                    ["20110719110700_add_notified_object.rb","add_notified_object.rb"],
-                    ["20110912163911_add_notification_code.rb","add_notification_code.rb"],
-                    ["20111204163911_add_attachments.rb","add_attachments.rb"]]
+      migrations = [["20110511145103_create_mailboxer.rb","create_mailboxer.rb"]],
       migrations.each do |migration|
         migration_template "../../../../db/migrate/" + migration[0], "db/migrate/" + migration[1]
       end
