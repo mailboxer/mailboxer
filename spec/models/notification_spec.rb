@@ -93,6 +93,18 @@ describe Mailboxer::Notification do
     notification.body.should=="Body"
   end
 
+  describe "scopes" do
+    let!(:notification) { @entity1.notify("Body", "Subject").notification }
+
+    describe ".unread" do
+      it "finds unread notifications" do
+        unread_notification = @entity1.notify("Body", "Subject").notification
+        notification.mark_as_read(@entity1)
+        Mailboxer::Notification.unread.last.should == unread_notification
+      end
+    end
+  end
+
   describe "#expire" do
     subject { described_class.new }
 
