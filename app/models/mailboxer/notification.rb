@@ -20,7 +20,7 @@ class Mailboxer::Notification < ActiveRecord::Base
     joins(:receipts).where('mailboxer_receipts.trashed' => false)
   }
   scope :unread,  lambda {
-    joins(:receipts).where('mailboxer_receipts.read' => false)
+    joins(:receipts).where('mailboxer_receipts.is_read' => false)
   }
   scope :global, lambda { where(:global => true) }
   scope :expired, lambda { where("notifications.expires < ?", Time.now) }
