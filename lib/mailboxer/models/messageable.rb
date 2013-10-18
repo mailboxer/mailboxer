@@ -3,7 +3,7 @@ module Mailboxer
     module Messageable
       extend ActiveSupport::Concern
 
-      module ActiveRecord
+      module ActiveRecordExtension
         #Converts the model into messageable allowing it to interchange messages and
         #receive notifications
         def acts_as_messageable
