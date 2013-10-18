@@ -11,7 +11,7 @@ class CreateMailboxer < ActiveRecord::Migration
     create_table :mailboxer_receipts do |t|
       t.references :receiver, :polymorphic => true
       t.column :notification_id, :integer, :null => false
-      t.column :read, :boolean, :default => false
+      t.column :is_read, :boolean, :default => false
       t.column :trashed, :boolean, :default => false
       t.column :deleted, :boolean, :default => false
       t.column :mailbox_type, :string, :limit => 25
@@ -31,6 +31,8 @@ class CreateMailboxer < ActiveRecord::Migration
       t.column :attachment, :string
       t.column :updated_at, :datetime, :null => false
       t.column :created_at, :datetime, :null => false
+      t.boolean :global, :default => false
+      t.datetime :expires
     end    
     
     
