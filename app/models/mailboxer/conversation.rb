@@ -29,7 +29,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
     participant(participant).merge(Mailboxer::Receipt.is_unread)
   }
   scope :not_trash,  lambda {|participant|
-    participant(participant).merge(Receipt.not_trash)
+    participant(participant).merge(Mailboxer::Receipt.not_trash)
   }
 
   #Mark the conversation as read for one of the participants
