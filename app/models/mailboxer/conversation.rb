@@ -69,13 +69,8 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   #Returns an array of participants
   def recipients
-    if self.last_message
-      recps = self.last_message.recipients
-      recps = recps.is_a?(Array) ? recps : [recps]
-      recps
-    else
-      []
-    end
+    return [] unless original_message
+    Array original_message.recipients
   end
 
   #Returns an array of participants
