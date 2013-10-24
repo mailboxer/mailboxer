@@ -34,34 +34,34 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   #Mark the conversation as read for one of the participants
   def mark_as_read(participant)
-    return if participant.nil?
-    self.receipts_for(participant).mark_as_read
+    return unless participant
+    receipts_for(participant).mark_as_read
   end
 
   #Mark the conversation as unread for one of the participants
   def mark_as_unread(participant)
-    return if participant.nil?
-    self.receipts_for(participant).mark_as_unread
+    return unless participant
+    receipts_for(participant).mark_as_unread
   end
 
   #Move the conversation to the trash for one of the participants
   def move_to_trash(participant)
-    return if participant.nil?
-    self.receipts_for(participant).move_to_trash
+    return unless participant
+    receipts_for(participant).move_to_trash
   end
 
   #Takes the conversation out of the trash for one of the participants
   def untrash(participant)
-    return if participant.nil?
-    self.receipts_for(participant).untrash
+    return unless participant
+    receipts_for(participant).untrash
   end
 
   #Mark the conversation as deleted for one of the participants
   def mark_as_deleted(participant)
-    return if participant.nil?
-    deleted_receipts = self.receipts_for(participant).mark_as_deleted
+    return unless participant
+    deleted_receipts = receipts_for(participant).mark_as_deleted
     if is_orphaned?
-      self.destroy
+      destroy
     else
       deleted_receipts
     end
@@ -110,8 +110,8 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   #Returns true if the messageable is a participant of the conversation
   def is_participant?(participant)
-    return false if participant.nil?
-    self.receipts_for(participant).count != 0
+    return false unless participant
+    receipts_for(participant).count != 0
   end
 
 	#Adds a new participant to the conversation
@@ -131,13 +131,13 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   #Returns true if the participant has at least one trashed message of the conversation
   def is_trashed?(participant)
-    return false if participant.nil?
+    return false unless participant
     self.receipts_for(participant).trash.count != 0
   end
 
   #Returns true if the participant has deleted the conversation
   def is_deleted?(participant)
-    return false if participant.nil?
+    return false unless participant
     return self.receipts_for(participant).deleted.count == self.receipts_for(participant).count
   end
 
@@ -150,18 +150,18 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   #Returns true if the participant has trashed all the messages of the conversation
   def is_completely_trashed?(participant)
-    return false if participant.nil?
-    self.receipts_for(participant).trash.count == self.receipts_for(participant).count
+    return false unless participant
+    receipts_for(participant).trash.count == receipts_for(participant).count
   end
 
   def is_read?(participant)
-    !self.is_unread?(participant)
+    !is_unread?(participant)
   end
 
   #Returns true if the participant has at least one unread message of the conversation
   def is_unread?(participant)
-    return false if participant.nil?
-    self.receipts_for(participant).not_trash.is_unread.count != 0
+    return false unless participant
+    receipts_for(participant).not_trash.is_unread.count != 0
   end
 
   protected
@@ -170,6 +170,6 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   #Use the default sanitize to clean the conversation subject
   def clean
-    self.subject = sanitize self.subject
+    self.subject = sanitize subject
   end
 end
