@@ -94,13 +94,28 @@ describe Mailboxer::Notification do
   end
 
   describe "scopes" do
-    let!(:notification) { @entity1.notify("Body", "Subject").notification }
+    let(:scope_user) { FactoryGirl.create(:user) }
+    let!(:notification) { scope_user.notify("Body", "Subject").notification }
 
     describe ".unread" do
       it "finds unread notifications" do
-        unread_notification = @entity1.notify("Body", "Subject").notification
-        notification.mark_as_read(@entity1)
+        unread_notification = scope_user.notify("Body", "Subject").notification
+        notification.mark_as_read(scope_user)
         Mailboxer::Notification.unread.last.should == unread_notification
+      end
+    end
+
+    describe ".expired" do
+      it "finds expired notifications" do
+        notification.update_attributes(expires: 1.day.ago)
+        scope_user.mailbox.notifications.expired.count.should eq(1)
+      end
+    end
+
+    describe ".unexpired" do
+      it "finds unexpired notifications" do
+        notification.update_attributes(expires: 1.day.from_now)
+        scope_user.mailbox.notifications.unexpired.count.should eq(1)
       end
     end
   end
