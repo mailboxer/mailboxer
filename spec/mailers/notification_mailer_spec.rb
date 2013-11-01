@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe NotificationMailer do
+describe Mailboxer::NotificationMailer do
   before do
     @entity1 = FactoryGirl.create(:user)
     @entity2 = FactoryGirl.create(:duck)

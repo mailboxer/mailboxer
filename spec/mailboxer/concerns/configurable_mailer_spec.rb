@@ -4,7 +4,7 @@ describe Concerns::ConfigurableMailer do
   describe "Notification instance#get_mailer" do
     before { @obj = Mailboxer::Notification.new }
     it "returns default_mailer" do
-      @obj.get_mailer.should eq NotificationMailer
+      @obj.get_mailer.should eq Mailboxer::NotificationMailer
     end
     it "returns 'foo' from Mailerbox.notification_mailer" do
       Mailboxer.notification_mailer = 'foo'
@@ -16,7 +16,7 @@ describe Concerns::ConfigurableMailer do
   describe "Message instance#get_mailer" do
     before { @obj = Mailboxer::Message.new }
     it "returns default_mailer" do
-      @obj.get_mailer.should eq MessageMailer
+      @obj.get_mailer.should eq Mailboxer::MessageMailer
     end
     it "returns 'foo' from Mailerbox.message_mailer" do
       Mailboxer.message_mailer = 'foo'

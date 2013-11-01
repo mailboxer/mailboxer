@@ -1,4 +1,4 @@
-class NotificationMailer < ActionMailer::Base
+class Mailboxer::NotificationMailer < ActionMailer::Base
   default :from => Mailboxer.default_from
   #Sends and email for indicating a new notification to a receiver.
   #It calls new_notification_email.

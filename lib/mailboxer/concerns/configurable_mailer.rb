@@ -7,7 +7,7 @@ module Concerns
       return @mailer if @mailer
       klass = self.class.to_s.sub(/^Mailboxer::/, '')
       method = "#{klass.downcase}_mailer".to_sym
-      @mailer = Mailboxer.send(method) ||  "#{klass}Mailer".constantize
+      @mailer = Mailboxer.send(method) ||  "#{self.class}Mailer".constantize
     end
 
   end
