@@ -23,9 +23,9 @@ class Mailboxer::Notification < ActiveRecord::Base
     joins(:receipts).where('mailboxer_receipts.is_read' => false)
   }
   scope :global, lambda { where(:global => true) }
-  scope :expired, lambda { where("notifications.expires < ?", Time.now) }
+  scope :expired, lambda { where("mailboxer_notifications.expires < ?", Time.now) }
   scope :unexpired, lambda {
-    where("notifications.expires is NULL OR notifications.expires > ?", Time.now)
+    where("mailboxer_notifications.expires is NULL OR mailboxer_notifications.expires > ?", Time.now)
   }
 
   include Concerns::ConfigurableMailer
