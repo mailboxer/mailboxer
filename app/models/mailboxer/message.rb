@@ -13,8 +13,6 @@ class Mailboxer::Message < Mailboxer::Notification
 
   mount_uploader :attachment, AttachmentUploader
 
-  include Concerns::ConfigurableMailer
-
   class << self
     #Sets the on deliver callback method.
     def on_deliver(callback_method)
@@ -35,36 +33,17 @@ class Mailboxer::Message < Mailboxer::Notification
 
     temp_receipts << sender_receipt
 
-    temp_receipts.each(&:valid?)
-    if temp_receipts.all? { |t| t.errors.empty? }
+    if temp_receipts.all?(&:valid?)
       temp_receipts.each(&:save!) 	#Save receipts
-      #Should send an email?
-      if Mailboxer.uses_emails
-        if Mailboxer.mailer_wants_array
-          get_mailer.send_email(self, recipients).deliver
-        else
-          recipients.each do |recipient|
-            email_to = recipient.send(Mailboxer.email_method, self)
-            get_mailer.send_email(self, recipient).deliver if email_to.present?
-          end
-        end
-      end
-      if reply
-        self.conversation.touch
-      end
-      self.recipients=nil
-      self.on_deliver_callback.call(self) unless self.on_deliver_callback.nil?
+
+      Mailboxer::MailDispatcher.new(self, recipients).call
+
+      conversation.touch if reply
+
+      self.recipients = nil
+
+      on_deliver_callback.call(self) if on_deliver_callback
     end
     sender_receipt
-  end
-
-  private
-  def build_receipt(receiver, mailbox_type, is_read = false)
-    Mailboxer::Receipt.new.tap do |receipt|
-      receipt.notification = self
-      receipt.is_read = is_read
-      receipt.receiver = receiver
-      receipt.mailbox_type = mailbox_type
-    end
   end
 end
