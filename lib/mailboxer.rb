@@ -3,6 +3,8 @@ module Mailboxer
     autoload :Messageable, 'mailboxer/models/messageable'
   end
 
+  require 'mailboxer/cleaner'
+
   mattr_accessor :default_from
   @@default_from = "no-reply@mailboxer.com"
   mattr_accessor :uses_emails

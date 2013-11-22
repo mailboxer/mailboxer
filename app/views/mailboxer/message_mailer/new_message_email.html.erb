@@ -4,7 +4,7 @@
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
   </head>
   <body>
-    <h1>You have a new message: <%= @message.subject.html_safe? ? @message.subject : strip_tags(@message.subject) %></h1>
+    <h1>You have a new message: <%= @subject %></h1>
     <p>
       You have received a new message:
     </p>
@@ -14,7 +14,7 @@
       </p>
     </blockquote>
     <p>
-      Visit <%= link_to root_url,root_url %> and go to your inbox for more info.
+      Visit <%= link_to root_url, root_url %> and go to your inbox for more info.
     </p>
   </body>
 </html>
