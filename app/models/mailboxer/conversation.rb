@@ -166,10 +166,12 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   protected
 
-  include ActionView::Helpers::SanitizeHelper
-
   #Use the default sanitize to clean the conversation subject
   def clean
     self.subject = sanitize subject
+  end
+
+  def sanitize(text)
+    ::Mailboxer::Cleaner.instance.sanitize(text)
   end
 end

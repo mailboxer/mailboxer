@@ -28,15 +28,12 @@ class Mailboxer::Notification < ActiveRecord::Base
     where("mailboxer_notifications.expires is NULL OR mailboxer_notifications.expires > ?", Time.now)
   }
 
-  include Concerns::ConfigurableMailer
-
   class << self
     #Sends a Notification to all the recipients
     def notify_all(recipients,subject,body,obj = nil,sanitize_text = true,notification_code=nil,send_mail=true)
       notification = Mailboxer::Notification.new({:body => body, :subject => subject})
-      notification.recipients = recipients.respond_to?(:each) ? recipients : [recipients]
-      notification.recipients = notification.recipients.uniq if recipients.respond_to?(:uniq)
-      notification.notified_object = obj if obj.present?
+      notification.recipients        = Array(recipients).uniq
+      notification.notified_object   = obj               if obj.present?
       notification.notification_code = notification_code if notification_code.present?
       notification.deliver sanitize_text, send_mail
     end
@@ -77,30 +74,20 @@ class Mailboxer::Notification < ActiveRecord::Base
   #Delivers a Notification. USE NOT RECOMENDED.
   #Use Mailboxer::Models::Message.notify and Notification.notify_all instead.
   def deliver(should_clean = true, send_mail = true)
-    self.clean if should_clean
+    clean if should_clean
     temp_receipts = Array.new
+
     #Receiver receipts
     self.recipients.each do |r|
-      msg_receipt = Mailboxer::Receipt.new
-      msg_receipt.notification = self
-      msg_receipt.is_read = false
-      msg_receipt.receiver = r
-      temp_receipts << msg_receipt
+      temp_receipts << build_receipt(r, nil, false)
     end
-    temp_receipts.each(&:valid?)
-    if temp_receipts.all? { |t| t.errors.empty? }
+
+    if temp_receipts.all?(&:valid?)
       temp_receipts.each(&:save!)   #Save receipts
-      self.recipients.each do |r|
-        #Should send an email?
-        if Mailboxer.uses_emails
-          email_to = r.send(Mailboxer.email_method,self)
-          if send_mail && !email_to.blank?
-            get_mailer.send_email(self,r).deliver
-          end
-        end
-      end
-      self.recipients=nil
+      Mailboxer::MailDispatcher.new(self, recipients).call if send_mail
+      self.recipients = nil
     end
+
     return temp_receipts if temp_receipts.size > 1
     temp_receipts.first
   end
@@ -181,14 +168,10 @@ class Mailboxer::Notification < ActiveRecord::Base
     return self.receipt_for(participant).mark_as_deleted
   end
 
-  include ActionView::Helpers::SanitizeHelper
-
   #Sanitizes the body and subject
   def clean
-    unless self.subject.nil?
-      self.subject = sanitize self.subject
-    end
-    self.body = sanitize self.body
+    self.subject = sanitize(subject) if subject
+    self.body    = sanitize(body)
   end
 
   #Returns notified_object. DEPRECATED
@@ -196,4 +179,20 @@ class Mailboxer::Notification < ActiveRecord::Base
     warn "DEPRECATION WARNING: use 'notify_object' instead of 'object' to get the object associated with the Notification"
     notified_object
   end
+
+  def sanitize(text)
+    ::Mailboxer::Cleaner.instance.sanitize(text)
+  end
+
+  private
+
+  def build_receipt(receiver, mailbox_type, is_read = false)
+    Mailboxer::Receipt.new.tap do |receipt|
+      receipt.notification = self
+      receipt.is_read = is_read
+      receipt.receiver = receiver
+      receipt.mailbox_type = mailbox_type
+    end
+  end
+
 end
