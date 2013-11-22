@@ -22,9 +22,14 @@ Gem::Specification.new do |s|
   # Development Gem dependencies
   s.add_runtime_dependency('rails', '> 3.0.0')
   s.add_runtime_dependency('carrierwave', '>= 0.5.8')
+
   # Debugging
   if RUBY_VERSION < '1.9'
     s.add_development_dependency('ruby-debug', '>= 0.10.3')
+  end
+
+  if RUBY_PLATFORM == 'rbx'
+    s.add_runtime_dependency('rubysl-singleton')
   end
   # Specs
   s.add_development_dependency('rspec-rails', '>= 2.6.1')
