@@ -34,9 +34,8 @@ class Mailboxer::Notification < ActiveRecord::Base
     #Sends a Notification to all the recipients
     def notify_all(recipients,subject,body,obj = nil,sanitize_text = true,notification_code=nil,send_mail=true)
       notification = Mailboxer::Notification.new({:body => body, :subject => subject})
-      notification.recipients = recipients.respond_to?(:each) ? recipients : [recipients]
-      notification.recipients = notification.recipients.uniq if recipients.respond_to?(:uniq)
-      notification.notified_object = obj if obj.present?
+      notification.recipients        = Array(recipients).uniq
+      notification.notified_object   = obj               if obj.present?
       notification.notification_code = notification_code if notification_code.present?
       notification.deliver sanitize_text, send_mail
     end
@@ -87,8 +86,8 @@ class Mailboxer::Notification < ActiveRecord::Base
       msg_receipt.receiver = r
       temp_receipts << msg_receipt
     end
-    temp_receipts.each(&:valid?)
-    if temp_receipts.all? { |t| t.errors.empty? }
+
+    if temp_receipts.all?(&:valid?)
       temp_receipts.each(&:save!)   #Save receipts
       self.recipients.each do |r|
         #Should send an email?
@@ -181,19 +180,19 @@ class Mailboxer::Notification < ActiveRecord::Base
     return self.receipt_for(participant).mark_as_deleted
   end
 
-  include ActionView::Helpers::SanitizeHelper
-
   #Sanitizes the body and subject
   def clean
-    unless self.subject.nil?
-      self.subject = sanitize self.subject
-    end
-    self.body = sanitize self.body
+    self.subject = sanitize(subject) if subject
+    self.body    = sanitize(body)
   end
 
   #Returns notified_object. DEPRECATED
   def object
     warn "DEPRECATION WARNING: use 'notify_object' instead of 'object' to get the object associated with the Notification"
     notified_object
+  end
+
+  def sanitize(text)
+    ::Mailboxer::Cleaner.instance.sanitize(text)
   end
 end
