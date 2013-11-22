@@ -79,7 +79,7 @@ class Mailboxer::Notification < ActiveRecord::Base
 
     #Receiver receipts
     self.recipients.each do |r|
-      temp_receipts << build_receipt(receiver, nil, false)
+      temp_receipts << build_receipt(r, nil, false)
     end
 
     if temp_receipts.all?(&:valid?)
