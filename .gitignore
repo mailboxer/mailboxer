@@ -9,6 +9,7 @@ spec/dummy/.project
 spec/dummy/solr
 **.tmp_*
 Gemfile.lock
+gemfiles/*.lock
 .idea
 .project
 .document
