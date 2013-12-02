@@ -28,8 +28,11 @@ Gem::Specification.new do |s|
     s.add_development_dependency('ruby-debug', '>= 0.10.3')
   end
 
-  if RUBY_PLATFORM == 'rbx'
-    s.add_runtime_dependency('rubysl-singleton')
+  if RUBY_ENGINE == "rbx" && RUBY_VERSION >= "2.1.0"
+    # Rubinius has it's own dependencies
+    s.add_runtime_dependency     'rubysl-singleton'
+    s.add_development_dependency 'rubysl-test-unit'
+    s.add_development_dependency 'racc'
   end
   # Specs
   s.add_development_dependency('rspec-rails', '>= 2.6.1')
