@@ -28,7 +28,9 @@ Gem::Specification.new do |s|
     s.add_development_dependency('ruby-debug', '>= 0.10.3')
   end
 
-  if RUBY_PLATFORM == 'rbx'
+  if RUBY_ENGINE == 'rbx'
+    s.add_development_dependency("racc")
+    s.add_runtime_dependency('rubysl')
     s.add_runtime_dependency('rubysl-singleton')
   end
   # Specs
