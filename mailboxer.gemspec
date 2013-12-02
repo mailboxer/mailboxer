@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   end
 
   if RUBY_PLATFORM == 'rbx'
+    s.add_runtime_dependency('rubysl')
     s.add_runtime_dependency('rubysl-singleton')
   end
   # Specs
