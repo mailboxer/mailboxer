@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   end
 
   if RUBY_ENGINE == 'rbx'
+    s.add_development_dependency("racc")
     s.add_runtime_dependency('rubysl')
     s.add_runtime_dependency('rubysl-singleton')
   end
