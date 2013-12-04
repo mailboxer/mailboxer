@@ -44,10 +44,8 @@ class Mailboxer::Notification < ActiveRecord::Base
       case receipts
       when Mailboxer::Receipt
         receipts.valid?
-        receipts.errors.empty?
       when Array
-        receipts.each(&:valid?)
-        receipts.all? { |t| t.errors.empty? }
+        receipts.all?(&:valid?)
       else
         false
       end
@@ -75,12 +73,7 @@ class Mailboxer::Notification < ActiveRecord::Base
   #Use Mailboxer::Models::Message.notify and Notification.notify_all instead.
   def deliver(should_clean = true, send_mail = true)
     clean if should_clean
-    temp_receipts = Array.new
-
-    #Receiver receipts
-    self.recipients.each do |r|
-      temp_receipts << build_receipt(r, nil, false)
-    end
+    temp_receipts = recipients.map { |r| build_receipt(r, nil, false) }
 
     if temp_receipts.all?(&:valid?)
       temp_receipts.each(&:save!)   #Save receipts
@@ -94,16 +87,8 @@ class Mailboxer::Notification < ActiveRecord::Base
 
   #Returns the recipients of the Notification
   def recipients
-    if @recipients.blank?
-      recipients_array = Array.new
-      self.receipts.each do |receipt|
-        recipients_array << receipt.receiver
-      end
-
-      recipients_array
-    else
-      @recipients
-    end
+    return @recipients unless @recipients.blank?
+    @recipients = receipts.map { |receipt| receipt.receiver }
   end
 
   #Returns the receipt for the participant
