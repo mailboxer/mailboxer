@@ -1,11 +1,6 @@
 class Mailboxer::MessageBuilder < Mailboxer::BaseBuilder
 
-  private
-
-  def fields
-    %w( sender conversation recipients body subject
-        created_at updated_at attachment )
-  end
+  protected
 
   def klass
     Mailboxer::Message
@@ -16,6 +11,6 @@ class Mailboxer::MessageBuilder < Mailboxer::BaseBuilder
   end
 
   def default_subject
-    "RE: #{conversation.subject}"
+    "RE: #{params[:conversation].subject}"
   end
 end

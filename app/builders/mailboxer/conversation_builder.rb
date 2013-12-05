@@ -1,10 +1,6 @@
 class Mailboxer::ConversationBuilder < Mailboxer::BaseBuilder
 
-  private
-
-  def fields
-    %w(subject created_at updated_at)
-  end
+  protected
 
   def klass
     Mailboxer::Conversation

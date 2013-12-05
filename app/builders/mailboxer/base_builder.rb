@@ -8,19 +8,19 @@ class Mailboxer::BaseBuilder
 
   def build
     klass.new.tap do |object|
-      fields.each do |field|
+      params.keys.each do |field|
         object.send("#{field}=", get(field)) unless get(field).nil?
       end
     end
   end
 
-  private
+  protected
 
   def get(key)
     respond_to?(key) ? send(key) : params[key]
   end
 
   def recipients
-    Array(params.fetch(:recipients)).uniq
+    Array(params[:recipients]).uniq
   end
 end
