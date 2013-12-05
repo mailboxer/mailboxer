@@ -76,10 +76,7 @@ class Mailboxer::Receipt < ActiveRecord::Base
     #Acording to the github ticket https://github.com/rails/rails/issues/522 it should be
     #supported with 3.2.
     def update_receipts(updates,options={})
-      ids = Array.new
-      where(options).each do |rcp|
-        ids << rcp.id
-      end
+      ids = where(options).map { |rcp| rcp.id }
       unless ids.empty?
         conditions = [""].concat(ids)
         condition = "id = ? "

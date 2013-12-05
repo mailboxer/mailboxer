@@ -47,7 +47,7 @@ module Mailboxer
 
       #Gets the mailbox of the messageable
       def mailbox
-        @mailbox = Mailboxer::Mailbox.new(self) if @mailbox.nil?
+        @mailbox ||= Mailboxer::Mailbox.new(self)
         @mailbox.type = :all
         @mailbox
       end
@@ -60,26 +60,38 @@ module Mailboxer
       #Sends a messages, starting a new conversation, with the messageable
       #as originator
       def send_message(recipients, msg_body, subject, sanitize_text=true, attachment=nil, message_timestamp = Time.now)
-        convo = Mailboxer::Conversation.new({:subject => subject})
-        convo.created_at = message_timestamp
-        convo.updated_at = message_timestamp
-        message = messages.new({:body => msg_body, :subject => subject, :attachment => attachment})
-        message.created_at = message_timestamp
-        message.updated_at = message_timestamp
-        message.conversation = convo
-        message.recipients = recipients.is_a?(Array) ? recipients : [recipients]
-        message.recipients = message.recipients.uniq
+        convo = Mailboxer::ConversationBuilder.new({
+          :subject    => subject,
+          :created_at => message_timestamp,
+          :updated_at => message_timestamp
+        }).build
+
+        message = Mailboxer::MessageBuilder.new({
+          :sender       => self,
+          :conversation => convo,
+          :recipients   => recipients,
+          :body         => msg_body,
+          :subject      => subject,
+          :attachment   => attachment,
+          :created_at   => message_timestamp,
+          :updated_at   => message_timestamp
+        }).build
+
         message.deliver false, sanitize_text
       end
 
       #Basic reply method. USE NOT RECOMENDED.
       #Use reply_to_sender, reply_to_all and reply_to_conversation instead.
       def reply(conversation, recipients, reply_body, subject=nil, sanitize_text=true, attachment=nil)
-        subject = subject || "RE: #{conversation.subject}"
-        response = messages.new({:body => reply_body, :subject => subject, :attachment => attachment})
-        response.conversation = conversation
-        response.recipients = recipients.is_a?(Array) ? recipients : [recipients]
-        response.recipients = response.recipients.uniq
+        response = Mailboxer::MessageBuilder.new({
+          :sender       => self,
+          :conversation => conversation,
+          :recipients   => recipients,
+          :body         => reply_body,
+          :subject      => subject,
+          :attachment   => attachment
+        }).build
+
         response.recipients.delete(self)
         response.deliver true, sanitize_text
       end
