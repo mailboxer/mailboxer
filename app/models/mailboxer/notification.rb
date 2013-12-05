@@ -172,12 +172,12 @@ class Mailboxer::Notification < ActiveRecord::Base
   private
 
   def build_receipt(receiver, mailbox_type, is_read = false)
-    Mailboxer::Receipt.new.tap do |receipt|
-      receipt.notification = self
-      receipt.is_read = is_read
-      receipt.receiver = receiver
-      receipt.mailbox_type = mailbox_type
-    end
+    Mailboxer::ReceiptBuilder.new({
+      :notification => self,
+      :mailbox_type => mailbox_type,
+      :receiver     => receiver,
+      :is_read      => is_read
+    }).build
   end
 
 end
