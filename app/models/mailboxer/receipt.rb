@@ -137,12 +137,12 @@ class Mailboxer::Receipt < ActiveRecord::Base
 
   #Returns if the participant have read the Notification
   def is_unread?
-    !self.is_read
+    !is_read
   end
 
   #Returns if the participant have trashed the Notification
   def is_trashed?
-    self.trashed
+    trashed
   end
 
   protected
@@ -150,9 +150,9 @@ class Mailboxer::Receipt < ActiveRecord::Base
   #Removes the duplicate error about not present subject from Conversation if it has been already
   #raised by Message
   def remove_duplicate_errors
-    if self.errors["mailboxer_notification.conversation.subject"].present? and self.errors["mailboxer_notification.subject"].present?
-      self.errors["mailboxer_notification.conversation.subject"].each do |msg|
-        self.errors["mailboxer_notification.conversation.subject"].delete(msg)
+    if errors["mailboxer_notification.conversation.subject"].present? and errors["mailboxer_notification.subject"].present?
+      errors["mailboxer_notification.conversation.subject"].each do |msg|
+        errors["mailboxer_notification.conversation.subject"].delete(msg)
       end
     end
   end

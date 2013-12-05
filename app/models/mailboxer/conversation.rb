@@ -80,22 +80,22 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   #Originator of the conversation.
   def originator
-    @originator ||= self.original_message.sender
+    @originator ||= original_message.sender
   end
 
   #First message of the conversation.
   def original_message
-    @original_message ||= self.messages.order('created_at').first
+    @original_message ||= messages.order('created_at').first
   end
 
   #Sender of the last message.
   def last_sender
-    @last_sender ||= self.last_message.sender
+    @last_sender ||= last_message.sender
   end
 
   #Last message in the conversation.
   def last_message
-    @last_message ||= self.messages.order('created_at DESC').first
+    @last_message ||= messages.order('created_at DESC').first
   end
 
   #Returns the receipts of the conversation for one participants
@@ -129,13 +129,13 @@ class Mailboxer::Conversation < ActiveRecord::Base
   #Returns true if the participant has at least one trashed message of the conversation
   def is_trashed?(participant)
     return false unless participant
-    self.receipts_for(participant).trash.count != 0
+    receipts_for(participant).trash.count != 0
   end
 
   #Returns true if the participant has deleted the conversation
   def is_deleted?(participant)
     return false unless participant
-    return self.receipts_for(participant).deleted.count == self.receipts_for(participant).count
+    return receipts_for(participant).deleted.count == receipts_for(participant).count
   end
 
   #Returns true if both participants have deleted the conversation

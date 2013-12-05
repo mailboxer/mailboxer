@@ -10,8 +10,8 @@ class Mailboxer::Mailbox
   #Returns the notifications for the messageable
   def notifications(options = {})
     #:type => nil is a hack not to give Messages as Notifications
-    notifs = Mailboxer::Notification.recipient(@messageable).where(:type => nil).order("mailboxer_notifications.created_at DESC")
-    if (options[:read].present? and options[:read]==false) or (options[:unread].present? and options[:unread]==true)
+    notifs = Mailboxer::Notification.recipient(messageable).where(:type => nil).order("mailboxer_notifications.created_at DESC")
+    if options[:read] == false || options[:unread]
       notifs = notifs.unread
     end
 
@@ -31,23 +31,10 @@ class Mailboxer::Mailbox
   #* :unread=true
   #
   def conversations(options = {})
-    conv = Mailboxer::Conversation.participant(@messageable)
+    conv = get_conversations(options[:mailbox_type])
 
-    if options[:mailbox_type].present?
-      case options[:mailbox_type]
-      when 'inbox'
-        conv = Mailboxer::Conversation.inbox(@messageable)
-      when 'sentbox'
-        conv = Mailboxer::Conversation.sentbox(@messageable)
-      when 'trash'
-        conv = Mailboxer::Conversation.trash(@messageable)
-      when  'not_trash'
-        conv = Mailboxer::Conversation.not_trash(@messageable)
-      end
-    end
-
-    if (options.has_key?(:read) && options[:read]==false) || (options.has_key?(:unread) && options[:unread]==true)
-      conv = conv.unread(@messageable)
+    if options[:read] == false || options[:unread]
+      conv = conv.unread(messageable)
     end
 
     conv
@@ -58,7 +45,7 @@ class Mailboxer::Mailbox
   #Same as conversations({:mailbox_type => 'inbox'})
   def inbox(options={})
     options = options.merge(:mailbox_type => 'inbox')
-    self.conversations(options)
+    conversations(options)
   end
 
   #Returns the conversations in the sentbox of messageable
@@ -66,7 +53,7 @@ class Mailboxer::Mailbox
   #Same as conversations({:mailbox_type => 'sentbox'})
   def sentbox(options={})
     options = options.merge(:mailbox_type => 'sentbox')
-    self.conversations(options)
+    conversations(options)
   end
 
   #Returns the conversations in the trash of messageable
@@ -74,12 +61,12 @@ class Mailboxer::Mailbox
   #Same as conversations({:mailbox_type => 'trash'})
   def trash(options={})
     options = options.merge(:mailbox_type => 'trash')
-    self.conversations(options)
+    conversations(options)
   end
 
   #Returns all the receipts of messageable, from Messages and Notifications
   def receipts(options = {})
-    Mailboxer::Receipt.where(options).recipient(@messageable)
+    Mailboxer::Receipt.where(options).recipient(messageable)
   end
 
   #Deletes all the messages in the trash of messageable. NOT IMPLEMENTED.
@@ -90,17 +77,17 @@ class Mailboxer::Mailbox
 
   #Returns if messageable is a participant of conversation
   def has_conversation?(conversation)
-    conversation.is_participant?(@messageable)
+    conversation.is_participant?(messageable)
   end
 
   #Returns true if messageable has at least one trashed message of the conversation
   def is_trashed?(conversation)
-    conversation.is_trashed?(@messageable)
+    conversation.is_trashed?(messageable)
   end
 
   #Returns true if messageable has trashed all the messages of the conversation
   def is_completely_trashed?(conversation)
-    conversation.is_completely_trashed?(@messageable)
+    conversation.is_completely_trashed?(messageable)
   end
 
   #Returns the receipts of object for messageable as a ActiveRecord::Relation
@@ -114,9 +101,26 @@ class Mailboxer::Mailbox
   def receipts_for(object)
     case object
     when Mailboxer::Message, Mailboxer::Notification
-      object.receipt_for(@messageable)
+      object.receipt_for(messageable)
     when Mailboxer::Conversation
-      object.receipts_for(@messageable)
+      object.receipts_for(messageable)
+    end
+  end
+
+  private
+
+  def get_conversations(mailbox)
+    case mailbox
+    when 'inbox'
+      Mailboxer::Conversation.inbox(messageable)
+    when 'sentbox'
+      Mailboxer::Conversation.sentbox(messageable)
+    when 'trash'
+      Mailboxer::Conversation.trash(messageable)
+    when  'not_trash'
+      Mailboxer::Conversation.not_trash(messageable)
+    else
+      Mailboxer::Conversation.participant(messageable)
     end
   end
 end

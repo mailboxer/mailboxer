@@ -23,7 +23,7 @@ class Mailboxer::Message < Mailboxer::Notification
   #Delivers a Message. USE NOT RECOMENDED.
   #Use Mailboxer::Models::Message.send_message instead.
   def deliver(reply = false, should_clean = true)
-    self.clean if should_clean
+    clean if should_clean
 
     #Receiver receipts
     temp_receipts = recipients.map { |r| build_receipt(r, 'inbox') }

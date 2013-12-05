@@ -57,18 +57,18 @@ class Mailboxer::Notification < ActiveRecord::Base
   end
 
   def expired?
-    self.expires.present? && (self.expires < Time.now)
+    expires.present? && (expires < Time.now)
   end
 
   def expire!
-    unless self.expired?
-      self.expire
-      self.save
+    unless expired?
+      expire
+      save
     end
   end
 
   def expire
-    unless self.expired?
+    unless expired?
       self.expires = Time.now - 1.second
     end
   end
@@ -108,53 +108,53 @@ class Mailboxer::Notification < ActiveRecord::Base
   #Returns if the participant have read the Notification
   def is_unread?(participant)
     return false if participant.nil?
-    !self.receipt_for(participant).first.is_read
+    !receipt_for(participant).first.is_read
   end
 
   def is_read?(participant)
-    !self.is_unread?(participant)
+    !is_unread?(participant)
   end
 
   #Returns if the participant have trashed the Notification
   def is_trashed?(participant)
     return false if participant.nil?
-    self.receipt_for(participant).first.trashed
+    receipt_for(participant).first.trashed
   end
 
   #Returns if the participant have deleted the Notification
   def is_deleted?(participant)
     return false if participant.nil?
-    return self.receipt_for(participant).first.deleted
+    return receipt_for(participant).first.deleted
   end
 
   #Mark the notification as read
   def mark_as_read(participant)
     return if participant.nil?
-    self.receipt_for(participant).mark_as_read
+    receipt_for(participant).mark_as_read
   end
 
   #Mark the notification as unread
   def mark_as_unread(participant)
     return if participant.nil?
-    self.receipt_for(participant).mark_as_unread
+    receipt_for(participant).mark_as_unread
   end
 
   #Move the notification to the trash
   def move_to_trash(participant)
     return if participant.nil?
-    self.receipt_for(participant).move_to_trash
+    receipt_for(participant).move_to_trash
   end
 
   #Takes the notification out of the trash
   def untrash(participant)
     return if participant.nil?
-    self.receipt_for(participant).untrash
+    receipt_for(participant).untrash
   end
 
   #Mark the notification as deleted for one of the participant
   def mark_as_deleted(participant)
     return if participant.nil?
-    return self.receipt_for(participant).mark_as_deleted
+    return receipt_for(participant).mark_as_deleted
   end
 
   #Sanitizes the body and subject

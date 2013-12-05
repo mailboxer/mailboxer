@@ -3,7 +3,7 @@ class Mailboxer::BaseBuilder
   attr_reader :params
 
   def initialize(params)
-    @params = params
+    @params = params.with_indifferent_access
   end
 
   def build
