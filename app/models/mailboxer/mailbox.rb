@@ -1,5 +1,4 @@
 class Mailboxer::Mailbox
-  attr_accessor :type
   attr_reader :messageable
 
   #Initializer method

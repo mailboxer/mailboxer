@@ -48,8 +48,6 @@ module Mailboxer
       #Gets the mailbox of the messageable
       def mailbox
         @mailbox ||= Mailboxer::Mailbox.new(self)
-        @mailbox.type = :all
-        @mailbox
       end
 
       #Sends a notification to the messageable
