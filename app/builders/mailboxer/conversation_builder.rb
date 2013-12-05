@@ -6,7 +6,6 @@ class Mailboxer::ConversationBuilder < Mailboxer::BaseBuilder
     %w(subject created_at updated_at)
   end
 
-
   def klass
     Mailboxer::Conversation
   end

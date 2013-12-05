@@ -11,16 +11,8 @@ class Mailboxer::ReceiptBuilder < Mailboxer::BaseBuilder
     Mailboxer::Receipt
   end
 
-  def notification
-    params.fetch(:notification)
-  end
-
   def is_read
     params.fetch(:is_read, false)
-  end
-
-  def receiver
-    params.fetch(:receiver)
   end
 
   def mailbox_type
