@@ -200,7 +200,7 @@ describe Mailboxer::Conversation do
   end
 
   describe "#subscriber?" do
-    let(:action) { conversation.subscriber?(entity1) }
+    let(:action) { conversation.has_subscriber?(entity1) }
 
     context 'participant opted in' do
       it "returns true" do

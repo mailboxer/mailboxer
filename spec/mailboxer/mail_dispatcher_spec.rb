@@ -93,4 +93,22 @@ describe Mailboxer::MailDispatcher do
       end
     end
   end
+
+  describe "filtered_recipients" do
+    context "responds to conversation" do
+      let(:conversation) { double 'conversation' }
+      let(:mailable)     { double 'mailable', :conversation => conversation }
+      before(:each) do
+        conversation.should_receive(:has_subscriber?).with(recipient1).and_return false
+        conversation.should_receive(:has_subscriber?).with(recipient2).and_return true
+      end
+
+      its(:filtered_recipients){ should eq [recipient2] }
+    end
+
+    context 'doesnt respond to conversation' do
+      let(:mailable) { double 'mailable' }
+      its(:filtered_recipients){ should eq recipients }
+    end
+  end
 end
