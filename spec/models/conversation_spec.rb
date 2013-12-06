@@ -148,4 +148,74 @@ describe Mailboxer::Conversation do
     end
   end
 
+
+  describe "#opt_out" do
+    context 'participant still opt in' do
+      let(:opt_out) { conversation.opt_outs.first }
+
+      it "creates an opt_out object" do
+        expect{
+          conversation.opt_out(entity1)
+        }.to change{ conversation.opt_outs.count}.by 1
+      end
+
+      it "creates opt out object linked to the proper conversation and participant" do
+        conversation.opt_out(entity1)
+        expect(opt_out.conversation).to eq conversation
+        expect(opt_out.unsubscriber).to eq entity1
+      end
+    end
+
+    context 'participant already opted out' do
+      before do
+        conversation.opt_out(entity1)
+      end
+      it 'does nothing' do
+        expect{
+          conversation.opt_out(entity1)
+        }.to_not change{ conversation.opt_outs.count}
+      end
+    end
+  end
+
+  describe "#opt_out" do
+    context 'participant already opt in' do
+      it "does nothing" do
+        expect{
+          conversation.opt_in(entity1)
+        }.to_not change{ conversation.opt_outs.count }
+      end
+    end
+
+    context 'participant opted out' do
+      before do
+        conversation.opt_out(entity1)
+      end
+      it 'destroys the opt out object' do
+        expect{
+          conversation.opt_in(entity1)
+        }.to change{ conversation.opt_outs.count}.by -1
+      end
+    end
+  end
+
+  describe "#subscriber?" do
+    let(:action) { conversation.subscriber?(entity1) }
+
+    context 'participant opted in' do
+      it "returns true" do
+        expect(action).to be_true
+      end
+    end
+
+    context 'participant opted out' do
+      before do
+        conversation.opt_out(entity1)
+      end
+      it 'returns false' do
+        expect(action).to be_false
+      end
+    end
+  end
+
 end
