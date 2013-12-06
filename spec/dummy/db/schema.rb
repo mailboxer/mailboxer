@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,26 +11,32 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120305103203) do
-
-  create_table "mailboxer_conversations", :force => true do |t|
-    t.string   "subject",    :default => ""
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
-  end
+ActiveRecord::Schema.define(:version => 20131206080416) do
 
   create_table "cylons", :force => true do |t|
     t.string   "name"
     t.string   "email"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "ducks", :force => true do |t|
     t.string   "name"
     t.string   "email"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mailboxer_conversation_opt_outs", :force => true do |t|
+    t.integer "unsubscriber_id"
+    t.string  "unsubscriber_type"
+    t.integer "conversation_id"
+  end
+
+  create_table "mailboxer_conversations", :force => true do |t|
+    t.string   "subject",    :default => ""
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
   create_table "mailboxer_notifications", :force => true do |t|
@@ -38,17 +45,19 @@ ActiveRecord::Schema.define(:version => 20120305103203) do
     t.string   "subject",              :default => ""
     t.integer  "sender_id"
     t.string   "sender_type"
-    t.integer  "conversation_id"
-    t.boolean  "draft",                :default => false
-    t.datetime "updated_at",                              :null => false
-    t.datetime "created_at",                              :null => false
     t.integer  "notified_object_id"
     t.string   "notified_object_type"
     t.string   "notification_code"
+    t.integer  "conversation_id"
+    t.boolean  "draft",                :default => false
     t.string   "attachment"
+    t.datetime "updated_at",                              :null => false
+    t.datetime "created_at",                              :null => false
+    t.boolean  "global",               :default => false
+    t.datetime "expires"
   end
 
-  add_index "mailboxer_notifications", ["conversation_id"], :name => "index_notifications_on_conversation_id"
+  add_index "mailboxer_notifications", ["conversation_id"], :name => "index_mailboxer_notifications_on_conversation_id"
 
   create_table "mailboxer_receipts", :force => true do |t|
     t.integer  "receiver_id"
@@ -62,13 +71,13 @@ ActiveRecord::Schema.define(:version => 20120305103203) do
     t.datetime "updated_at",                                       :null => false
   end
 
-  add_index "mailboxer_receipts", ["notification_id"], :name => "index_receipts_on_notification_id"
+  add_index "mailboxer_receipts", ["notification_id"], :name => "index_mailboxer_receipts_on_notification_id"
 
   create_table "users", :force => true do |t|
     t.string   "name"
     t.string   "email"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end

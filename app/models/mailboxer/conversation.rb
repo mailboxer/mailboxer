@@ -3,8 +3,9 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   attr_accessible :subject if Mailboxer.protected_attributes?
 
+  has_many :opt_outs, :dependent => :destroy, :class_name => "Mailboxer::Conversation::OptOut"
   has_many :messages, :dependent => :destroy, :class_name => "Mailboxer::Message"
-  has_many :receipts, :through => :messages, :class_name => "Mailboxer::Receipt"
+  has_many :receipts, :through => :messages,  :class_name => "Mailboxer::Receipt"
 
   validates_presence_of :subject
 
@@ -162,6 +163,14 @@ class Mailboxer::Conversation < ActiveRecord::Base
   def is_unread?(participant)
     return false unless participant
     receipts_for(participant).not_trash.is_unread.count != 0
+  end
+
+  def opt_out(participant)
+
+  end
+
+  def opt_in(participant)
+
   end
 
   protected
