@@ -65,7 +65,7 @@ module Mailboxer
         convo.updated_at = message_timestamp
 
         ### BookaCoach Modification
-        convo.lesson = lesson
+        convo.lesson = lesson.id
 
         message = messages.new({:body => msg_body, :subject => subject, :attachment => attachment})
         message.created_at = message_timestamp
