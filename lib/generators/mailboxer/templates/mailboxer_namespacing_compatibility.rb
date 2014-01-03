@@ -6,8 +6,8 @@ class MailboxerNamespacingCompatibility < ActiveRecord::Migration
     rename_table :receipts,      :mailboxer_receipts
 
     if Rails.version < '4'
-      rename_index :mailboxer_notifications, :notifications_on_conversation_id, :mailboxer_notifications_on_conversation_id
-      rename_index :mailboxer_receipts,      :receipts_on_notification_id,      :mailboxer_receipts_on_notification_id
+      rename_index :mailboxer_notifications, "index_notifications_on_conversation_id", :mailboxer_notifications_on_conversation_id
+      rename_index :mailboxer_receipts,      "index_receipts_on_notification_id",      :mailboxer_receipts_on_notification_id
     end
   end
 
