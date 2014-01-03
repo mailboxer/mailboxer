@@ -67,20 +67,20 @@ module Mailboxer
 
 
 
-      #Sends a messages, starting a new conversation, with the messageable
-      #as originator
-      def send_message(recipients, msg_body, subject, sanitize_text=true, attachment=nil, message_timestamp = Time.now)
-        convo = Mailboxer::Conversation.new({:subject => subject})
-        convo.created_at = message_timestamp
-        convo.updated_at = message_timestamp
-        message = messages.new({:body => msg_body, :subject => subject, :attachment => attachment})
-        message.created_at = message_timestamp
-        message.updated_at = message_timestamp
-        message.conversation = convo
-        message.recipients = recipients.is_a?(Array) ? recipients : [recipients]
-        message.recipients = message.recipients.uniq
-        message.deliver false, sanitize_text
-      end
+      # #Sends a messages, starting a new conversation, with the messageable
+      # #as originator
+      # def send_message(recipients, msg_body, subject, sanitize_text=true, attachment=nil, message_timestamp = Time.now)
+      #   convo = Mailboxer::Conversation.new({:subject => subject})
+      #   convo.created_at = message_timestamp
+      #   convo.updated_at = message_timestamp
+      #   message = messages.new({:body => msg_body, :subject => subject, :attachment => attachment})
+      #   message.created_at = message_timestamp
+      #   message.updated_at = message_timestamp
+      #   message.conversation = convo
+      #   message.recipients = recipients.is_a?(Array) ? recipients : [recipients]
+      #   message.recipients = message.recipients.uniq
+      #   message.deliver false, sanitize_text
+      # end
 
       #Basic reply method. USE NOT RECOMENDED.
       #Use reply_to_sender, reply_to_all and reply_to_conversation instead.
