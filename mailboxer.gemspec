@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
     # Rubinius has it's own dependencies
     s.add_runtime_dependency     'rubysl-singleton'
     s.add_runtime_dependency     'rubysl-logger'
+    s.add_runtime_dependency     'rubysl-enumerator'
     s.add_development_dependency 'rubysl-test-unit'
     s.add_development_dependency 'racc'
   end
