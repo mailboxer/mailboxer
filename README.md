@@ -41,7 +41,7 @@ gem 'mailboxer'
 Then run:
 
 ```sh
-$ bundle update
+$ bundle install
 ```
 
 Run install script:
