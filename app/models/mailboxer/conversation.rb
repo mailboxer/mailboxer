@@ -3,8 +3,9 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   attr_accessible :subject if Mailboxer.protected_attributes?
 
+  has_many :opt_outs, :dependent => :destroy, :class_name => "Mailboxer::Conversation::OptOut"
   has_many :messages, :dependent => :destroy, :class_name => "Mailboxer::Message"
-  has_many :receipts, :through => :messages, :class_name => "Mailboxer::Receipt"
+  has_many :receipts, :through => :messages,  :class_name => "Mailboxer::Receipt"
 
   validates_presence_of :subject
 
@@ -111,7 +112,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
   #Returns true if the messageable is a participant of the conversation
   def is_participant?(participant)
     return false unless participant
-    receipts_for(participant).count != 0
+    receipts_for(participant).any?
   end
 
 	#Adds a new participant to the conversation
@@ -162,6 +163,24 @@ class Mailboxer::Conversation < ActiveRecord::Base
   def is_unread?(participant)
     return false unless participant
     receipts_for(participant).not_trash.is_unread.count != 0
+  end
+
+  # Creates a opt out object
+  # because by default all particpants are opt in
+  def opt_out(participant)
+    return unless has_subscriber?(participant)
+    opt_outs.create(:unsubscriber => participant)
+  end
+
+  # Destroys opt out object if any
+  # a participant outside of the discussion is, yet, not meant to optin
+  def opt_in(participant)
+    opt_outs.unsubscriber(participant).destroy_all
+  end
+
+  # tells if participant is opt in
+  def has_subscriber?(participant)
+    !opt_outs.unsubscriber(participant).any?
   end
 
   protected

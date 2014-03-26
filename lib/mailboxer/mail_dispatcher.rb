@@ -10,9 +10,9 @@ module Mailboxer
     def call
       return false unless Mailboxer.uses_emails
       if Mailboxer.mailer_wants_array
-        send_email(recipients)
+        send_email(filtered_recipients)
       else
-        recipients.each do |recipient|
+        filtered_recipients.each do |recipient|
           email_to = recipient.send(Mailboxer.email_method, mailable)
           send_email(recipient) if email_to.present?
         end
@@ -25,6 +25,15 @@ module Mailboxer
       klass = mailable.class.name.demodulize
       method = "#{klass.downcase}_mailer".to_sym
       Mailboxer.send(method) || "#{mailable.class}Mailer".constantize
+    end
+
+    # recipients can be filtered on a conversation basis
+    def filtered_recipients
+      return recipients unless mailable.respond_to?(:conversation)
+
+      recipients.each_with_object([]) do |recipient, array|
+        array << recipient if mailable.conversation.has_subscriber?(recipient)
+      end
     end
 
     def send_email(recipient)
