@@ -7,7 +7,8 @@ class Mailboxer::Conversation < ActiveRecord::Base
   has_many :messages, :dependent => :destroy, :class_name => "Mailboxer::Message"
   has_many :receipts, :through => :messages,  :class_name => "Mailboxer::Receipt"
 
-  validates_presence_of :subject
+  validates :subject, :presence => true,
+                      :length => { :maximum => Mailboxer.subject_max_length }
 
   before_validation :clean
 

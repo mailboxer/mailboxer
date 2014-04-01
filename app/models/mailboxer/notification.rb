@@ -8,7 +8,10 @@ class Mailboxer::Notification < ActiveRecord::Base
   belongs_to :notified_object, :polymorphic => :true
   has_many :receipts, :dependent => :destroy, :class_name => "Mailboxer::Receipt"
 
-  validates_presence_of :subject, :body
+  validates :subject, :presence => true,
+                      :length => { :maximum => Mailboxer.subject_max_length }
+  validates :body,    :presence => true,
+                      :length => { :maximum => Mailboxer.body_max_length }
 
   scope :recipient, lambda { |recipient|
     joins(:receipts).where('mailboxer_receipts.receiver_id' => recipient.id,'mailboxer_receipts.receiver_type' => recipient.class.base_class.to_s)
