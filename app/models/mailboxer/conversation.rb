@@ -13,10 +13,9 @@ class Mailboxer::Conversation < ActiveRecord::Base
   before_validation :clean
 
   scope :participant, lambda {|participant|
-    select('mailboxer_conversations.*').
-      where('mailboxer_notifications.type'=> Mailboxer::Message.name).
-      order("mailboxer_conversations.updated_at DESC").
-      joins(:receipts).merge(Mailboxer::Receipt.recipient(participant)).uniq
+    where('mailboxer_notifications.type'=> Mailboxer::Message.name).
+    order("mailboxer_conversations.updated_at DESC").
+    joins(:receipts).merge(Mailboxer::Receipt.recipient(participant)).uniq
   }
   scope :inbox, lambda {|participant|
     participant(participant).merge(Mailboxer::Receipt.inbox.not_trash.not_deleted)
