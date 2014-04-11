@@ -35,7 +35,7 @@ Gem::Specification.new do |s|
   end
   # Specs
   s.add_development_dependency('rspec-rails', '>= 2.6.1')
-  s.add_development_dependency("appraisal")
+  s.add_development_dependency('appraisal', '~> 1.0.0')
   s.add_development_dependency('shoulda-matchers')
   # Fixtures
   #if RUBY_VERSION >= '1.9.2'
