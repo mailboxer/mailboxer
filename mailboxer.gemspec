@@ -23,11 +23,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('rails', '>= 3.2.0', '< 4.1.0')
   s.add_runtime_dependency('carrierwave', '>= 0.5.8')
 
-  # Debugging
-  if RUBY_VERSION < '1.9'
-    s.add_development_dependency('ruby-debug', '>= 0.10.3')
-  end
-
   if RUBY_ENGINE == "rbx" && RUBY_VERSION >= "2.1.0"
     # Rubinius has it's own dependencies
     s.add_runtime_dependency     'rubysl'
