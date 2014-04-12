@@ -1,6 +1,10 @@
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'mailboxer/version'
+
 Gem::Specification.new do |s|
   s.name = "mailboxer"
-  s.version = "0.11.0"
+  s.version = Mailboxer::VERSION
 
   s.authors = ["Eduardo Casanova Cuesta"]
   s.summary = "Messaging system for rails apps."
