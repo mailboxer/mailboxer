@@ -33,11 +33,15 @@ class Mailboxer::Notification < ActiveRecord::Base
 
   class << self
     #Sends a Notification to all the recipients
-    def notify_all(recipients,subject,body,obj = nil,sanitize_text = true,notification_code=nil,send_mail=true)
-      notification = Mailboxer::Notification.new({:body => body, :subject => subject})
-      notification.recipients        = Array(recipients).uniq
-      notification.notified_object   = obj               if obj.present?
-      notification.notification_code = notification_code if notification_code.present?
+    def notify_all(recipients, subject, body, obj = nil, sanitize_text = true, notification_code=nil, send_mail=true)
+      notification = Mailboxer::NotificationBuilder.new({
+        :recipients        => recipients,
+        :subject           => subject,
+        :body              => body,
+        :notified_object   => obj,
+        :notification_code => notification_code
+      }).build
+
       notification.deliver sanitize_text, send_mail
     end
 
@@ -47,10 +51,8 @@ class Mailboxer::Notification < ActiveRecord::Base
       case receipts
       when Mailboxer::Receipt
         receipts.valid?
-        receipts.errors.empty?
       when Array
-        receipts.each(&:valid?)
-        receipts.all? { |t| t.errors.empty? }
+        receipts.all?(&:valid?)
       else
         false
       end
@@ -58,18 +60,18 @@ class Mailboxer::Notification < ActiveRecord::Base
   end
 
   def expired?
-    self.expires.present? && (self.expires < Time.now)
+    expires.present? && (expires < Time.now)
   end
 
   def expire!
-    unless self.expired?
-      self.expire
-      self.save
+    unless expired?
+      expire
+      save
     end
   end
 
   def expire
-    unless self.expired?
+    unless expired?
       self.expires = Time.now - 1.second
     end
   end
@@ -78,12 +80,7 @@ class Mailboxer::Notification < ActiveRecord::Base
   #Use Mailboxer::Models::Message.notify and Notification.notify_all instead.
   def deliver(should_clean = true, send_mail = true)
     clean if should_clean
-    temp_receipts = Array.new
-
-    #Receiver receipts
-    self.recipients.each do |r|
-      temp_receipts << build_receipt(r, nil, false)
-    end
+    temp_receipts = recipients.map { |r| build_receipt(r, nil, false) }
 
     if temp_receipts.all?(&:valid?)
       temp_receipts.each(&:save!)   #Save receipts
@@ -97,16 +94,8 @@ class Mailboxer::Notification < ActiveRecord::Base
 
   #Returns the recipients of the Notification
   def recipients
-    if @recipients.blank?
-      recipients_array = Array.new
-      self.receipts.each do |receipt|
-        recipients_array << receipt.receiver
-      end
-
-      recipients_array
-    else
-      @recipients
-    end
+    return @recipients unless @recipients.blank?
+    @recipients = receipts.map { |receipt| receipt.receiver }
   end
 
   #Returns the receipt for the participant
@@ -122,53 +111,53 @@ class Mailboxer::Notification < ActiveRecord::Base
   #Returns if the participant have read the Notification
   def is_unread?(participant)
     return false if participant.nil?
-    !self.receipt_for(participant).first.is_read
+    !receipt_for(participant).first.is_read
   end
 
   def is_read?(participant)
-    !self.is_unread?(participant)
+    !is_unread?(participant)
   end
 
   #Returns if the participant have trashed the Notification
   def is_trashed?(participant)
     return false if participant.nil?
-    self.receipt_for(participant).first.trashed
+    receipt_for(participant).first.trashed
   end
 
   #Returns if the participant have deleted the Notification
   def is_deleted?(participant)
     return false if participant.nil?
-    return self.receipt_for(participant).first.deleted
+    return receipt_for(participant).first.deleted
   end
 
   #Mark the notification as read
   def mark_as_read(participant)
     return if participant.nil?
-    self.receipt_for(participant).mark_as_read
+    receipt_for(participant).mark_as_read
   end
 
   #Mark the notification as unread
   def mark_as_unread(participant)
     return if participant.nil?
-    self.receipt_for(participant).mark_as_unread
+    receipt_for(participant).mark_as_unread
   end
 
   #Move the notification to the trash
   def move_to_trash(participant)
     return if participant.nil?
-    self.receipt_for(participant).move_to_trash
+    receipt_for(participant).move_to_trash
   end
 
   #Takes the notification out of the trash
   def untrash(participant)
     return if participant.nil?
-    self.receipt_for(participant).untrash
+    receipt_for(participant).untrash
   end
 
   #Mark the notification as deleted for one of the participant
   def mark_as_deleted(participant)
     return if participant.nil?
-    return self.receipt_for(participant).mark_as_deleted
+    return receipt_for(participant).mark_as_deleted
   end
 
   #Sanitizes the body and subject
@@ -190,12 +179,12 @@ class Mailboxer::Notification < ActiveRecord::Base
   private
 
   def build_receipt(receiver, mailbox_type, is_read = false)
-    Mailboxer::Receipt.new.tap do |receipt|
-      receipt.notification = self
-      receipt.is_read = is_read
-      receipt.receiver = receiver
-      receipt.mailbox_type = mailbox_type
-    end
+    Mailboxer::ReceiptBuilder.new({
+      :notification => self,
+      :mailbox_type => mailbox_type,
+      :receiver     => receiver,
+      :is_read      => is_read
+    }).build
   end
 
 end
