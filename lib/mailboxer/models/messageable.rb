@@ -75,7 +75,7 @@ module Mailboxer
       #Basic reply method. USE NOT RECOMENDED.
       #Use reply_to_sender, reply_to_all and reply_to_conversation instead.
       def reply(conversation, recipients, reply_body, subject=nil, sanitize_text=true, attachment=nil)
-        subject = subject || "RE: #{conversation.subject}"
+        subject = subject || conversation.subject
         response = messages.new({:body => reply_body, :subject => subject, :attachment => attachment})
         response.conversation = conversation
         response.recipients = recipients.is_a?(Array) ? recipients : [recipients]
