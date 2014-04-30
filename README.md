@@ -56,6 +56,21 @@ And don't forget to migrate your database:
 $ rake db:migrate
 ```
 
+Upgrading
+---------
+
+If upgrading from 0.11.0 to 0.12.0, run the following generator:
+
+```sh
+$ rails generate mailboxer:namespacing_compatibility
+```
+
+Then, migrate your database:
+
+```sh
+$ rake db:migrate
+```
+
 ## Requirements & Settings
 
 ### Emails
