@@ -181,6 +181,17 @@ Version 0.8.0 sees `Messageable#read` and `Messageable#unread` renamed to `mark_
 alfa.send_message(beta, "Body", "subject")
 ```
 
+```ruby
+#alfa wants to send a message to beta and charlie
+alfa.send_message([beta, charlie], "Body", "subject")
+```
+
+```ruby
+#alfa wants to send a message to all users
+users = User.all
+alfa.send_message(users, "Body", "subject")
+```
+
 ### How can I reply a message?
 
 ```ruby

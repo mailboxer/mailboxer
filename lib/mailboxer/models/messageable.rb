@@ -67,7 +67,7 @@ module Mailboxer
         message.created_at = message_timestamp
         message.updated_at = message_timestamp
         message.conversation = convo
-        message.recipients = recipients.is_a?(Array) ? recipients : [recipients]
+        message.recipients = Array.wrap recipients
         message.recipients = message.recipients.uniq
         message.deliver false, sanitize_text
       end
@@ -78,7 +78,7 @@ module Mailboxer
         subject = subject || conversation.subject
         response = messages.new({:body => reply_body, :subject => subject, :attachment => attachment})
         response.conversation = conversation
-        response.recipients = recipients.is_a?(Array) ? recipients : [recipients]
+        response.recipients = Array.wrap recipients
         response.recipients = response.recipients.uniq
         response.recipients.delete(self)
         response.deliver true, sanitize_text
