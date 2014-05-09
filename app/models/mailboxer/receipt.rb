@@ -73,7 +73,7 @@ class Mailboxer::Receipt < ActiveRecord::Base
     end
 
     #This methods helps to do a update_all with table joins, not currently supported by rails.
-    #Acording to the github ticket https://github.com/rails/rails/issues/522 it should be
+    #According to the github ticket https://github.com/rails/rails/issues/522 it should be
     #supported with 3.2.
     def update_receipts(updates,options={})
       ids = where(options).map { |rcp| rcp.id }

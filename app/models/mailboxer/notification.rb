@@ -91,7 +91,8 @@ class Mailboxer::Notification < ActiveRecord::Base
 
   #Returns the recipients of the Notification
   def recipients
-    return @recipients unless @recipients.blank?
+    # puts "is @recipients defined? #{@recipients}"
+    return Array.wrap(@recipients) unless @recipients.blank?
     @recipients = receipts.map { |receipt| receipt.receiver }
   end
 

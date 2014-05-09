@@ -11,7 +11,7 @@ class Mailboxer::Message < Mailboxer::Notification
     where(:conversation_id => conversation.id)
   }
 
-  mount_uploader :attachment, Mailboxer::AttachmentUploader
+  mount_uploader :attachment, AttachmentUploader
 
   class << self
     #Sets the on deliver callback method.
@@ -23,7 +23,7 @@ class Mailboxer::Message < Mailboxer::Notification
   #Delivers a Message. USE NOT RECOMENDED.
   #Use Mailboxer::Models::Message.send_message instead.
   def deliver(reply = false, should_clean = true)
-    clean if should_clean
+    self.clean if should_clean
 
     #Receiver receipts
     temp_receipts = recipients.map { |r| build_receipt(r, 'inbox') }
@@ -33,8 +33,7 @@ class Mailboxer::Message < Mailboxer::Notification
 
     temp_receipts << sender_receipt
 
-    if temp_receipts.all?(&:valid?)
-      temp_receipts.each(&:save!) 	#Save receipts
+    if temp_receipts.all?(&:save!)
 
       Mailboxer::MailDispatcher.new(self, recipients).call
 
@@ -44,6 +43,7 @@ class Mailboxer::Message < Mailboxer::Notification
 
       on_deliver_callback.call(self) if on_deliver_callback
     end
+    # puts "receipt_notification_new_record?: #{sender_receipt.notification.new_record?}"
     sender_receipt
   end
 end

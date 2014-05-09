@@ -11,7 +11,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
   before_validation :clean
 
   scope :participant, lambda {|participant|
-    select('DISTINCT mailboxer_conversations.*').
+    Mailboxer::Conversation.distinct.
       where('mailboxer_notifications.type'=> Mailboxer::Message.name).
       order("mailboxer_conversations.updated_at DESC").
       joins(:receipts).merge(Mailboxer::Receipt.recipient(participant))
