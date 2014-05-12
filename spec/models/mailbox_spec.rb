@@ -132,17 +132,11 @@ describe Mailboxer::Mailbox do
     assert @entity1.mailbox.receipts.inbox.mark_as_deleted
     @entity1.mailbox.inbox.count.should==0
 
-    puts "entity mailbox: #{@entity1.mailbox.inbox.inspect}"
-    puts "*************************************************"
     @entity2.reply_to_all(@receipt1,"Reply body 1")
     @entity1.mailbox.inbox.count.should==1
 
-    puts "entity mailbox: #{@entity1.mailbox.inbox.inspect}"
-    puts "*************************************************"
     @entity2.reply_to_all(@receipt1,"Reply body 3")
-    # @entity1.mailbox.inbox.count.should==2
-    puts "entity mailbox: #{@entity1.mailbox.inbox.inspect}"
-    puts "*************************************************"
+    @entity1.mailbox.inbox.count.should==1
   end
 
   context "STI models" do

@@ -43,7 +43,6 @@ class Mailboxer::Message < Mailboxer::Notification
 
       on_deliver_callback.call(self) if on_deliver_callback
     end
-    # puts "receipt_notification_new_record?: #{sender_receipt.notification.new_record?}"
     sender_receipt
   end
 end
