@@ -13,10 +13,16 @@ class Mailboxer::Conversation < ActiveRecord::Base
   before_validation :clean
 
   scope :participant, lambda {|participant|
-    Mailboxer::Conversation.distinct.
+    if Rails::VERSION::MAJOR == 4
+      self.distinct.
+        where('mailboxer_notifications.type'=> Mailboxer::Message.name).
+        order("mailboxer_conversations.updated_at DESC").
+        joins(:receipts).merge(Mailboxer::Receipt.recipient(participant))
+    else
       where('mailboxer_notifications.type'=> Mailboxer::Message.name).
       order("mailboxer_conversations.updated_at DESC").
-      joins(:receipts).merge(Mailboxer::Receipt.recipient(participant))
+      joins(:receipts).merge(Mailboxer::Receipt.recipient(participant)).uniq
+    end
   }
   scope :inbox, lambda {|participant|
     participant(participant).merge(Mailboxer::Receipt.inbox.not_trash.not_deleted)
