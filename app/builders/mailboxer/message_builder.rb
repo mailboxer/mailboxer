@@ -11,6 +11,6 @@ class Mailboxer::MessageBuilder < Mailboxer::BaseBuilder
   end
 
   def default_subject
-    "RE: #{params[:conversation].subject}"
+    "#{params[:conversation].subject}"
   end
 end
