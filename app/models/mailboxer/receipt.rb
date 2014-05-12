@@ -73,13 +73,10 @@ class Mailboxer::Receipt < ActiveRecord::Base
     end
 
     #This methods helps to do a update_all with table joins, not currently supported by rails.
-    #Acording to the github ticket https://github.com/rails/rails/issues/522 it should be
+    #According to the github ticket https://github.com/rails/rails/issues/522 it should be
     #supported with 3.2.
     def update_receipts(updates,options={})
-      ids = Array.new
-      where(options).each do |rcp|
-        ids << rcp.id
-      end
+      ids = where(options).map { |rcp| rcp.id }
       unless ids.empty?
         conditions = [""].concat(ids)
         condition = "id = ? "
@@ -140,12 +137,12 @@ class Mailboxer::Receipt < ActiveRecord::Base
 
   #Returns if the participant have read the Notification
   def is_unread?
-    !self.is_read
+    !is_read
   end
 
   #Returns if the participant have trashed the Notification
   def is_trashed?
-    self.trashed
+    trashed
   end
 
   protected
@@ -153,9 +150,9 @@ class Mailboxer::Receipt < ActiveRecord::Base
   #Removes the duplicate error about not present subject from Conversation if it has been already
   #raised by Message
   def remove_duplicate_errors
-    if self.errors["mailboxer_notification.conversation.subject"].present? and self.errors["mailboxer_notification.subject"].present?
-      self.errors["mailboxer_notification.conversation.subject"].each do |msg|
-        self.errors["mailboxer_notification.conversation.subject"].delete(msg)
+    if errors["mailboxer_notification.conversation.subject"].present? and errors["mailboxer_notification.subject"].present?
+      errors["mailboxer_notification.conversation.subject"].each do |msg|
+        errors["mailboxer_notification.conversation.subject"].delete(msg)
       end
     end
   end
