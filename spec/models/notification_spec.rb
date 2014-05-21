@@ -47,7 +47,7 @@ describe Mailboxer::Notification do
   end
 
   it "should notify several users" do
-    recipients = Set.new [@entity1,@entity2,@entity3]
+    recipients = [@entity1,@entity2,@entity3]
     Mailboxer::Notification.notify_all(recipients,"Subject","Body")
     #Check getting ALL receipts
     @entity1.mailbox.receipts.size.should==1
