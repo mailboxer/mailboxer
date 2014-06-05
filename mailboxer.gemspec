@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
     s.add_development_dependency 'racc'
   end
   # Specs
-  s.add_development_dependency('rspec-rails', '>= 2.6.1')
+  s.add_development_dependency 'rspec-rails', '~> 2.99'
   s.add_development_dependency('appraisal', '~> 1.0.0')
   s.add_development_dependency('shoulda-matchers')
   # Fixtures
