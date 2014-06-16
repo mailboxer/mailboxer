@@ -59,10 +59,11 @@ $ rake db:migrate
 Upgrading
 ---------
 
-If upgrading from 0.11.0 to 0.12.0, run the following generator:
+If upgrading from 0.11.0 to 0.12.0, run the following generators:
 
 ```sh
 $ rails generate mailboxer:namespacing_compatibility
+$ rails generate -s mailboxer:install
 ```
 
 Then, migrate your database:
