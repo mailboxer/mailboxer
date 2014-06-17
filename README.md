@@ -63,7 +63,7 @@ If upgrading from 0.11.0 to 0.12.0, run the following generators:
 
 ```sh
 $ rails generate mailboxer:namespacing_compatibility
-$ rails generate -s mailboxer:install
+$ rails generate mailboxer:install -s
 ```
 
 Then, migrate your database:
