@@ -168,7 +168,7 @@ class Mailboxer::Notification < ActiveRecord::Base
 
   #Returns notified_object. DEPRECATED
   def object
-    warn "DEPRECATION WARNING: use 'notify_object' instead of 'object' to get the object associated with the Notification"
+    warn "DEPRECATION WARNING: use 'notified_object' instead of 'object' to get the object associated with the Notification"
     notified_object
   end
 
