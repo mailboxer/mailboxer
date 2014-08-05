@@ -11,7 +11,7 @@ a powerful and flexible message system. It supports the use of
 conversations with two or more participants, sending notifications to
 recipients (intended to be used as system notifications “Your picture has
 new comments”, “John Doe has updated his document”, etc.), and emailing the
-messageable model (if configured to do so). It has a complete implementation 
+messageable model (if configured to do so). It has a complete implementation
 of a `Mailbox` object for each messageable with `inbox`, `sentbox` and
 `trash`.
 
@@ -56,6 +56,12 @@ And don't forget to migrate your database:
 $ rake db:migrate
 ```
 
+You can also generate email views:
+
+```sh
+$ rails g mailboxer:views
+```
+
 Upgrading
 ---------
 
@@ -81,7 +87,7 @@ We are now adding support for sending emails when a Notification or a Message is
 ```ruby
 Mailboxer.setup do |config|
   #Enables or disables email sending for Notifications and Messages
-  config.uses_emails = true  
+  config.uses_emails = true
   #Configures the default `from` address for the email sent for Messages and Notifications of Mailboxer
   config.default_from = "no-reply@dit.upm.es"
   ...
@@ -244,12 +250,12 @@ conversations = alfa.mailbox.conversations.page(params[:page]).per(9)
 
 #Paginating received conversations using :page parameter and 9 per page
 conversations = alfa.mailbox.inbox.page(params[:page]).per(9)
-  
+
 #Paginating sent conversations using :page parameter and 9 per page
 conversations = alfa.mailbox.sentbox.page(params[:page]).per(9)
 
 #Paginating trashed conversations using :page parameter and 9 per page
-conversations = alfa.mailbox.trash.page(params[:page]).per(9) 
+conversations = alfa.mailbox.trash.page(params[:page]).per(9)
 ```
 
 ### How can I read the messages of a conversation?
@@ -306,3 +312,4 @@ If you need a GUI you should take a look a these links:
 * [bennick](https://github.com/ging/mailboxer/commits/master?author=bennick) (Ryan Bennick)
 * [rjst](https://github.com/ging/mailboxer/commits/master?author=rjst) (Ricardo Trindade)
 * [fabianoalmeida](https://github.com/ging/mailboxer/commits/master?author=fabianoalmeida) (Fabiano Almeida)
+* [supremebeing7](https://github.com/ging/mailboxer/commits/master?author=supremebeing7) (Mark J. Lehman)
