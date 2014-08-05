@@ -56,6 +56,12 @@ And don't forget to migrate your database:
 $ rake db:migrate
 ```
 
+You can also generate email views:
+
+```sh
+$ rails g mailboxer:views
+```
+
 Upgrading
 ---------
 
