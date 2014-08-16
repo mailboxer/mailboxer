@@ -68,10 +68,11 @@ class Mailboxer::Mailbox
     Mailboxer::Receipt.where(options).recipient(messageable)
   end
 
-  #Deletes all the messages in the trash of messageable. NOT IMPLEMENTED.
+  #Deletes all the messages in the trash of messageable.
   def empty_trash(options = {})
-    #TODO
-    false
+    trash(options).each do |conversation|
+      conversation.mark_as_deleted(messageable)
+    end
   end
 
   #Returns if messageable is a participant of conversation
