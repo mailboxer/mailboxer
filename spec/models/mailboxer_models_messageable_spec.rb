@@ -11,6 +11,18 @@ describe "Mailboxer::Models::Messageable through User" do
     assert @entity1.mailbox
   end
 
+  it 'should return the inbox count' do
+    @entity1.unread_inbox_count.should == 0
+    @entity2.send_message(@entity1,"Body","Subject")
+    @entity2.send_message(@entity1,"Body","Subject")
+    @entity1.unread_inbox_count.should == 2
+    @entity1.receipts.first.mark_as_read
+    @entity1.unread_inbox_count.should == 1
+    @entity2.send_message(@entity1,"Body","Subject")
+    @entity2.send_message(@entity1,"Body","Subject")
+    @entity1.unread_inbox_count.should == 3
+  end
+
   it "should be able to send a message" do
     assert @entity1.send_message(@entity2,"Body","Subject")
   end
@@ -24,8 +36,6 @@ describe "Mailboxer::Models::Messageable through User" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     assert @entity2.reply_to_all(@receipt,"Reply body")
   end
-
-
 
   it "should be able to unread an owned Mailboxer::Receipt (mark as unread)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
