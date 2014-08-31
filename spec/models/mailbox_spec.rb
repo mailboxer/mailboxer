@@ -88,13 +88,12 @@ describe Mailboxer::Mailbox do
     @entity2.mailbox.receipts.trash.count.should==0
   end
 
-  it "should delete trashed mails (TODO)" do
+  it "should delete trashed mails" do
     @entity1.mailbox.receipts.move_to_trash
-    #TODO
-    #@entity1.mailbox.empty_trash
+    @entity1.mailbox.empty_trash
 
     assert @entity1.mailbox.receipts.trash
-    #@entity1.mailbox.receipts.trash.count.should==0
+    @entity1.mailbox.receipts.trash.count.should==0
 
     assert @entity2.mailbox.receipts
     @entity2.mailbox.receipts.count.should==4
