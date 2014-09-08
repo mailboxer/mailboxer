@@ -313,3 +313,5 @@ If you need a GUI you should take a look a these links:
 * [rjst](https://github.com/ging/mailboxer/commits/master?author=rjst) (Ricardo Trindade)
 * [fabianoalmeida](https://github.com/ging/mailboxer/commits/master?author=fabianoalmeida) (Fabiano Almeida)
 * [supremebeing7](https://github.com/ging/mailboxer/commits/master?author=supremebeing7) (Mark J. Lehman)
+* [searsaw](https://github.com/mailboxer/mailboxer/commits/master?author=searsaw) (Alex Sears)
+* [joshblour](https://github.com/mailboxer/mailboxer/commits/master?author=joshblour) (Yonah Forst)
