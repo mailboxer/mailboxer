@@ -24,15 +24,15 @@ describe Mailboxer::MessageMailer do
       end
 
       it "should send an email to user entity" do
-        sent_to?(entity1).should be_true
+        sent_to?(entity1).should be true
       end
 
       it "shouldn't send an email to duck entity" do
-        sent_to?(entity2).should be_false
+        sent_to?(entity2).should be false
       end
 
       it "shouldn't send an email to cylon entity" do
-        sent_to?(entity3).should be_false
+        sent_to?(entity3).should be false
       end
     end
 
@@ -48,15 +48,15 @@ describe Mailboxer::MessageMailer do
       end
 
       it "should send an email to user entity" do
-        sent_to?(entity1).should be_true
+        sent_to?(entity1).should be true
       end
 
       it "shouldn't send an email to duck entity" do
-        sent_to?(entity2).should be_false
+        sent_to?(entity2).should be false
       end
 
       it "shouldn't send an email to cylon entity" do
-        sent_to?(entity3).should be_false
+        sent_to?(entity3).should be false
       end
     end
   end

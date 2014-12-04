@@ -197,7 +197,7 @@ describe Mailboxer::Notification do
     context "when the expiration date is in the past" do
       before { subject.stub(:expires => Time.now - 1.second) }
       it 'should be expired' do
-        subject.expired?.should be_true
+        subject.expired?.should be true
       end
     end
 
@@ -209,21 +209,21 @@ describe Mailboxer::Notification do
       }
 
       it 'should not be expired' do
-        subject.expired?.should be_false
+        subject.expired?.should be false
       end
     end
 
     context "when the expiration date is in the future" do
       before { subject.stub(:expires => Time.now + 1.second) }
       it 'should not be expired' do
-        subject.expired?.should be_false
+        subject.expired?.should be false
       end
     end
 
     context "when the expiration date is not set" do
       before {subject.stub(:expires => nil)}
       it 'should not be expired' do
-        subject.expired?.should be_false
+        subject.expired?.should be false
       end
     end
 
