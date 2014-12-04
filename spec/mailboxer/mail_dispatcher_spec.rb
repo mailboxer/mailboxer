@@ -13,7 +13,7 @@ describe Mailboxer::MailDispatcher do
     context "no emails" do
       before { Mailboxer.uses_emails = false }
       after  { Mailboxer.uses_emails = true }
-      its(:call) { should be_false }
+      its(:call) { should be false }
     end
 
     context "mailer wants array" do

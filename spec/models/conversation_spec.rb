@@ -47,7 +47,7 @@ describe Mailboxer::Conversation do
   it "should be removed from the database once deleted by all participants" do
     conversation.mark_as_deleted(entity1)
     conversation.mark_as_deleted(entity2)
-    Mailboxer::Conversation.exists?(conversation.id).should be_false
+    Mailboxer::Conversation.exists?(conversation.id).should be false
   end
 
   it "should be able to be marked as read" do
@@ -123,18 +123,18 @@ describe Mailboxer::Conversation do
   describe "#is_completely_trashed?" do
     it "returns true if all receipts in conversation are trashed for participant" do
       conversation.move_to_trash(entity1)
-      conversation.is_completely_trashed?(entity1).should be_true
+      conversation.is_completely_trashed?(entity1).should be true
     end
   end
 
   describe "#is_deleted?" do
     it "returns false if a recipient has not deleted the conversation" do
-      conversation.is_deleted?(entity1).should be_false
+      conversation.is_deleted?(entity1).should be false
     end
 
     it "returns true if a recipient has deleted the conversation" do
       conversation.mark_as_deleted(entity1)
-      conversation.is_deleted?(entity1).should be_true
+      conversation.is_deleted?(entity1).should be true
     end
   end
 
@@ -142,12 +142,12 @@ describe Mailboxer::Conversation do
     it "returns true if both participants have deleted the conversation" do
       conversation.mark_as_deleted(entity1)
       conversation.mark_as_deleted(entity2)
-      conversation.is_orphaned?.should be_true
+      conversation.is_orphaned?.should be true
     end
 
     it "returns false if one has not deleted the conversation" do
       conversation.mark_as_deleted(entity1)
-      conversation.is_orphaned?.should be_false
+      conversation.is_orphaned?.should be false
     end
   end
 
@@ -207,7 +207,7 @@ describe Mailboxer::Conversation do
 
     context 'participant opted in' do
       it "returns true" do
-        expect(action).to be_true
+        expect(action).to be true
       end
     end
 
@@ -216,7 +216,7 @@ describe Mailboxer::Conversation do
         conversation.opt_out(entity1)
       end
       it 'returns false' do
-        expect(action).to be_false
+        expect(action).to be false
       end
     end
   end
