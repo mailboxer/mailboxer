@@ -39,4 +39,6 @@ RSpec.configure do |config|
 
   # == Mock Framework
   config.mock_with :rspec
+
+  config.infer_spec_type_from_file_location!
 end
