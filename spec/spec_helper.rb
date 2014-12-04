@@ -40,5 +40,8 @@ RSpec.configure do |config|
   # == Mock Framework
   config.mock_with :rspec
 
+  # Rspec only clears out ActionMailer::Base#deliveries for mailers specs
+  config.after(:each, type: :integration){ ActionMailer::Base.deliveries.clear }
+
   config.infer_spec_type_from_file_location!
 end
