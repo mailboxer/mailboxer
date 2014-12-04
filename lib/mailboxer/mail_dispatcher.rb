@@ -40,7 +40,7 @@ module Mailboxer
       if Mailboxer.custom_deliver_proc
         Mailboxer.custom_deliver_proc.call(mailer, mailable, recipient)
       else
-        mailer.send_email(mailable, recipient).deliver
+        mailer.send_email(mailable, recipient).deliver_now
       end
     end
 
