@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Messages And Mailboxer::Receipts" do
+describe "Messages And Mailboxer::Receipts", type: :integration do
 
   describe "two equal entities" do
     before do

@@ -4,6 +4,9 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require "rspec/rails"
 
+require 'rspec/its'
+require 'rspec/collection_matchers'
+
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
 ActionMailer::Base.default_url_options[:host] = "test.com"
@@ -36,4 +39,9 @@ RSpec.configure do |config|
 
   # == Mock Framework
   config.mock_with :rspec
+
+  # Rspec only clears out ActionMailer::Base#deliveries for mailers specs
+  config.after(:each, type: :integration){ ActionMailer::Base.deliveries.clear }
+
+  config.infer_spec_type_from_file_location!
 end

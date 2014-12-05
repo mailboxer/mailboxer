@@ -13,7 +13,7 @@ describe Mailboxer::MailDispatcher do
     context "no emails" do
       before { Mailboxer.uses_emails = false }
       after  { Mailboxer.uses_emails = true }
-      its(:call) { should be_false }
+      its(:call) { should be false }
     end
 
     context "mailer wants array" do
@@ -58,7 +58,7 @@ describe Mailboxer::MailDispatcher do
 
       it "triggers standard deliver chain" do
         mailer.should_receive(:send_email).with(mailable, recipient1).and_return email
-        email.should_receive :deliver
+        email.should_receive :deliver_now
 
         subject.send :send_email, recipient1
       end

@@ -79,12 +79,12 @@ class Mailboxer::Receipt < ActiveRecord::Base
       ids = where(options).map { |rcp| rcp.id }
       unless ids.empty?
         conditions = [""].concat(ids)
-        condition = "id = ? "
+        condition = "#{table_name}.id = ? "
         ids.drop(1).each do
-          condition << "OR id = ? "
+          condition << "OR #{table_name}.id = ? "
         end
         conditions[0] = condition
-        Mailboxer::Receipt.except(:where).except(:joins).where(conditions).update_all(updates)
+        Mailboxer::Receipt.where(conditions).update_all(updates)
       end
     end
   end

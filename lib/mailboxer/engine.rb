@@ -1,5 +1,3 @@
-# Database foreign keys
-require 'foreigner'
 require 'carrierwave'
 begin
   require 'sunspot_rails'

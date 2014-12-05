@@ -20,11 +20,9 @@ Gem::Specification.new do |s|
 
   # Gem dependencies
   #
-  # SQL foreign keys
-  s.add_runtime_dependency('foreigner', '>= 0.9.1')
 
   # Development Gem dependencies
-  s.add_runtime_dependency('rails', '>= 3.2.0')
+  s.add_runtime_dependency('rails', '4.2.0.rc1')
   s.add_runtime_dependency('carrierwave', '>= 0.5.8')
 
   if RUBY_ENGINE == "rbx" && RUBY_VERSION >= "2.1.0"
@@ -33,7 +31,9 @@ Gem::Specification.new do |s|
     s.add_development_dependency 'racc'
   end
   # Specs
-  s.add_development_dependency 'rspec-rails', '~> 2.99'
+  s.add_development_dependency 'rspec-rails', '~> 3.0.0'
+  s.add_development_dependency 'rspec-its', '~> 1.1.0'
+  s.add_development_dependency 'rspec-collection_matchers', '~> 1.1.0'
   s.add_development_dependency('appraisal', '~> 1.0.0')
   s.add_development_dependency('shoulda-matchers')
   # Fixtures
@@ -47,6 +47,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('forgery', '>= 0.3.6')
   # Integration testing
   s.add_development_dependency('capybara', '>= 0.3.9')
+  s.add_development_dependency('pry')
   # Testing database
   if RUBY_PLATFORM == 'java'
     s.add_development_dependency('jdbc-sqlite3')
