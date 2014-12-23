@@ -40,9 +40,9 @@ module Mailboxer
       if Mailboxer.custom_deliver_proc
         Mailboxer.custom_deliver_proc.call(mailer, mailable, recipient)
       else
-        mailer.send_email(mailable, recipient).deliver
+        email = mailer.send_email(mailable, recipient)
+        email.respond_to?(:deliver_now) ? email.deliver_now : email.deliver
       end
     end
-
   end
 end
