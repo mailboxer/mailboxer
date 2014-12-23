@@ -16,8 +16,8 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message1.sender.id.should == @entity1.id
-        @message1.sender.class.should == @entity1.class
+        expect(@message1.sender.id).to eq @entity1.id
+        expect(@message1.sender.class).to eq @entity1.class
         assert @message1.body.eql?"Body"
         assert @message1.subject.eql?"Subject"
       end
@@ -27,25 +27,25 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message1).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message1).first
         assert mail
         if mail
-          mail.is_read.should==false
-          mail.trashed.should==false
-          mail.mailbox_type.should=="inbox"
+          expect(mail.is_read).to be false
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "inbox"
         end
       end
 
       it "should have the correct recipients" do
         recipients = @message1.recipients
-        recipients.count.should==2
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
+        expect(recipients.count).to eq 2
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
       end
 
     end
@@ -59,10 +59,10 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message2.sender.id.should == @entity2.id
-        @message2.sender.class.should == @entity2.class
-        @message2.body.should eq "Reply body"
-        @message2.subject.should eq "Subject"
+        expect(@message2.sender.id).to eq @entity2.id
+        expect(@message2.sender.class).to eq @entity2.class
+        expect(@message2.body).to eq "Reply body"
+        expect(@message2.subject).to eq "Subject"
       end
 
       it "should create proper mails" do
@@ -70,29 +70,29 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==false
-          mail.trashed.should==false
-          mail.mailbox_type.should=="inbox"
+          expect(mail.is_read).to be false
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "inbox"
         end
       end
 
       it "should have the correct recipients" do
         recipients = @message2.recipients
-        recipients.count.should==2
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
+        expect(recipients.count).to eq 2
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
       end
 
       it "should be associated to the same conversation" do
-        @message1.conversation.id.should==@message2.conversation.id
+        expect(@message1.conversation.id).to eq @message2.conversation.id
       end
     end
 
@@ -105,8 +105,8 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message2.sender.id.should == @entity2.id
-        @message2.sender.class.should == @entity2.class
+        expect(@message2.sender.id).to eq @entity2.id
+        expect(@message2.sender.class).to eq @entity2.class
         assert @message2.body.eql?"Reply body"
         assert @message2.subject.eql?"Subject"
       end
@@ -116,29 +116,29 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==false
-          mail.trashed.should==false
-          mail.mailbox_type.should=="inbox"
+          expect(mail.is_read).to be false
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "inbox"
         end
       end
 
       it "should have the correct recipients" do
         recipients = @message2.recipients
-        recipients.count.should==2
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
+        expect(recipients.count).to eq 2
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
       end
 
       it "should be associated to the same conversation" do
-        @message1.conversation.id.should==@message2.conversation.id
+        expect(@message1.conversation.id).to eq @message2.conversation.id
       end
     end
     describe "message replying to conversation" do
@@ -150,8 +150,8 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message2.sender.id.should == @entity2.id
-        @message2.sender.class.should == @entity2.class
+        expect(@message2.sender.id).to eq @entity2.id
+        expect(@message2.sender.class).to eq @entity2.class
         assert @message2.body.eql?"Reply body"
         assert @message2.subject.eql?"Subject"
       end
@@ -161,29 +161,29 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==false
-          mail.trashed.should==false
-          mail.mailbox_type.should=="inbox"
+          expect(mail.is_read).to be false
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "inbox"
         end
       end
 
       it "should have the correct recipients" do
         recipients = @message2.recipients
-        recipients.count.should==2
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
+        expect(recipients.count).to eq 2
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
       end
 
       it "should be associated to the same conversation" do
-        @message1.conversation.id.should==@message2.conversation.id
+        expect(@message1.conversation.id).to eq @message2.conversation.id
       end
     end
   end
@@ -202,8 +202,8 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message1.sender.id.should == @entity1.id
-        @message1.sender.class.should == @entity1.class
+        expect(@message1.sender.id).to eq @entity1.id
+        expect(@message1.sender.class).to eq @entity1.class
         assert @message1.body.eql?"Body"
         assert @message1.subject.eql?"Subject"
       end
@@ -213,25 +213,25 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message1).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message1).first
         assert mail
         if mail
-          mail.is_read.should==false
-          mail.trashed.should==false
-          mail.mailbox_type.should=="inbox"
+          expect(mail.is_read).to be false
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "inbox"
         end
       end
 
       it "should have the correct recipients" do
         recipients = @message1.recipients
-        recipients.count.should==2
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
+        expect(recipients.count).to eq 2
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
       end
 
     end
@@ -245,8 +245,8 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message2.sender.id.should == @entity2.id
-        @message2.sender.class.should == @entity2.class
+        expect(@message2.sender.id).to eq @entity2.id
+        expect(@message2.sender.class).to eq @entity2.class
         assert @message2.body.eql?"Reply body"
         assert @message2.subject.eql?"Subject"
       end
@@ -256,29 +256,29 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==false
-          mail.trashed.should==false
-          mail.mailbox_type.should=="inbox"
+          expect(mail.is_read).to be false
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "inbox"
         end
       end
 
       it "should have the correct recipients" do
         recipients = @message2.recipients
-        recipients.count.should==2
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
+        expect(recipients.count).to eq 2
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
       end
 
       it "should be associated to the same conversation" do
-        @message1.conversation.id.should==@message2.conversation.id
+        expect(@message1.conversation.id).to eq @message2.conversation.id
       end
     end
 
@@ -291,8 +291,8 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message2.sender.id.should == @entity2.id
-        @message2.sender.class.should == @entity2.class
+        expect(@message2.sender.id).to eq @entity2.id
+        expect(@message2.sender.class).to eq @entity2.class
         assert @message2.body.eql?"Reply body"
         assert @message2.subject.eql?"Subject"
       end
@@ -302,29 +302,29 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==false
-          mail.trashed.should==false
-          mail.mailbox_type.should=="inbox"
+          expect(mail.is_read).to be false
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "inbox"
         end
       end
 
       it "should have the correct recipients" do
         recipients = @message2.recipients
-        recipients.count.should==2
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
+        expect(recipients.count).to eq 2
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
       end
 
       it "should be associated to the same conversation" do
-        @message1.conversation.id.should==@message2.conversation.id
+        expect(@message1.conversation.id).to eq @message2.conversation.id
       end
     end
     describe "message replying to conversation (TODO)" do
@@ -368,8 +368,8 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message1.sender.id.should == @entity1.id
-        @message1.sender.class.should == @entity1.class
+        expect(@message1.sender.id).to eq @entity1.id
+        expect(@message1.sender.class).to eq @entity1.class
         assert @message1.body.eql?"Body"
         assert @message1.subject.eql?"Subject"
       end
@@ -379,28 +379,28 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message1).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mails
         @recipients.each do |receiver|
           mail = Mailboxer::Receipt.recipient(receiver).notification(@message1).first
           assert mail
           if mail
-            mail.is_read.should==false
-            mail.trashed.should==false
-            mail.mailbox_type.should=="inbox"
+            expect(mail.is_read).to be false
+            expect(mail.trashed).to be false
+            expect(mail.mailbox_type).to eq "inbox"
           end
         end
       end
 
       it "should have the correct recipients" do
         recipients = @message1.recipients
-        recipients.count.should==3
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
-        recipients.count(@entity3).should==1
+        expect(recipients.count).to eq 3
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
+        expect(recipients.count(@entity3)).to eq 1
       end
 
     end
@@ -414,8 +414,8 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message2.sender.id.should == @entity2.id
-        @message2.sender.class.should == @entity2.class
+        expect(@message2.sender.id).to eq @entity2.id
+        expect(@message2.sender.class).to eq @entity2.class
         assert @message2.body.eql?"Reply body"
         assert @message2.subject.eql?"Subject"
       end
@@ -425,17 +425,17 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==false
-          mail.trashed.should==false
-          mail.mailbox_type.should=="inbox"
+          expect(mail.is_read).to be false
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "inbox"
         end
 
         #No Receiver, No Mail
@@ -446,14 +446,14 @@ describe "Messages And Mailboxer::Receipts" do
 
       it "should have the correct recipients" do
         recipients = @message2.recipients
-        recipients.count.should==2
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
-        recipients.count(@entity3).should==0
+        expect(recipients.count).to eq 2
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
+        expect(recipients.count(@entity3)).to eq 0
       end
 
       it "should be associated to the same conversation" do
-        @message1.conversation.id.should==@message2.conversation.id
+        expect(@message1.conversation.id).to eq @message2.conversation.id
       end
     end
 
@@ -470,8 +470,8 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message2.sender.id.should == @entity2.id
-        @message2.sender.class.should == @entity2.class
+        expect(@message2.sender.id).to eq @entity2.id
+        expect(@message2.sender.class).to eq @entity2.class
         assert @message2.body.eql?"Reply body"
         assert @message2.subject.eql?"Subject"
       end
@@ -481,32 +481,32 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mails
         @recipients2.each do |receiver|
           mail = Mailboxer::Receipt.recipient(receiver).notification(@message2).first
           assert mail
           if mail
-            mail.is_read.should==false
-            mail.trashed.should==false
-            mail.mailbox_type.should=="inbox"
+            expect(mail.is_read).to be false
+            expect(mail.trashed).to be false
+            expect(mail.mailbox_type).to eq "inbox"
           end
         end
       end
 
       it "should have the correct recipients" do
         recipients = @message2.recipients
-        recipients.count.should==3
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
-        recipients.count(@entity3).should==1
+        expect(recipients.count).to eq 3
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
+        expect(recipients.count(@entity3)).to eq 1
       end
 
       it "should be associated to the same conversation" do
-        @message1.conversation.id.should==@message2.conversation.id
+        expect(@message1.conversation.id).to eq @message2.conversation.id
       end
     end
     describe "message replying to conversation (TODO)" do
@@ -550,8 +550,8 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message1.sender.id.should == @entity1.id
-        @message1.sender.class.should == @entity1.class
+        expect(@message1.sender.id).to eq @entity1.id
+        expect(@message1.sender.class).to eq @entity1.class
         assert @message1.body.eql?"Body"
         assert @message1.subject.eql?"Subject"
       end
@@ -561,28 +561,28 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message1).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mails
         @recipients.each do |receiver|
           mail = Mailboxer::Receipt.recipient(receiver).notification(@message1).first
           assert mail
           if mail
-            mail.is_read.should==false
-            mail.trashed.should==false
-            mail.mailbox_type.should=="inbox"
+            expect(mail.is_read).to be false
+            expect(mail.trashed).to be false
+            expect(mail.mailbox_type).to eq "inbox"
           end
         end
       end
 
       it "should have the correct recipients" do
         recipients = @message1.recipients
-        recipients.count.should==3
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
-        recipients.count(@entity3).should==1
+        expect(recipients.count).to eq 3
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
+        expect(recipients.count(@entity3)).to eq 1
       end
 
     end
@@ -596,8 +596,8 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message2.sender.id.should == @entity2.id
-        @message2.sender.class.should == @entity2.class
+        expect(@message2.sender.id).to eq @entity2.id
+        expect(@message2.sender.class).to eq @entity2.class
         assert @message2.body.eql?"Reply body"
         assert @message2.subject.eql?"Subject"
       end
@@ -607,17 +607,17 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==false
-          mail.trashed.should==false
-          mail.mailbox_type.should=="inbox"
+          expect(mail.is_read).to be false
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "inbox"
         end
 
         #No Receiver, No Mail
@@ -628,14 +628,14 @@ describe "Messages And Mailboxer::Receipts" do
 
       it "should have the correct recipients" do
         recipients = @message2.recipients
-        recipients.count.should==2
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
-        recipients.count(@entity3).should==0
+        expect(recipients.count).to eq 2
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
+        expect(recipients.count(@entity3)).to eq 0
       end
 
       it "should be associated to the same conversation" do
-        @message1.conversation.id.should==@message2.conversation.id
+        expect(@message1.conversation.id).to eq @message2.conversation.id
       end
     end
 
@@ -652,8 +652,8 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message2.sender.id.should == @entity2.id
-        @message2.sender.class.should == @entity2.class
+        expect(@message2.sender.id).to eq @entity2.id
+        expect(@message2.sender.class).to eq @entity2.class
         assert @message2.body.eql?"Reply body"
         assert @message2.subject.eql?"Subject"
       end
@@ -663,32 +663,32 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mails
         @recipients2.each do |receiver|
           mail = Mailboxer::Receipt.recipient(receiver).notification(@message2).first
           assert mail
           if mail
-            mail.is_read.should==false
-            mail.trashed.should==false
-            mail.mailbox_type.should=="inbox"
+            expect(mail.is_read).to be false
+            expect(mail.trashed).to be false
+            expect(mail.mailbox_type).to eq "inbox"
           end
         end
       end
 
       it "should have the correct recipients" do
         recipients = @message2.recipients
-        recipients.count.should==3
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
-        recipients.count(@entity3).should==1
+        expect(recipients.count).to eq 3
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
+        expect(recipients.count(@entity3)).to eq 1
       end
 
       it "should be associated to the same conversation" do
-        @message1.conversation.id.should==@message2.conversation.id
+        expect(@message1.conversation.id).to eq @message2.conversation.id
       end
     end
 
@@ -729,8 +729,8 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message1.sender.id.should == @entity1.id
-        @message1.sender.class.should == @entity1.class
+        expect(@message1.sender.id).to eq @entity1.id
+        expect(@message1.sender.class).to eq @entity1.class
         assert @message1.body.eql?"Body"
         assert @message1.subject.eql?"Subject"
       end
@@ -740,25 +740,25 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message1).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message1).first
         assert mail
         if mail
-          mail.is_read.should==false
-          mail.trashed.should==false
-          mail.mailbox_type.should=="inbox"
+          expect(mail.is_read).to be false
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "inbox"
         end
       end
 
       it "should have the correct recipients" do
         recipients = @message1.recipients
-        recipients.count.should==2
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
+        expect(recipients.count).to eq 2
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
       end
 
     end
@@ -772,8 +772,8 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message2.sender.id.should == @entity2.id
-        @message2.sender.class.should == @entity2.class
+        expect(@message2.sender.id).to eq @entity2.id
+        expect(@message2.sender.class).to eq @entity2.class
         assert @message2.body.eql?"Reply body"
         assert @message2.subject.eql?"Subject"
       end
@@ -783,29 +783,29 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==false
-          mail.trashed.should==false
-          mail.mailbox_type.should=="inbox"
+          expect(mail.is_read).to be false
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "inbox"
         end
       end
 
       it "should have the correct recipients" do
         recipients = @message2.recipients
-        recipients.count.should==2
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
+        expect(recipients.count).to eq 2
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
       end
 
       it "should be associated to the same conversation" do
-        @message1.conversation.id.should==@message2.conversation.id
+        expect(@message1.conversation.id).to eq @message2.conversation.id
       end
     end
 
@@ -818,8 +818,8 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message2.sender.id.should == @entity2.id
-        @message2.sender.class.should == @entity2.class
+        expect(@message2.sender.id).to eq @entity2.id
+        expect(@message2.sender.class).to eq @entity2.class
         assert @message2.body.eql?"Reply body"
         assert @message2.subject.eql?"Subject"
       end
@@ -829,29 +829,29 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==false
-          mail.trashed.should==false
-          mail.mailbox_type.should=="inbox"
+          expect(mail.is_read).to be false
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "inbox"
         end
       end
 
       it "should have the correct recipients" do
         recipients = @message2.recipients
-        recipients.count.should==2
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
+        expect(recipients.count).to eq 2
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
       end
 
       it "should be associated to the same conversation" do
-        @message1.conversation.id.should==@message2.conversation.id
+        expect(@message1.conversation.id).to eq @message2.conversation.id
       end
     end
     describe "message replying to conversation" do
@@ -863,8 +863,8 @@ describe "Messages And Mailboxer::Receipts" do
       end
 
       it "should create proper message" do
-        @message2.sender.id.should == @entity2.id
-        @message2.sender.class.should == @entity2.class
+        expect(@message2.sender.id).to eq @entity2.id
+        expect(@message2.sender.class).to eq @entity2.class
         assert @message2.body.eql?"Reply body"
         assert @message2.subject.eql?"Subject"
       end
@@ -874,29 +874,29 @@ describe "Messages And Mailboxer::Receipts" do
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==true
-          mail.trashed.should==false
-          mail.mailbox_type.should=="sentbox"
+          expect(mail.is_read).to be true
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "sentbox"
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
         assert mail
         if mail
-          mail.is_read.should==false
-          mail.trashed.should==false
-          mail.mailbox_type.should=="inbox"
+          expect(mail.is_read).to be false
+          expect(mail.trashed).to be false
+          expect(mail.mailbox_type).to eq "inbox"
         end
       end
 
       it "should have the correct recipients" do
         recipients = @message2.recipients
-        recipients.count.should==2
-        recipients.count(@entity1).should==1
-        recipients.count(@entity2).should==1
+        expect(recipients.count).to eq 2
+        expect(recipients.count(@entity1)).to eq 1
+        expect(recipients.count(@entity2)).to eq 1
       end
 
       it "should be associated to the same conversation" do
-        @message1.conversation.id.should==@message2.conversation.id
+        expect(@message1.conversation.id).to eq @message2.conversation.id
       end
     end
   end

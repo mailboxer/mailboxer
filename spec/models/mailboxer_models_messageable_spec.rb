@@ -12,15 +12,15 @@ describe "Mailboxer::Models::Messageable through User" do
   end
 
   it 'should return the inbox count' do
-    @entity1.unread_inbox_count.should == 0
+    expect(@entity1.unread_inbox_count).to eq 0
     @entity2.send_message(@entity1,"Body","Subject")
     @entity2.send_message(@entity1,"Body","Subject")
-    @entity1.unread_inbox_count.should == 2
+    expect(@entity1.unread_inbox_count).to eq 2
     @entity1.receipts.first.mark_as_read
-    @entity1.unread_inbox_count.should == 1
+    expect(@entity1.unread_inbox_count).to eq 1
     @entity2.send_message(@entity1,"Body","Subject")
     @entity2.send_message(@entity1,"Body","Subject")
-    @entity1.unread_inbox_count.should == 3
+    expect(@entity1.unread_inbox_count).to eq 3
   end
 
   it "should be able to send a message" do
@@ -39,62 +39,62 @@ describe "Mailboxer::Models::Messageable through User" do
 
   it "should be able to unread an owned Mailboxer::Receipt (mark as unread)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
-    @receipt.is_read.should==true
+    expect(@receipt.is_read).to eq true
     @entity1.mark_as_unread(@receipt)
-    @receipt.is_read.should==false
+    expect(@receipt.is_read).to eq false
   end
 
   it "should be able to read an owned Mailboxer::Receipt (mark as read)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
-    @receipt.is_read.should==true
+    expect(@receipt.is_read).to eq true
     @entity1.mark_as_unread(@receipt)
     @entity1.mark_as_read(@receipt)
-    @receipt.is_read.should==true
+    expect(@receipt.is_read).to eq true
   end
 
   it "should not be able to unread a not owned Mailboxer::Receipt (mark as unread)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
-    @receipt.is_read.should==true
+    expect(@receipt.is_read).to eq true
     @entity2.mark_as_unread(@receipt) #Should not change
-    @receipt.is_read.should==true
+    expect(@receipt.is_read).to eq true
   end
 
   it "should not be able to read a not owned Mailboxer::Receipt (mark as read)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
-    @receipt.is_read.should==true
+    expect(@receipt.is_read).to eq true
     @entity1.mark_as_unread(@receipt) #From read to unread
     @entity2.mark_as_read(@receipt) #Should not change
-    @receipt.is_read.should==false
+    expect(@receipt.is_read).to eq false
   end
 
   it "should be able to trash an owned Mailboxer::Receipt" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
     @entity1.trash(@receipt)
-    @receipt.trashed.should==true
+    expect(@receipt.trashed).to eq true
   end
 
   it "should be able to untrash an owned Mailboxer::Receipt" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
     @entity1.trash(@receipt)
     @entity1.untrash(@receipt)
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
   end
 
   it "should not be able to trash a not owned Mailboxer::Receipt" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
     @entity2.trash(@receipt) #Should not change
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
   end
 
   it "should not be able to untrash a not owned Mailboxer::Receipt" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
     @entity1.trash(@receipt) #From read to unread
     @entity2.untrash(@receipt) #Should not change
-    @receipt.trashed.should==true
+    expect(@receipt.trashed).to eq true
   end
 
 
@@ -102,69 +102,69 @@ describe "Mailboxer::Models::Messageable through User" do
   it "should be able to unread an owned Message (mark as unread)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @message = @receipt.message
-    @receipt.is_read.should==true
+    expect(@receipt.is_read).to eq true
     @entity1.mark_as_unread(@message)
-    @message.receipt_for(@entity1).first.is_read.should==false
+    expect(@message.receipt_for(@entity1).first.is_read).to eq false
   end
 
   it "should be able to read an owned Message (mark as read)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @message = @receipt.message
-    @receipt.is_read.should==true
+    expect(@receipt.is_read).to eq true
     @entity1.mark_as_unread(@message)
     @entity1.mark_as_read(@message)
-    @message.receipt_for(@entity1).first.is_read.should==true
+    expect(@message.receipt_for(@entity1).first.is_read).to eq true
   end
 
   it "should not be able to unread a not owned Message (mark as unread)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @message = @receipt.message
-    @receipt.is_read.should==true
+    expect(@receipt.is_read).to eq true
     @entity2.mark_as_unread(@message) #Should not change
-    @message.receipt_for(@entity1).first.is_read.should==true
+    expect(@message.receipt_for(@entity1).first.is_read).to eq true
   end
 
   it "should not be able to read a not owned Message (mark as read)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @message = @receipt.message
-    @receipt.is_read.should==true
+    expect(@receipt.is_read).to eq true
     @entity1.mark_as_unread(@message) #From read to unread
     @entity2.mark_as_read(@message) #Should not change
-    @message.receipt_for(@entity1).first.is_read.should==false
+    expect(@message.receipt_for(@entity1).first.is_read).to eq false
   end
 
   it "should be able to trash an owned Message" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @message = @receipt.message
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
     @entity1.trash(@message)
-    @message.receipt_for(@entity1).first.trashed.should==true
+    expect(@message.receipt_for(@entity1).first.trashed).to eq true
   end
 
   it "should be able to untrash an owned Message" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @message = @receipt.message
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
     @entity1.trash(@message)
     @entity1.untrash(@message)
-    @message.receipt_for(@entity1).first.trashed.should==false
+    expect(@message.receipt_for(@entity1).first.trashed).to eq false
   end
 
   it "should not be able to trash a not owned Message" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @message = @receipt.message
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
     @entity2.trash(@message) #Should not change
-    @message.receipt_for(@entity1).first.trashed.should==false
+    expect(@message.receipt_for(@entity1).first.trashed).to eq false
   end
 
   it "should not be able to untrash a not owned Message" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @message = @receipt.message
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
     @entity1.trash(@message) #From read to unread
     @entity2.untrash(@message) #Should not change
-    @message.receipt_for(@entity1).first.trashed.should==true
+    expect(@message.receipt_for(@entity1).first.trashed).to eq true
   end
 
 
@@ -172,69 +172,69 @@ describe "Mailboxer::Models::Messageable through User" do
   it "should be able to unread an owned Notification (mark as unread)" do
     @receipt = @entity1.notify("Subject","Body")
     @notification = @receipt.notification
-    @receipt.is_read.should==false
+    expect(@receipt.is_read).to eq false
     @entity1.mark_as_read(@notification)
     @entity1.mark_as_unread(@notification)
-    @notification.receipt_for(@entity1).first.is_read.should==false
+    expect(@notification.receipt_for(@entity1).first.is_read).to eq false
   end
 
   it "should be able to read an owned Notification (mark as read)" do
     @receipt = @entity1.notify("Subject","Body")
     @notification = @receipt.notification
-    @receipt.is_read.should==false
+    expect(@receipt.is_read).to eq false
     @entity1.mark_as_read(@notification)
-    @notification.receipt_for(@entity1).first.is_read.should==true
+    expect(@notification.receipt_for(@entity1).first.is_read).to eq true
   end
 
   it "should not be able to unread a not owned Notification (mark as unread)" do
     @receipt = @entity1.notify("Subject","Body")
     @notification = @receipt.notification
-    @receipt.is_read.should==false
+    expect(@receipt.is_read).to eq false
     @entity1.mark_as_read(@notification)
     @entity2.mark_as_unread(@notification)
-    @notification.receipt_for(@entity1).first.is_read.should==true
+    expect(@notification.receipt_for(@entity1).first.is_read).to eq true
   end
 
   it "should not be able to read a not owned Notification (mark as read)" do
     @receipt = @entity1.notify("Subject","Body")
     @notification = @receipt.notification
-    @receipt.is_read.should==false
+    expect(@receipt.is_read).to eq false
     @entity2.mark_as_read(@notification)
-    @notification.receipt_for(@entity1).first.is_read.should==false
+    expect(@notification.receipt_for(@entity1).first.is_read).to eq false
   end
 
   it "should be able to trash an owned Notification" do
     @receipt = @entity1.notify("Subject","Body")
     @notification = @receipt.notification
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
     @entity1.trash(@notification)
-    @notification.receipt_for(@entity1).first.trashed.should==true
+    expect(@notification.receipt_for(@entity1).first.trashed).to eq true
   end
 
   it "should be able to untrash an owned Notification" do
     @receipt = @entity1.notify("Subject","Body")
     @notification = @receipt.notification
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
     @entity1.trash(@notification)
     @entity1.untrash(@notification)
-    @notification.receipt_for(@entity1).first.trashed.should==false
+    expect(@notification.receipt_for(@entity1).first.trashed).to eq false
   end
 
   it "should not be able to trash a not owned Notification" do
     @receipt = @entity1.notify("Subject","Body")
     @notification = @receipt.notification
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
     @entity2.trash(@notification)
-    @notification.receipt_for(@entity1).first.trashed.should==false
+    expect(@notification.receipt_for(@entity1).first.trashed).to eq false
   end
 
   it "should not be able to untrash a not owned Notification" do
     @receipt = @entity1.notify("Subject","Body")
     @notification = @receipt.notification
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
     @entity1.trash(@notification)
     @entity2.untrash(@notification)
-    @notification.receipt_for(@entity1).first.trashed.should==true
+    expect(@notification.receipt_for(@entity1).first.trashed).to eq true
   end
 
 
@@ -242,75 +242,75 @@ describe "Mailboxer::Models::Messageable through User" do
   it "should be able to unread an owned Conversation (mark as unread)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @conversation = @receipt.conversation
-    @receipt.is_read.should==true
+    expect(@receipt.is_read).to eq true
     @entity1.mark_as_unread(@conversation)
-    @conversation.receipts_for(@entity1).first.is_read.should==false
+    expect(@conversation.receipts_for(@entity1).first.is_read).to eq false
   end
 
   it "should be able to read an owned Conversation (mark as read)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @conversation = @receipt.conversation
-    @receipt.is_read.should==true
+    expect(@receipt.is_read).to eq true
     @entity1.mark_as_unread(@conversation)
     @entity1.mark_as_read(@conversation)
-    @conversation.receipts_for(@entity1).first.is_read.should==true
+    expect(@conversation.receipts_for(@entity1).first.is_read).to eq true
   end
 
   it "should not be able to unread a not owned Conversation (mark as unread)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @conversation = @receipt.conversation
-    @receipt.is_read.should==true
+    expect(@receipt.is_read).to eq true
     @entity2.mark_as_unread(@conversation)
-    @conversation.receipts_for(@entity1).first.is_read.should==true
+    expect(@conversation.receipts_for(@entity1).first.is_read).to eq true
   end
 
   it "should not be able to read a not owned Conversation (mark as read)" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @conversation = @receipt.conversation
-    @receipt.is_read.should==true
+    expect(@receipt.is_read).to eq true
     @entity1.mark_as_unread(@conversation)
     @entity2.mark_as_read(@conversation)
-    @conversation.receipts_for(@entity1).first.is_read.should==false
+    expect(@conversation.receipts_for(@entity1).first.is_read).to eq false
   end
 
   it "should be able to trash an owned Conversation" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @conversation = @receipt.conversation
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
     @entity1.trash(@conversation)
-    @conversation.receipts_for(@entity1).first.trashed.should==true
+    expect(@conversation.receipts_for(@entity1).first.trashed).to eq true
   end
 
   it "should be able to untrash an owned Conversation" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @conversation = @receipt.conversation
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
     @entity1.trash(@conversation)
     @entity1.untrash(@conversation)
-    @conversation.receipts_for(@entity1).first.trashed.should==false
+    expect(@conversation.receipts_for(@entity1).first.trashed).to eq false
   end
 
   it "should not be able to trash a not owned Conversation" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @conversation = @receipt.conversation
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
     @entity2.trash(@conversation)
-    @conversation.receipts_for(@entity1).first.trashed.should==false
+    expect(@conversation.receipts_for(@entity1).first.trashed).to eq false
   end
 
   it "should not be able to untrash a not owned Conversation" do
     @receipt = @entity1.send_message(@entity2,"Body","Subject")
     @conversation = @receipt.conversation
-    @receipt.trashed.should==false
+    expect(@receipt.trashed).to eq false
     @entity1.trash(@conversation)
     @entity2.untrash(@conversation)
-    @conversation.receipts_for(@entity1).first.trashed.should==true
+    expect(@conversation.receipts_for(@entity1).first.trashed).to eq true
   end
 
   it "should be able to read attachment" do
     @receipt = @entity1.send_message(@entity2, "Body", "Subject", nil, File.open('spec/testfile.txt'))
     @conversation = @receipt.conversation
-    @conversation.messages.first.attachment_identifier.should=='testfile.txt'
+    expect(@conversation.messages.first.attachment_identifier).to eq 'testfile.txt'
   end
 
   it "should be the same message time as passed" do
@@ -319,10 +319,10 @@ describe "Mailboxer::Models::Messageable through User" do
     # We're going to compare the string representation, because ActiveSupport::TimeWithZone
     # has microsecond precision in ruby, but some databases don't support this level of precision.
     expected = message_time.utc.to_s
-    receipt.message.created_at.utc.to_s.should == expected
-    receipt.message.updated_at.utc.to_s.should == expected
-    receipt.message.conversation.created_at.utc.to_s.should == expected
-    receipt.message.conversation.updated_at.utc.to_s.should == expected
+    expect(receipt.message.created_at.utc.to_s).to eq expected
+    expect(receipt.message.updated_at.utc.to_s).to eq expected
+    expect(receipt.message.conversation.created_at.utc.to_s).to eq expected
+    expect(receipt.message.conversation.updated_at.utc.to_s).to eq expected
   end
 
 end

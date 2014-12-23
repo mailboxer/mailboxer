@@ -18,67 +18,67 @@ describe Mailboxer::Notification do
     @entity1.notify("Subject", "Body")
 
     #Check getting ALL receipts
-    @entity1.mailbox.receipts.size.should==1
+    expect(@entity1.mailbox.receipts.size).to eq 1
     receipt      = @entity1.mailbox.receipts.first
     notification = receipt.notification
-    notification.subject.should=="Subject"
-    notification.body.should=="Body"
+    expect(notification.subject).to eq "Subject"
+    expect(notification.body).to eq "Body"
 
     #Check getting NOTIFICATION receipts only
-    @entity1.mailbox.notifications.size.should==1
+    expect(@entity1.mailbox.notifications.size).to eq 1
     notification = @entity1.mailbox.notifications.first
-    notification.subject.should=="Subject"
-    notification.body.should=="Body"
+    expect(notification.subject).to eq "Subject"
+    expect(notification.body).to eq "Body"
   end
 
   it "should be unread by default" do
     @entity1.notify("Subject", "Body")
-    @entity1.mailbox.receipts.size.should==1
+    expect(@entity1.mailbox.receipts.size).to eq 1
     notification = @entity1.mailbox.receipts.first.notification
-    notification.should be_is_unread(@entity1)
+    expect(notification).to be_is_unread(@entity1)
   end
 
   it "should be able to marked as read" do
     @entity1.notify("Subject", "Body")
-    @entity1.mailbox.receipts.size.should==1
+    expect(@entity1.mailbox.receipts.size).to eq 1
     notification = @entity1.mailbox.receipts.first.notification
     notification.mark_as_read(@entity1)
-    notification.should be_is_read(@entity1)
+    expect(notification).to be_is_read(@entity1)
   end
 
   it "should notify several users" do
     recipients = [@entity1,@entity2,@entity3]
     Mailboxer::Notification.notify_all(recipients,"Subject","Body")
     #Check getting ALL receipts
-    @entity1.mailbox.receipts.size.should==1
+    expect(@entity1.mailbox.receipts.size).to eq 1
     receipt      = @entity1.mailbox.receipts.first
     notification = receipt.notification
-    notification.subject.should=="Subject"
-    notification.body.should=="Body"
-    @entity2.mailbox.receipts.size.should==1
+    expect(notification.subject).to eq "Subject"
+    expect(notification.body).to eq "Body"
+    expect(@entity2.mailbox.receipts.size).to eq 1
     receipt      = @entity2.mailbox.receipts.first
     notification = receipt.notification
-    notification.subject.should=="Subject"
-    notification.body.should=="Body"
-    @entity3.mailbox.receipts.size.should==1
+    expect(notification.subject).to eq "Subject"
+    expect(notification.body).to eq "Body"
+    expect(@entity3.mailbox.receipts.size).to eq 1
     receipt      = @entity3.mailbox.receipts.first
     notification = receipt.notification
-    notification.subject.should=="Subject"
-    notification.body.should=="Body"
+    expect(notification.subject).to eq "Subject"
+    expect(notification.body).to eq "Body"
 
     #Check getting NOTIFICATION receipts only
-    @entity1.mailbox.notifications.size.should==1
+    expect(@entity1.mailbox.notifications.size).to eq 1
     notification = @entity1.mailbox.notifications.first
-    notification.subject.should=="Subject"
-    notification.body.should=="Body"
-    @entity2.mailbox.notifications.size.should==1
+    expect(notification.subject).to eq "Subject"
+    expect(notification.body).to eq "Body"
+    expect(@entity2.mailbox.notifications.size).to eq 1
     notification = @entity2.mailbox.notifications.first
-    notification.subject.should=="Subject"
-    notification.body.should=="Body"
-    @entity3.mailbox.notifications.size.should==1
+    expect(notification.subject).to eq "Subject"
+    expect(notification.body).to eq "Body"
+    expect(@entity3.mailbox.notifications.size).to eq 1
     notification = @entity3.mailbox.notifications.first
-    notification.subject.should=="Subject"
-    notification.body.should=="Body"
+    expect(notification.subject).to eq "Subject"
+    expect(notification.body).to eq "Body"
 
   end
 
@@ -86,17 +86,17 @@ describe Mailboxer::Notification do
     Mailboxer::Notification.notify_all(@entity1,"Subject","Body")
 
     #Check getting ALL receipts
-    @entity1.mailbox.receipts.size.should==1
+    expect(@entity1.mailbox.receipts.size).to eq 1
     receipt      = @entity1.mailbox.receipts.first
     notification = receipt.notification
-    notification.subject.should=="Subject"
-    notification.body.should=="Body"
+    expect(notification.subject).to eq "Subject"
+    expect(notification.body).to eq "Body"
 
     #Check getting NOTIFICATION receipts only
-    @entity1.mailbox.notifications.size.should==1
+    expect(@entity1.mailbox.notifications.size).to eq 1
     notification = @entity1.mailbox.notifications.first
-    notification.subject.should=="Subject"
-    notification.body.should=="Body"
+    expect(notification.subject).to eq "Subject"
+    expect(notification.body).to eq "Body"
   end
 
   describe "scopes" do
@@ -107,21 +107,21 @@ describe Mailboxer::Notification do
       it "finds unread notifications" do
         unread_notification = scope_user.notify("Body", "Subject").notification
         notification.mark_as_read(scope_user)
-        Mailboxer::Notification.unread.last.should == unread_notification
+        expect(Mailboxer::Notification.unread.last).to eq unread_notification
       end
     end
 
     describe ".expired" do
       it "finds expired notifications" do
         notification.update_attributes(expires: 1.day.ago)
-        scope_user.mailbox.notifications.expired.count.should eq(1)
+        expect(scope_user.mailbox.notifications.expired.count).to eq(1)
       end
     end
 
     describe ".unexpired" do
       it "finds unexpired notifications" do
         notification.update_attributes(expires: 1.day.from_now)
-        scope_user.mailbox.notifications.unexpired.count.should eq(1)
+        expect(scope_user.mailbox.notifications.unexpired.count).to eq(1)
       end
     end
   end
@@ -131,11 +131,11 @@ describe Mailboxer::Notification do
 
     describe "when the notification is already expired" do
       before do
-        subject.stub(:expired? => true)
+        allow(subject).to receive(:expired?).and_return(true)
       end
       it 'should not update the expires attribute' do
-        subject.should_not_receive :expires=
-        subject.should_not_receive :save
+        expect(subject).not_to receive :expires=
+        expect(subject).not_to receive :save
         subject.expire
       end
     end
@@ -144,15 +144,15 @@ describe Mailboxer::Notification do
       let(:now) { Time.now }
       let(:one_second_ago) { now - 1.second }
       before do
-        Time.stub(:now => now)
-        subject.stub(:expired? => false)
+        allow(Time).to receive(:now).and_return(now)
+        allow(subject).to receive(:expired?).and_return(false)
       end
       it 'should update the expires attribute' do
-        subject.should_receive(:expires=).with(one_second_ago)
+        expect(subject).to receive(:expires=).with(one_second_ago)
         subject.expire
       end
       it 'should not save the record' do
-        subject.should_not_receive :save
+        expect(subject).not_to receive :save
         subject.expire
       end
     end
@@ -164,11 +164,11 @@ describe Mailboxer::Notification do
 
     describe "when the notification is already expired" do
       before do
-        subject.stub(:expired? => true)
+        allow(subject).to receive(:expired?).and_return(true)
       end
       it 'should not call expire' do
-        subject.should_not_receive :expire
-        subject.should_not_receive :save
+        expect(subject).not_to receive :expire
+        expect(subject).not_to receive :save
         subject.expire!
       end
     end
@@ -177,15 +177,15 @@ describe Mailboxer::Notification do
       let(:now) { Time.now }
       let(:one_second_ago) { now - 1.second }
       before do
-        Time.stub(:now => now)
-        subject.stub(:expired? => false)
+        allow(Time).to receive(:now).and_return(now)
+        allow(subject).to receive(:expired?).and_return(false)
       end
       it 'should call expire' do
-        subject.should_receive(:expire)
+        expect(subject).to receive(:expire)
         subject.expire!
       end
       it 'should save the record' do
-        subject.should_receive :save
+        expect(subject).to receive :save
         subject.expire!
       end
     end
@@ -195,35 +195,35 @@ describe Mailboxer::Notification do
   describe "#expired?" do
     subject { described_class.new }
     context "when the expiration date is in the past" do
-      before { subject.stub(:expires => Time.now - 1.second) }
+      before { allow(subject).to receive(:expires).and_return(Time.now - 1.second) }
       it 'should be expired' do
-        subject.expired?.should be true
+        expect(subject.expired?).to be true
       end
     end
 
     context "when the expiration date is now" do
       before {
         time = Time.now
-        Time.stub(:now => time)
-        subject.stub(:expires => time)
+        allow(Time).to receive(:now).and_return(time)
+        allow(subject).to receive(:expires).and_return(time)
       }
 
       it 'should not be expired' do
-        subject.expired?.should be false
+        expect(subject.expired?).to be false
       end
     end
 
     context "when the expiration date is in the future" do
-      before { subject.stub(:expires => Time.now + 1.second) }
+      before { allow(subject).to receive(:expires).and_return(Time.now + 1.second) }
       it 'should not be expired' do
-        subject.expired?.should be false
+        expect(subject.expired?).to be false
       end
     end
 
     context "when the expiration date is not set" do
-      before {subject.stub(:expires => nil)}
+      before { allow(subject).to receive(:expires).and_return(nil) }
       it 'should not be expired' do
-        subject.expired?.should be false
+        expect(subject.expired?).to be false
       end
     end
 

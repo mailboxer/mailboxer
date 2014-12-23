@@ -21,71 +21,71 @@ describe Mailboxer::Mailbox do
 
     assert @entity1.mailbox.conversations
 
-    @entity1.mailbox.conversations.to_a.count.should==4
-        @entity1.mailbox.conversations.to_a.count(@conversation).should==1
-        @entity1.mailbox.conversations.to_a.count(@conv2).should==1
-        @entity1.mailbox.conversations.to_a.count(@conv3).should==1
-        @entity1.mailbox.conversations.to_a.count(@conv4).should==1
+    expect(@entity1.mailbox.conversations.to_a.count).to eq 4
+        expect(@entity1.mailbox.conversations.to_a.count(@conversation)).to eq 1
+        expect(@entity1.mailbox.conversations.to_a.count(@conv2)).to eq 1
+        expect(@entity1.mailbox.conversations.to_a.count(@conv3)).to eq 1
+        expect(@entity1.mailbox.conversations.to_a.count(@conv4)).to eq 1
   end
 
   it "should return all mail" do
     assert @entity1.mailbox.receipts
-    @entity1.mailbox.receipts.count.should==4
-    @entity1.mailbox.receipts[0].should==Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[0]
-    @entity1.mailbox.receipts[1].should==Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[1]
-    @entity1.mailbox.receipts[2].should==Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[2]
-    @entity1.mailbox.receipts[3].should==Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[3]
+    expect(@entity1.mailbox.receipts.count).to eq 4
+    expect(@entity1.mailbox.receipts[0]).to eq Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[0]
+    expect(@entity1.mailbox.receipts[1]).to eq Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[1]
+    expect(@entity1.mailbox.receipts[2]).to eq Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[2]
+    expect(@entity1.mailbox.receipts[3]).to eq Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[3]
 
     assert @entity2.mailbox.receipts
-    @entity2.mailbox.receipts.count.should==4
-    @entity2.mailbox.receipts[0].should==Mailboxer::Receipt.recipient(@entity2).conversation(@conversation)[0]
-    @entity2.mailbox.receipts[1].should==Mailboxer::Receipt.recipient(@entity2).conversation(@conversation)[1]
-    @entity2.mailbox.receipts[2].should==Mailboxer::Receipt.recipient(@entity2).conversation(@conversation)[2]
-    @entity2.mailbox.receipts[3].should==Mailboxer::Receipt.recipient(@entity2).conversation(@conversation)[3]
+    expect(@entity2.mailbox.receipts.count).to eq 4
+    expect(@entity2.mailbox.receipts[0]).to eq Mailboxer::Receipt.recipient(@entity2).conversation(@conversation)[0]
+    expect(@entity2.mailbox.receipts[1]).to eq Mailboxer::Receipt.recipient(@entity2).conversation(@conversation)[1]
+    expect(@entity2.mailbox.receipts[2]).to eq Mailboxer::Receipt.recipient(@entity2).conversation(@conversation)[2]
+    expect(@entity2.mailbox.receipts[3]).to eq Mailboxer::Receipt.recipient(@entity2).conversation(@conversation)[3]
   end
 
   it "should return sentbox" do
     assert @entity1.mailbox.receipts.inbox
-    @entity1.mailbox.receipts.sentbox.count.should==2
-    @entity1.mailbox.receipts.sentbox[0].should==@receipt1
-    @entity1.mailbox.receipts.sentbox[1].should==@receipt3
+    expect(@entity1.mailbox.receipts.sentbox.count).to eq 2
+    expect(@entity1.mailbox.receipts.sentbox[0]).to eq @receipt1
+    expect(@entity1.mailbox.receipts.sentbox[1]).to eq @receipt3
 
     assert @entity2.mailbox.receipts.inbox
-    @entity2.mailbox.receipts.sentbox.count.should==2
-    @entity2.mailbox.receipts.sentbox[0].should==@receipt2
-    @entity2.mailbox.receipts.sentbox[1].should==@receipt4
+    expect(@entity2.mailbox.receipts.sentbox.count).to eq 2
+    expect(@entity2.mailbox.receipts.sentbox[0]).to eq @receipt2
+    expect(@entity2.mailbox.receipts.sentbox[1]).to eq @receipt4
   end
 
   it "should return inbox" do
     assert @entity1.mailbox.receipts.inbox
-    @entity1.mailbox.receipts.inbox.count.should==2
-    @entity1.mailbox.receipts.inbox[0].should==Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[0]
-    @entity1.mailbox.receipts.inbox[1].should==Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[1]
+    expect(@entity1.mailbox.receipts.inbox.count).to eq 2
+    expect(@entity1.mailbox.receipts.inbox[0]).to eq Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[0]
+    expect(@entity1.mailbox.receipts.inbox[1]).to eq Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[1]
 
     assert @entity2.mailbox.receipts.inbox
-    @entity2.mailbox.receipts.inbox.count.should==2
-    @entity2.mailbox.receipts.inbox[0].should==Mailboxer::Receipt.recipient(@entity2).inbox.conversation(@conversation)[0]
-    @entity2.mailbox.receipts.inbox[1].should==Mailboxer::Receipt.recipient(@entity2).inbox.conversation(@conversation)[1]
+    expect(@entity2.mailbox.receipts.inbox.count).to eq 2
+    expect(@entity2.mailbox.receipts.inbox[0]).to eq Mailboxer::Receipt.recipient(@entity2).inbox.conversation(@conversation)[0]
+    expect(@entity2.mailbox.receipts.inbox[1]).to eq Mailboxer::Receipt.recipient(@entity2).inbox.conversation(@conversation)[1]
   end
 
   it "should understand the read option" do
-    @entity1.mailbox.inbox({:read => false}).count.should_not == 0
+    expect(@entity1.mailbox.inbox({:read => false}).count).not_to eq 0
     @conversation.mark_as_read(@entity1)
-    @entity1.mailbox.inbox({:read => false}).count.should == 0
+    expect(@entity1.mailbox.inbox({:read => false}).count).to eq 0
   end
 
   it "should return trashed mails" do
     @entity1.mailbox.receipts.move_to_trash
 
     assert @entity1.mailbox.receipts.trash
-    @entity1.mailbox.receipts.trash.count.should==4
-    @entity1.mailbox.receipts.trash[0].should==Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[0]
-    @entity1.mailbox.receipts.trash[1].should==Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[1]
-    @entity1.mailbox.receipts.trash[2].should==Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[2]
-    @entity1.mailbox.receipts.trash[3].should==Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[3]
+    expect(@entity1.mailbox.receipts.trash.count).to eq 4
+    expect(@entity1.mailbox.receipts.trash[0]).to eq Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[0]
+    expect(@entity1.mailbox.receipts.trash[1]).to eq Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[1]
+    expect(@entity1.mailbox.receipts.trash[2]).to eq Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[2]
+    expect(@entity1.mailbox.receipts.trash[3]).to eq Mailboxer::Receipt.recipient(@entity1).conversation(@conversation)[3]
 
     assert @entity2.mailbox.receipts.trash
-    @entity2.mailbox.receipts.trash.count.should==0
+    expect(@entity2.mailbox.receipts.trash.count).to eq 0
   end
 
   it "should delete trashed mails" do
@@ -93,49 +93,49 @@ describe Mailboxer::Mailbox do
     @entity1.mailbox.empty_trash
 
     assert @entity1.mailbox.receipts.trash
-    @entity1.mailbox.receipts.trash.count.should==0
+    expect(@entity1.mailbox.receipts.trash.count).to eq 0
 
     assert @entity2.mailbox.receipts
-    @entity2.mailbox.receipts.count.should==4
+    expect(@entity2.mailbox.receipts.count).to eq 4
 
     assert @entity2.mailbox.receipts.trash
-    @entity2.mailbox.receipts.trash.count.should==0
+    expect(@entity2.mailbox.receipts.trash.count).to eq 0
   end
 
   it "should deleted messages are not shown in inbox" do
     assert @entity1.mailbox.receipts.inbox
-    @entity1.mailbox.inbox.count.should==1
-    @entity1.mailbox.receipts.inbox[0].should==Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[0]
-    @entity1.mailbox.receipts.inbox[1].should==Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[1]
+    expect(@entity1.mailbox.inbox.count).to eq 1
+    expect(@entity1.mailbox.receipts.inbox[0]).to eq Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[0]
+    expect(@entity1.mailbox.receipts.inbox[1]).to eq Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[1]
 
     assert @entity1.mailbox.receipts.inbox.mark_as_deleted
-    @entity1.mailbox.inbox.count.should==0
+    expect(@entity1.mailbox.inbox.count).to eq 0
   end
 
   it "should deleted messages are not shown in sentbox" do
     assert @entity1.mailbox.receipts.inbox
-    @entity1.mailbox.receipts.sentbox.count.should==2
-    @entity1.mailbox.receipts.sentbox[0].should==@receipt1
-    @entity1.mailbox.receipts.sentbox[1].should==@receipt3
+    expect(@entity1.mailbox.receipts.sentbox.count).to eq 2
+    expect(@entity1.mailbox.receipts.sentbox[0]).to eq @receipt1
+    expect(@entity1.mailbox.receipts.sentbox[1]).to eq @receipt3
 
     assert @entity1.mailbox.receipts.sentbox.mark_as_deleted
-    @entity1.mailbox.sentbox.count.should==0
+    expect(@entity1.mailbox.sentbox.count).to eq 0
   end
 
   it "should reply for deleted messages return to inbox" do
     assert @entity1.mailbox.receipts.inbox
-    @entity1.mailbox.inbox.count.should==1
-    @entity1.mailbox.receipts.inbox[0].should==Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[0]
-    @entity1.mailbox.receipts.inbox[1].should==Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[1]
+    expect(@entity1.mailbox.inbox.count).to eq 1
+    expect(@entity1.mailbox.receipts.inbox[0]).to eq Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[0]
+    expect(@entity1.mailbox.receipts.inbox[1]).to eq Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[1]
 
     assert @entity1.mailbox.receipts.inbox.mark_as_deleted
-    @entity1.mailbox.inbox.count.should==0
+    expect(@entity1.mailbox.inbox.count).to eq 0
 
     @entity2.reply_to_all(@receipt1,"Reply body 1")
-    @entity1.mailbox.inbox.count.should==1
+    expect(@entity1.mailbox.inbox.count).to eq 1
 
     @entity2.reply_to_all(@receipt3,"Reply body 3")
-    @entity1.mailbox.inbox.count.should==1
+    expect(@entity1.mailbox.inbox.count).to eq 1
   end
 
   context "STI models" do
@@ -146,13 +146,13 @@ describe Mailboxer::Mailbox do
     end
 
     it "should add one to senders sentbox" do
-      @sti_entity1.mailbox.sentbox.count.should==1
-      @sti_entity1.mailbox.sentbox.should include(@sti_mail.conversation)
+      expect(@sti_entity1.mailbox.sentbox.count).to eq 1
+      expect(@sti_entity1.mailbox.sentbox).to include(@sti_mail.conversation)
     end
 
     it "should add one to recievers inbox" do
-      @sti_entity2.mailbox.inbox.count.should == 1
-      @sti_entity2.mailbox.inbox.should include(@sti_mail.conversation)
+      expect(@sti_entity2.mailbox.inbox.count).to eq 1
+      expect(@sti_entity2.mailbox.inbox).to include(@sti_mail.conversation)
     end
   end
 

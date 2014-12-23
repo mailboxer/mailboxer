@@ -20,15 +20,15 @@ describe Mailboxer::MailDispatcher do
       before { Mailboxer.mailer_wants_array = true  }
       after  { Mailboxer.mailer_wants_array = false }
       it 'sends collection' do
-        subject.should_receive(:send_email).with(recipients)
+        expect(subject).to receive(:send_email).with(recipients)
         subject.call
       end
     end
 
     context "mailer doesnt want array" do
       it 'sends collection' do
-        subject.should_not_receive(:send_email).with(recipient1) #email is blank
-        subject.should_receive(:send_email).with(recipient2)
+        expect(subject).not_to receive(:send_email).with(recipient1) #email is blank
+        expect(subject).to receive(:send_email).with(recipient2)
         subject.call
       end
     end
@@ -39,7 +39,7 @@ describe Mailboxer::MailDispatcher do
     let(:mailer) { double 'mailer' }
 
     before(:each) do
-      subject.stub(:mailer).and_return mailer
+      allow(subject).to receive(:mailer).and_return mailer
     end
 
     context "with custom_deliver_proc" do
@@ -48,7 +48,7 @@ describe Mailboxer::MailDispatcher do
       before { Mailboxer.custom_deliver_proc = my_proc }
       after  { Mailboxer.custom_deliver_proc = nil     }
       it "triggers proc" do
-        my_proc.should_receive(:call).with(mailer, mailable, recipient1)
+        expect(my_proc).to receive(:call).with(mailer, mailable, recipient1)
         subject.send :send_email, recipient1
       end
     end
@@ -57,8 +57,8 @@ describe Mailboxer::MailDispatcher do
       let(:email) { double :email }
 
       it "triggers standard deliver chain" do
-        mailer.should_receive(:send_email).with(mailable, recipient1).and_return email
-        email.should_receive :deliver
+        expect(mailer).to receive(:send_email).with(mailable, recipient1).and_return email
+        expect(email).to receive :deliver
 
         subject.send :send_email, recipient1
       end
@@ -99,8 +99,8 @@ describe Mailboxer::MailDispatcher do
       let(:conversation) { double 'conversation' }
       let(:mailable)     { double 'mailable', :conversation => conversation }
       before(:each) do
-        conversation.should_receive(:has_subscriber?).with(recipient1).and_return false
-        conversation.should_receive(:has_subscriber?).with(recipient2).and_return true
+        expect(conversation).to receive(:has_subscriber?).with(recipient1).and_return false
+        expect(conversation).to receive(:has_subscriber?).with(recipient2).and_return true
       end
 
       its(:filtered_recipients){ should eq [recipient2] }

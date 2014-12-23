@@ -19,20 +19,20 @@ describe Mailboxer::MessageMailer do
       end
 
       it "should send emails when should_email? is true (1 out of 3)" do
-        ActionMailer::Base.deliveries.should_not be_empty
-        ActionMailer::Base.deliveries.should have(1).item
+        expect(ActionMailer::Base.deliveries).not_to be_empty
+        expect(ActionMailer::Base.deliveries).to have(1).item
       end
 
       it "should send an email to user entity" do
-        sent_to?(entity1).should be true
+        expect(sent_to?(entity1)).to be true
       end
 
       it "shouldn't send an email to duck entity" do
-        sent_to?(entity2).should be false
+        expect(sent_to?(entity2)).to be false
       end
 
       it "shouldn't send an email to cylon entity" do
-        sent_to?(entity3).should be false
+        expect(sent_to?(entity3)).to be false
       end
     end
 
@@ -43,20 +43,20 @@ describe Mailboxer::MessageMailer do
       end
 
       it "should send emails when should_email? is true (1 out of 3)" do
-        ActionMailer::Base.deliveries.should_not be_empty
-        ActionMailer::Base.deliveries.should have(2).items
+        expect(ActionMailer::Base.deliveries).not_to be_empty
+        expect(ActionMailer::Base.deliveries).to have(2).items
       end
 
       it "should send an email to user entity" do
-        sent_to?(entity1).should be true
+        expect(sent_to?(entity1)).to be true
       end
 
       it "shouldn't send an email to duck entity" do
-        sent_to?(entity2).should be false
+        expect(sent_to?(entity2)).to be false
       end
 
       it "shouldn't send an email to cylon entity" do
-        sent_to?(entity3).should be false
+        expect(sent_to?(entity3)).to be false
       end
     end
   end
