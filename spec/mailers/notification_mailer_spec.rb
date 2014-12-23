@@ -9,8 +9,7 @@ describe Mailboxer::NotificationMailer do
   end
 
   it "should send emails when should_email? is true (2 out of 3)" do
-    ActionMailer::Base.deliveries.empty?.should==false
-    ActionMailer::Base.deliveries.size.should==2
+    expect(ActionMailer::Base.deliveries.size).to eq 2
   end
 
   it "should send an email to user entity" do
@@ -20,7 +19,7 @@ describe Mailboxer::NotificationMailer do
       temp = true
       end
     end
-    temp.should==true
+    expect(temp).to be true
   end
 
   it "should send an email to duck entity" do
@@ -30,7 +29,7 @@ describe Mailboxer::NotificationMailer do
       temp = true
       end
     end
-    temp.should==true
+    expect(temp).to be true
   end
 
   it "shouldn't send an email to cylon entity" do
@@ -40,7 +39,7 @@ describe Mailboxer::NotificationMailer do
       temp = true
       end
     end
-    temp.should==false
+    expect(temp).to be false
   end
 end
 
