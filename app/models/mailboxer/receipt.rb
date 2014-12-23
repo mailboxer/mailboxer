@@ -72,19 +72,12 @@ class Mailboxer::Receipt < ActiveRecord::Base
       update_receipts({:mailbox_type => :sentbox, :trashed => false}, options)
     end
 
-    #This methods helps to do a update_all with table joins, not currently supported by rails.
-    #According to the github ticket https://github.com/rails/rails/issues/522 it should be
-    #supported with 3.2.
-    def update_receipts(updates,options={})
+    def update_receipts(updates, options={})
       ids = where(options).map { |rcp| rcp.id }
       unless ids.empty?
-        conditions = [""].concat(ids)
-        condition = "id = ? "
-        ids.drop(1).each do
-          condition << "OR id = ? "
-        end
-        conditions[0] = condition
-        Mailboxer::Receipt.except(:where).except(:joins).where(conditions).update_all(updates)
+        sql = ids.map { "#{table_name}.id = ? " }.join(' OR ')
+        conditions = [sql].concat(ids)
+        Mailboxer::Receipt.where(conditions).update_all(updates)
       end
     end
   end
