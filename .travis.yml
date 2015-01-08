@@ -1,12 +1,24 @@
 language: ruby
+cache: bundler
+sudo: false
+
 rvm:
-  - 1.9.3
-  - 2.0.0
-  - jruby-19mode
+  - 2.1.4
+
+matrix:
+  include:
+    - rvm: 1.9.3
+      gemfile: gemfiles/rails4.1.gemfile
+    - rvm: 2.0
+      gemfile: gemfiles/rails4.1.gemfile
+    - rvm: jruby-19mode
+      gemfile: gemfiles/rails4.1.gemfile
+
 gemfile:
   - gemfiles/rails3.2.gemfile
   - gemfiles/rails4.0.gemfile
   - gemfiles/rails4.1.gemfile
+  - gemfiles/rails4.2.gemfile
 env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
