@@ -99,6 +99,16 @@ describe Mailboxer::Notification do
     notification.body.should=="Body"
   end
 
+  it "should not escape the HTML body" do
+    @entity1.notify("Subject", "<strong>Hello</strong>>_<")
+    @entity1.mailbox.receipts.size.should==1
+    receipt      = @entity1.mailbox.receipts.first
+    notification = receipt.notification
+    notification.subject.should=="Subject"
+    # Note: if we not unescapeHTML, the body will be <strong>Hello</strong>>_&lt;
+    notification.body.should=="<strong>Hello</strong>>_<"
+  end
+
   describe "scopes" do
     let(:scope_user) { FactoryGirl.create(:user) }
     let!(:notification) { scope_user.notify("Body", "Subject").notification }

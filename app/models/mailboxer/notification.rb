@@ -163,7 +163,7 @@ class Mailboxer::Notification < ActiveRecord::Base
   #Sanitizes the body and subject
   def clean
     self.subject = sanitize(subject) if subject
-    self.body    = sanitize(body)
+    # self.body    = sanitize(body)
   end
 
   #Returns notified_object. DEPRECATED
