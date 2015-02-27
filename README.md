@@ -142,7 +142,7 @@ end
 You may change whatever you want or need. For example:
 
 ```ruby
-config.email_method = :notifications_email
+config.email_method = :notification_email
 config.name_method = :display_name
 ```
 
