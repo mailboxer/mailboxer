@@ -99,6 +99,26 @@ describe Mailboxer::Notification do
     expect(notification.body).to eq "Body"
   end
 
+  it "should be able to specify a sender for a notification" do
+
+    Mailboxer::Notification.notify_all(@entity1,"Subject","Body", nil, true, nil, false, @entity3)
+
+    #Check getting ALL receipts
+    expect(@entity1.mailbox.receipts.size).to eq 1
+    receipt      = @entity1.mailbox.receipts.first
+    notification = receipt.notification
+    expect(notification.subject).to eq "Subject"
+    expect(notification.body).to eq "Body"
+    expect(notification.sender).to eq @entity3
+
+    #Check getting NOTIFICATION receipts only
+    expect(@entity1.mailbox.notifications.size).to eq 1
+    notification = @entity1.mailbox.notifications.first
+    expect(notification.subject).to eq "Subject"
+    expect(notification.body).to eq "Body"
+    expect(notification.sender).to eq @entity3
+  end
+
   describe "scopes" do
     let(:scope_user) { FactoryGirl.create(:user) }
     let!(:notification) { scope_user.notify("Body", "Subject").notification }

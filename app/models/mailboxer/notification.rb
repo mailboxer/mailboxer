@@ -33,13 +33,14 @@ class Mailboxer::Notification < ActiveRecord::Base
 
   class << self
     #Sends a Notification to all the recipients
-    def notify_all(recipients, subject, body, obj = nil, sanitize_text = true, notification_code=nil, send_mail=true)
+    def notify_all(recipients, subject, body, obj = nil, sanitize_text = true, notification_code=nil, send_mail=true, sender=nil)
       notification = Mailboxer::NotificationBuilder.new({
         :recipients        => recipients,
         :subject           => subject,
         :body              => body,
         :notified_object   => obj,
-        :notification_code => notification_code
+        :notification_code => notification_code,
+        :sender            => sender
       }).build
 
       notification.deliver sanitize_text, send_mail
