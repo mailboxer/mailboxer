@@ -25,7 +25,7 @@ Mailboxer was born from the great, but outdated, code from [lpsergi /
 acts*as*messageable](https://github.com/psergi/acts_as_messageable).
 
 We are now working to make exhaustive documentation and some wiki
-pages in order to make it even easier to use the gem to its full potencial.
+pages in order to make it even easier to use the gem to its full potential.
 Please, give us some time if you find something missing or [ask for
 it](https://github.com/ging/mailboxer/issues).  You can also find us on the [Gitter room for this repo](https://gitter.im/mailboxer/mailboxer).  Join us there to talk.
 
