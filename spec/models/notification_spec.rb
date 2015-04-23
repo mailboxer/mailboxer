@@ -46,6 +46,13 @@ describe Mailboxer::Notification do
     expect(notification).to be_is_read(@entity1)
   end
 
+  it "should be able to specify a sender for a notification" do
+    @entity1.notify("Subject", "Body", nil, true, nil, true, @entity3)
+    expect(@entity1.mailbox.receipts.size).to eq 1
+    notification = @entity1.mailbox.receipts.first.notification
+    expect(notification.sender).to eq(@entity3)
+  end
+
   it "should notify several users" do
     recipients = [@entity1,@entity2,@entity3]
     Mailboxer::Notification.notify_all(recipients,"Subject","Body")
@@ -97,6 +104,25 @@ describe Mailboxer::Notification do
     notification = @entity1.mailbox.notifications.first
     expect(notification.subject).to eq "Subject"
     expect(notification.body).to eq "Body"
+  end
+
+  it "should be able to specify a sender for a notification" do
+    Mailboxer::Notification.notify_all(@entity1,"Subject","Body", nil, true, nil, false, @entity3)
+
+    #Check getting ALL receipts
+    expect(@entity1.mailbox.receipts.size).to eq 1
+    receipt      = @entity1.mailbox.receipts.first
+    notification = receipt.notification
+    expect(notification.subject).to eq "Subject"
+    expect(notification.body).to eq "Body"
+    expect(notification.sender).to eq @entity3
+
+    #Check getting NOTIFICATION receipts only
+    expect(@entity1.mailbox.notifications.size).to eq 1
+    notification = @entity1.mailbox.notifications.first
+    expect(notification.subject).to eq "Subject"
+    expect(notification.body).to eq "Body"
+    expect(notification.sender).to eq @entity3
   end
 
   describe "scopes" do
