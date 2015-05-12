@@ -82,7 +82,7 @@ $ rake db:migrate
 
 ### Emails
 
-We are now adding support for sending emails when a Notification or a Message is sent to one or more recipients. You should modify the mailboxer initializer (/config/initializer/mailboxer.rb) to edit these settings.
+We are now adding support for sending emails when a Notification or a Message is sent to one or more recipients. You should modify the mailboxer initializer (/config/initializer/mailboxer.rb) to edit these settings:
 
 ```ruby
 Mailboxer.setup do |config|
@@ -94,7 +94,7 @@ Mailboxer.setup do |config|
 end
 ```
 
-You can change the way in which emails are delivered by specifying a custom implementation of notification and message mailers
+You can change the way in which emails are delivered by specifying a custom implementation of notification and message mailers:
 
 ```ruby
 Mailboxer.setup do |config|
@@ -160,7 +160,7 @@ class User < ActiveRecord::Base
 end
 ```
 
-You are not limited to the User model. You can use Mailboxer in any other model and use it in serveral different models. If you have ducks and cylons in your application and you want to exchange messages as if they were the same, just add `acts_as_messageable` to each one and you will be able to send duck-duck, duck-cylon, cylon-duck and cylon-cylon messages. Of course, you can extend it for as many classes as you need.
+You are not limited to the User model. You can use Mailboxer in any other model and use it in several different models. If you have ducks and cylons in your application and you want to exchange messages as if they were the same, just add `acts_as_messageable` to each one and you will be able to send duck-duck, duck-cylon, cylon-duck and cylon-cylon messages. Of course, you can extend it for as many classes as you need.
 
 Example:
 
