@@ -96,7 +96,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   #Last message in the conversation.
   def last_message
-    @last_message ||= messages.order('created_at DESC').first
+    @last_message ||= messages.order('created_at DESC, id DESC').first
   end
 
   #Returns the receipts of the conversation for one participants
