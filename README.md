@@ -188,76 +188,6 @@ Version 0.8.0 sees `Messageable#read` and `Messageable#unread` renamed to `mark_
 alfa.send_message(beta, "Body", "subject")
 ```
 
-### How can I reply a message?
-
-```ruby
-#alfa wants to reply to all in a conversation
-#using a receipt
-alfa.reply_to_all(receipt, "Reply body")
-
-#using a conversation
-alfa.reply_to_conversation(conversation, "Reply body")
-```
-
-```ruby
-#alfa wants to reply to the sender of a message (and ONLY the sender)
-#using a receipt
-alfa.reply_to_sender(receipt, "Reply body")
-```
-
-### How can I retrieve my conversations?
-
-```ruby
-#alfa wants to retrieve all his conversations
-alfa.mailbox.conversations
-
-#A wants to retrieve his inbox
-alfa.mailbox.inbox
-
-#A wants to retrieve his sent conversations
-alfa.mailbox.sentbox
-
-#alfa wants to retrieve his trashed conversations
-alfa.mailbox.trash
-```
-
-### How can I delete a message from trash?
-
-```ruby
-#delete conversations forever for one receipt (still in database)
-receipt.mark_as_deleted
-
-#you can mark conversation as deleted for one participant
-conversation.mark_as_deleted participant
-
-#Mark the object as deleted for messageable
-#Object can be:
-  #* A Receipt
-  #* A Conversation
-  #* A Notification
-  #* A Message
-  #* An array with any of them
-alfa.mark_as_deleted conversation
-```
-
-### How can I paginate conversations?
-
-You can use Kaminari to paginate the conversations as normal. Please, make sure you use the last version as mailboxer uses `select('DISTINCT conversations.*')` which was not respected before Kaminari 0.12.4 according to its changelog. Working corretly on Kaminari 0.13.0.
-
-```ruby
-#Paginating all conversations using :page parameter and 9 per page
-conversations = alfa.mailbox.conversations.page(params[:page]).per(9)
-
-#Paginating received conversations using :page parameter and 9 per page
-conversations = alfa.mailbox.inbox.page(params[:page]).per(9)
-
-#Paginating sent conversations using :page parameter and 9 per page
-conversations = alfa.mailbox.sentbox.page(params[:page]).per(9)
-
-#Paginating trashed conversations using :page parameter and 9 per page
-conversations = alfa.mailbox.trash.page(params[:page]).per(9)
-```
-
 ### How can I read the messages of a conversation?
 
 As a messageable, what you receive are receipts, which are associated with the message itself. You should retrieve your receipts for the conversation a get the message associated with them.
@@ -278,6 +208,75 @@ receipts.each do |receipt|
   read = receipt.is_unread? #or message.is_unread?(alfa)
   ...
 end
+```
+
+### How can I reply a message?
+
+```ruby
+#alfa wants to reply to all in a conversation
+#using a receipt
+alfa.reply_to_all(receipt, "Reply body")
+
+#using a conversation
+alfa.reply_to_conversation(conversation, "Reply body")
+```
+
+```ruby
+#alfa wants to reply to the sender of a message (and ONLY the sender)
+#using a receipt
+alfa.reply_to_sender(receipt, "Reply body")
+```
+
+### How can I delete a message from trash?
+
+```ruby
+#delete conversations forever for one receipt (still in database)
+receipt.mark_as_deleted
+
+#you can mark conversation as deleted for one participant
+conversation.mark_as_deleted participant
+
+#Mark the object as deleted for messageable
+#Object can be:
+  #* A Receipt
+  #* A Conversation
+  #* A Notification
+  #* A Message
+  #* An array with any of them
+alfa.mark_as_deleted conversation
+```
+### How can I retrieve my conversations?
+
+```ruby
+#alfa wants to retrieve all his conversations
+alfa.mailbox.conversations
+
+#A wants to retrieve his inbox
+alfa.mailbox.inbox
+
+#A wants to retrieve his sent conversations
+alfa.mailbox.sentbox
+
+#alfa wants to retrieve his trashed conversations
+alfa.mailbox.trash
+```
+
+### How can I paginate conversations?
+
+You can use Kaminari to paginate the conversations as normal. Please, make sure you use the last version as mailboxer uses `select('DISTINCT conversations.*')` which was not respected before Kaminari 0.12.4 according to its changelog. Working corretly on Kaminari 0.13.0.
+
+```ruby
+#Paginating all conversations using :page parameter and 9 per page
+conversations = alfa.mailbox.conversations.page(params[:page]).per(9)
+
+#Paginating received conversations using :page parameter and 9 per page
+conversations = alfa.mailbox.inbox.page(params[:page]).per(9)
+
+#Paginating sent conversations using :page parameter and 9 per page
+conversations = alfa.mailbox.sentbox.page(params[:page]).per(9)
+
+#Paginating trashed conversations using :page parameter and 9 per page
+conversations = alfa.mailbox.trash.page(params[:page]).per(9)
 ```
 
 You can take a look at the full documentation for Mailboxer in [rubydoc.info](http://rubydoc.info/gems/mailboxer/frames).
