@@ -30,12 +30,12 @@ Dir["#{File.dirname(__FILE__)}/factories/*.rb"].each {|f| require f}
 
 # Shoulda Matchers
 require 'shoulda/matchers'
-
-Shoulda::Matchers.configure do |config|
-  config.integrate do |with|
-    # Choose a test framework:
-    with.test_framework :rspec
-    with.library :rails
+if Shoulda::Matchers.respond_to?(:configure)
+  Shoulda::Matchers.configure do |config|
+    config.integrate do |with|
+      with.test_framework :rspec
+      with.library :rails
+    end
   end
 end
 

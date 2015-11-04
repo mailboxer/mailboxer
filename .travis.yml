@@ -3,7 +3,7 @@ cache: bundler
 sudo: false
 
 rvm:
-  - 2.1.4
+  - 2
 
 matrix:
   include:
