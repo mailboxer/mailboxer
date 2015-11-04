@@ -308,9 +308,9 @@ describe "Mailboxer::Models::Messageable through User" do
   end
 
   it "should be able to read attachment" do
-    @receipt = @entity1.send_message(@entity2, "Body", "Subject", nil, File.open('spec/testfile.txt'))
+    @receipt = @entity1.send_message(@entity2, "Body", "Subject", nil, [FakeAttachment.create])
     @conversation = @receipt.conversation
-    expect(@conversation.messages.first.attachment_identifier).to eq 'testfile.txt'
+    expect(@receipt.message.attachments.first.filename).to eq 'testfile.txt'
   end
 
   it "should be the same message time as passed" do

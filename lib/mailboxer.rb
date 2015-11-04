@@ -24,6 +24,11 @@ module Mailboxer
   mattr_accessor :notification_mailer
   mattr_accessor :message_mailer
   mattr_accessor :custom_deliver_proc
+  mattr_accessor :attachments_model
+  mattr_accessor :attachment_file_method
+  @@attachment_file_method = :file
+  mattr_accessor :attachment_filename_method
+  @@attachment_file_method = :filename
 
   class << self
     def setup

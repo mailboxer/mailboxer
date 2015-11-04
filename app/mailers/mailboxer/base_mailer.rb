@@ -11,4 +11,11 @@ class Mailboxer::BaseMailer < ActionMailer::Base
     ::Mailboxer::Cleaner.instance.strip_tags(text)
   end
 
+  def attach_message_attachments
+    return unless @message.respond_to?(:attachments)
+    @message.attachments.each do |attachment|
+      attachments[attachment.send(Mailboxer.attachment_filename_method)] =
+        attachment.send(Mailboxer.attachment_file_method)
+    end
+  end
 end

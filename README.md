@@ -196,6 +196,12 @@ class Cylon < ActiveRecord::Base
 end
 ```
 
+## Attachments
+
+We are "uploader" agnostic but we require that the attachment is attached to a
+polymorphic object that exposes two methods, a name and a file.
+
+
 ## Mailboxer API
 
 ### Warning for version 0.8.0

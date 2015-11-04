@@ -50,7 +50,6 @@ ActiveRecord::Schema.define(:version => 20131206080416) do
     t.string   "notification_code"
     t.integer  "conversation_id"
     t.boolean  "draft",                :default => false
-    t.string   "attachment"
     t.datetime "updated_at",                              :null => false
     t.datetime "created_at",                              :null => false
     t.boolean  "global",               :default => false
@@ -62,6 +61,7 @@ ActiveRecord::Schema.define(:version => 20131206080416) do
   create_table "mailboxer_receipts", :force => true do |t|
     t.integer  "receiver_id"
     t.string   "receiver_type"
+    t.string   "message_id"
     t.integer  "notification_id",                                  :null => false
     t.boolean  "is_read",                       :default => false
     t.boolean  "trashed",                       :default => false
