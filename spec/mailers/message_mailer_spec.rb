@@ -60,36 +60,6 @@ describe Mailboxer::MessageMailer do
       end
     end
   end
-
-  context "when mailer_wants_array is false" do
-    it_behaves_like 'message_mailer'
-  end
-
-  context "mailer_wants_array is true" do
-    class ArrayMailer < Mailboxer::MessageMailer
-      default template_path: 'mailboxer/message_mailer'
-
-      def new_message_email(message, receivers)
-        receivers.each { |receiver| super(message, receiver) if receiver.mailboxer_email(message).present? }
-      end
-
-      def reply_message_email(message, receivers)
-        receivers.each { |receiver| super(message, receiver) if receiver.mailboxer_email(message).present? }
-      end
-    end
-
-    before :all do
-      Mailboxer.mailer_wants_array = true
-      Mailboxer.message_mailer = ArrayMailer
-    end
-
-    after :all do
-      Mailboxer.mailer_wants_array = false
-      Mailboxer.message_mailer = Mailboxer::MessageMailer
-    end
-
-    it_behaves_like 'message_mailer'
-  end
 end
 
 def print_emails

@@ -2,12 +2,15 @@ require 'spec_helper'
 
 describe Mailboxer::MailDispatcher do
 
-  subject(:instance) { described_class.new(mailable, recipients) }
+  subject(:instance) { described_class.new(mailable, receipts) }
 
   let(:mailable)   { Mailboxer::Notification.new }
-  let(:recipient1) { double 'recipient1', mailboxer_email: ''  }
-  let(:recipient2) { double 'recipient2', mailboxer_email: 'foo@bar.com'  }
-  let(:recipients) { [ recipient1, recipient2 ] }
+  let(:recipient1) { double 'recipient1', id: 1, mailboxer_email: '' }
+  let(:recipient2) { double 'recipient2', id: 2, mailboxer_email: 'foo@bar.com'}
+  let(:receipt1) { double 'receipt1', id: 1, receiver: recipient1 }
+  let(:receipt2) { double 'receipt2', id: 2, receiver: recipient2  }
+
+  let(:receipts) { [ receipt1, receipt2 ] }
 
   describe "call" do
     context "no emails" do
@@ -16,19 +19,10 @@ describe Mailboxer::MailDispatcher do
       its(:call) { should be false }
     end
 
-    context "mailer wants array" do
-      before { Mailboxer.mailer_wants_array = true  }
-      after  { Mailboxer.mailer_wants_array = false }
+    context "mailer doesn't want array" do
       it 'sends collection' do
-        expect(subject).to receive(:send_email).with(recipients)
-        subject.call
-      end
-    end
-
-    context "mailer doesnt want array" do
-      it 'sends collection' do
-        expect(subject).not_to receive(:send_email).with(recipient1) #email is blank
-        expect(subject).to receive(:send_email).with(recipient2)
+        expect(subject).not_to receive(:send_email).with(receipt1) #email is blank
+        expect(subject).to receive(:send_email).with(receipt2)
         subject.call
       end
     end
@@ -49,24 +43,25 @@ describe Mailboxer::MailDispatcher do
       after  { Mailboxer.custom_deliver_proc = nil     }
       it "triggers proc" do
         expect(my_proc).to receive(:call).with(mailer, mailable, recipient1)
-        subject.send :send_email, recipient1
+        subject.send :send_email, receipt1
       end
     end
 
     context "without custom_deliver_proc" do
-      let(:email) { double :email }
+      let(:email) { double :email, message_id: '123@local.com' }
 
       it "triggers standard deliver chain" do
         expect(mailer).to receive(:send_email).with(mailable, recipient1).and_return email
+        expect(receipt1).to receive(:assign_attributes).with({:delivery_method=>:email, :message_id=>"123@local.com"}).and_return email
         expect(email).to receive :deliver
 
-        subject.send :send_email, recipient1
+        subject.send :send_email, receipt1
       end
     end
   end
 
   describe "mailer" do
-    let(:recipients) { [] }
+    let(:receipts) { [] }
 
     context "mailable is a Message" do
       let(:mailable) { Mailboxer::Notification.new }
@@ -91,24 +86,6 @@ describe Mailboxer::MailDispatcher do
 
         its(:mailer) { should eq 'foo' }
       end
-    end
-  end
-
-  describe "filtered_recipients" do
-    context "responds to conversation" do
-      let(:conversation) { double 'conversation' }
-      let(:mailable)     { double 'mailable', :conversation => conversation }
-      before(:each) do
-        expect(conversation).to receive(:has_subscriber?).with(recipient1).and_return false
-        expect(conversation).to receive(:has_subscriber?).with(recipient2).and_return true
-      end
-
-      its(:filtered_recipients){ should eq [recipient2] }
-    end
-
-    context 'doesnt respond to conversation' do
-      let(:mailable) { double 'mailable' }
-      its(:filtered_recipients){ should eq recipients }
     end
   end
 end
