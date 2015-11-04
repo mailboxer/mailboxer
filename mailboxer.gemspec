@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-its', '~> 1.1'
   s.add_development_dependency 'rspec-collection_matchers', '~> 1.1'
   s.add_development_dependency('appraisal', '~> 1.0.0')
-  s.add_development_dependency('shoulda-matchers')
+  s.add_development_dependency('shoulda-matchers', '~> 3')
   # Fixtures
   #if RUBY_VERSION >= '1.9.2'
    # s.add_development_dependency('factory_girl', '>= 3.0.0')

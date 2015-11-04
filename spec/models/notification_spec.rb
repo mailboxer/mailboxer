@@ -11,8 +11,8 @@ describe Mailboxer::Notification do
   it { should validate_presence_of :subject }
   it { should validate_presence_of :body }
 
-  it { should ensure_length_of(:subject).is_at_most(Mailboxer.subject_max_length) }
-  it { should ensure_length_of(:body).is_at_most(Mailboxer.body_max_length) }
+  it { should validate_length_of(:subject).is_at_most(Mailboxer.subject_max_length) }
+  it { should validate_length_of(:body).is_at_most(Mailboxer.body_max_length) }
 
   it "should notify one user" do
     @entity1.notify("Subject", "Body")

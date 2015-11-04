@@ -13,7 +13,7 @@ describe Mailboxer::Conversation do
   let!(:conversation) { message1.conversation }
 
   it { should validate_presence_of :subject }
-  it { should ensure_length_of(:subject).is_at_most(Mailboxer.subject_max_length) }
+  it { should validate_length_of(:subject).is_at_most(Mailboxer.subject_max_length) }
 
   it "should have proper original message" do
     expect(conversation.original_message).to eq message1
