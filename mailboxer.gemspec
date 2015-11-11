@@ -23,6 +23,8 @@ Gem::Specification.new do |s|
   # SQL foreign keys
   s.add_runtime_dependency('foreigner', '>= 0.9.1')
 
+  s.add_runtime_dependency('attr_encrypted', '1.3.4')
+
   # Development Gem dependencies
   s.add_runtime_dependency('rails', '>= 3.2.0')
   s.add_runtime_dependency('carrierwave', '>= 0.5.8')

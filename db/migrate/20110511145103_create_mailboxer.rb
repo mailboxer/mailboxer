@@ -21,7 +21,7 @@ class CreateMailboxer < ActiveRecord::Migration
   	#Notifications and Messages
     create_table :mailboxer_notifications do |t|
       t.column :type, :string
-      t.column :body, :text
+      t.column :encrypted_body, :text
       t.column :subject, :string, :default => ""
       t.references :sender, :polymorphic => true
       t.column :conversation_id, :integer
