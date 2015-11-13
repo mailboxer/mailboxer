@@ -30,6 +30,14 @@ Dir["#{File.dirname(__FILE__)}/factories/*.rb"].each {|f| require f}
 
 # Shoulda Matchers
 require 'shoulda/matchers'
+if Shoulda::Matchers.respond_to?(:configure)
+  Shoulda::Matchers.configure do |config|
+    config.integrate do |with|
+      with.test_framework :rspec
+      with.library :rails
+    end
+  end
+end
 
 RSpec.configure do |config|
   # Remove this line if you don't want RSpec's should and should_not
