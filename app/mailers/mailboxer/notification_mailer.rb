@@ -1,5 +1,5 @@
 class Mailboxer::NotificationMailer < Mailboxer::BaseMailer
-  #Sends and email for indicating a new notification to a receiver.
+  #Sends an email for indicating a new notification to a receiver.
   #It calls new_notification_email.
   def send_email(notification, receiver)
     new_notification_email(notification, receiver)
