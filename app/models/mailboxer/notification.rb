@@ -84,8 +84,8 @@ class Mailboxer::Notification < ActiveRecord::Base
     temp_receipts = recipients.map { |r| build_receipt(r, nil, false) }
 
     if temp_receipts.all?(&:valid?)
+      Mailboxer::MailDispatcher.new(self, temp_receipts).call if send_mail
       temp_receipts.each(&:save!)   #Save receipts
-      Mailboxer::MailDispatcher.new(self, recipients).call if send_mail
       self.recipients = nil
     end
 
@@ -96,7 +96,8 @@ class Mailboxer::Notification < ActiveRecord::Base
   #Returns the recipients of the Notification
   def recipients
     return Array.wrap(@recipients) unless @recipients.blank?
-    @recipients = receipts.includes(:receiver).map { |receipt| receipt.receiver }
+    recipients  = receipts.includes(:receiver).map(&:receiver)
+    @recipients = Mailboxer::RecipientFilter.new(self, recipients).call
   end
 
   #Returns the receipt for the participant

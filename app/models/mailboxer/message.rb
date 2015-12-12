@@ -34,8 +34,8 @@ class Mailboxer::Message < Mailboxer::Notification
     temp_receipts << sender_receipt
 
     if temp_receipts.all?(&:valid?)
+      Mailboxer::MailDispatcher.new(self, temp_receipts).call
       temp_receipts.each(&:save!)
-      Mailboxer::MailDispatcher.new(self, recipients).call
 
       conversation.touch if reply
 

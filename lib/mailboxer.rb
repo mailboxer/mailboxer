@@ -7,8 +7,6 @@ module Mailboxer
   @@default_from = "no-reply@mailboxer.com"
   mattr_accessor :uses_emails
   @@uses_emails = true
-  mattr_accessor :mailer_wants_array
-  @@mailer_wants_array = false
   mattr_accessor :search_enabled
   @@search_enabled = false
   mattr_accessor :search_engine
@@ -41,3 +39,4 @@ end
 require 'mailboxer/engine'
 require 'mailboxer/cleaner'
 require 'mailboxer/mail_dispatcher'
+require 'mailboxer/recipient_filter'

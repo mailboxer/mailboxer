@@ -1,21 +1,17 @@
 module Mailboxer
   class MailDispatcher
+    attr_reader :mailable, :receipts
 
-    attr_reader :mailable, :recipients
-
-    def initialize(mailable, recipients)
-      @mailable, @recipients = mailable, recipients
+    def initialize(mailable, receipts)
+      @mailable, @receipts = mailable, receipts
     end
 
     def call
       return false unless Mailboxer.uses_emails
-      if Mailboxer.mailer_wants_array
-        send_email(filtered_recipients)
-      else
-        filtered_recipients.each do |recipient|
-          email_to = recipient.send(Mailboxer.email_method, mailable)
-          send_email(recipient) if email_to.present?
-        end
+
+      receipts.map do |receipt|
+        email_to = receipt.receiver.send(Mailboxer.email_method, mailable)
+        send_email(receipt) if email_to.present?
       end
     end
 
@@ -27,22 +23,22 @@ module Mailboxer
       Mailboxer.send(method) || "#{mailable.class}Mailer".constantize
     end
 
-    # recipients can be filtered on a conversation basis
-    def filtered_recipients
-      return recipients unless mailable.respond_to?(:conversation)
-
-      recipients.each_with_object([]) do |recipient, array|
-        array << recipient if mailable.conversation.has_subscriber?(recipient)
+    def send_email(receipt)
+      if Mailboxer.custom_deliver_proc
+        Mailboxer.custom_deliver_proc.call(mailer, mailable, receipt.receiver)
+      else
+        default_send_email(receipt)
       end
     end
 
-    def send_email(recipient)
-      if Mailboxer.custom_deliver_proc
-        Mailboxer.custom_deliver_proc.call(mailer, mailable, recipient)
-      else
-        email = mailer.send_email(mailable, recipient)
-        email.respond_to?(:deliver_now) ? email.deliver_now : email.deliver
-      end
+    def default_send_email(receipt)
+      mail = mailer.send_email(mailable, receipt.receiver)
+      mail.respond_to?(:deliver_now) ? mail.deliver_now : mail.deliver
+      receipt.assign_attributes(
+        :delivery_method => :email,
+        :message_id => mail.message_id
+      )
+      mail
     end
   end
 end
