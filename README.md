@@ -190,7 +190,7 @@ alfa.send_message(beta, "Body", "subject")
 
 ### How can I read the messages of a conversation?
 
-As a messageable, what you receive are receipts, which are associated with the message itself. You should retrieve your receipts for the conversation a get the message associated with them.
+As a messageable, what you receive are receipts, which are associated with the message itself. You should retrieve your receipts for the conversation and get the message associated with them.
 
 This is done this way because receipts save the information about the relation between messageable and the messages: is it read?, is it trashed?, etc.
 
