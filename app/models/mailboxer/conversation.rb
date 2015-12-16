@@ -115,17 +115,17 @@ class Mailboxer::Conversation < ActiveRecord::Base
     receipts_for(participant).any?
   end
 
-	#Adds a new participant to the conversation
-	def add_participant(participant)
-		messages.each do |message|
+  #Adds a new participant to the conversation
+  def add_participant(participant)
+    messages.each do |message|
       Mailboxer::ReceiptBuilder.new({
         :notification => message,
         :receiver     => participant,
         :updated_at   => message.updated_at,
         :created_at   => message.created_at
       }).build.save
-		end
-	end
+    end
+  end
 
   #Returns true if the participant has at least one trashed message of the conversation
   def is_trashed?(participant)
