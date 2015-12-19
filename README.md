@@ -210,7 +210,7 @@ receipts.each do |receipt|
 end
 ```
 
-### How can I reply a message?
+### How can I reply to a message?
 
 ```ruby
 #alfa wants to reply to all in a conversation
