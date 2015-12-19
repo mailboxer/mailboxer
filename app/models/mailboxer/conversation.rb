@@ -163,7 +163,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
   end
 
   # Creates a opt out object
-  # because by default all particpants are opt in
+  # because by default all participants are opt in
   def opt_out(participant)
     return unless has_subscriber?(participant)
     opt_outs.create(:unsubscriber => participant)
