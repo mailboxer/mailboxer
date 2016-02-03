@@ -67,6 +67,7 @@ describe Mailboxer::Conversation do
     expect(conversation.participants.count).to eq 3
     expect(conversation.participants).to include(new_user, entity1, entity2)
     expect(conversation.receipts_for(new_user).count).to eq conversation.receipts_for(entity1).count
+    expect(conversation.receipts_for(new_user).map(&:mailbox_type).uniq).to eq ['inbox']
   end
 
   it "should deliver messages to new participants" do
