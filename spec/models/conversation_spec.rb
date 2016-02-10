@@ -119,13 +119,13 @@ describe Mailboxer::Conversation do
       end
     end
 
-    describe ".participants" do
+    describe ".between" do
       it "finds conversations where two participants participate" do
-        expect(Mailboxer::Conversation.participants(entity1, participant)).to eq [sentbox_conversation, inbox_conversation]
+        expect(Mailboxer::Conversation.between(entity1, participant)).to eq [sentbox_conversation, inbox_conversation]
       end
 
       it "does not find conversations if the participants have not interacted yet" do
-        expect(Mailboxer::Conversation.participants(participant, entity2)).to eq []
+        expect(Mailboxer::Conversation.between(participant, entity2)).to eq []
       end
 
     end

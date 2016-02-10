@@ -19,7 +19,7 @@ class Mailboxer::Mailbox
 
   #Returns the conversations between messageable and other messageable
   def conversations_with(other_messageable)
-    Mailboxer::Conversation.participants(messageable, other_messageable)
+    Mailboxer::Conversation.between(messageable, other_messageable)
   end
 
   #Returns the conversations for the messageable
