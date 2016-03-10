@@ -118,6 +118,17 @@ describe Mailboxer::Conversation do
         expect(Mailboxer::Conversation.unread(participant)).to eq [unread_conversation]
       end
     end
+
+    describe ".between" do
+      it "finds conversations where two participants participate" do
+        expect(Mailboxer::Conversation.between(entity1, participant)).to eq [sentbox_conversation, inbox_conversation]
+      end
+
+      it "does not find conversations if the participants have not interacted yet" do
+        expect(Mailboxer::Conversation.between(participant, entity2)).to eq []
+      end
+
+    end
   end
 
   describe "#is_completely_trashed?" do

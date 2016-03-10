@@ -14,6 +14,12 @@ describe Mailboxer::Mailbox do
     @conversation = @message1.conversation
   end
 
+  it "should return conversations between two entities" do
+    assert @entity1.mailbox.conversations_with(@entity2)
+
+    expect(@entity1.mailbox.conversations_with(@entity2)).to eq [@conversation]
+  end
+
   it "should return all conversations" do
     @conv2 = @entity1.send_message(@entity2,"Body","Subject").conversation
     @conv3 = @entity2.send_message(@entity1,"Body","Subject").conversation
