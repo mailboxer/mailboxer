@@ -151,14 +151,21 @@ class Mailboxer::Receipt < ActiveRecord::Base
   end
 
   if Mailboxer.search_enabled
-    searchable do
-      text :subject, :boost => 5 do
-        message.subject if message
+    if Mailboxer.search_engine == :pg_search
+      include PgSearch
+      pg_search_scope :search, associated_against: {
+        message: [:subject, :body]
+      }
+    else
+      searchable do
+        text :subject, :boost => 5 do
+          message.subject if message
+        end
+        text :body do
+          message.body if message
+        end
+        integer :receiver_id
       end
-      text :body do
-        message.body if message
-      end
-      integer :receiver_id
     end
   end
 end
