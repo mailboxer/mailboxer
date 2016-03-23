@@ -62,7 +62,7 @@ module Mailboxer
 
       #Sends a messages, starting a new conversation, with the messageable
       #as originator
-      def send_message(recipients, msg_body, subject, sanitize_text=true, attachment=nil, message_timestamp = Time.now)
+      def send_message(recipients, msg_body, subject, sanitize_text=true, attachment=nil, message_timestamp = Time.now, with_email: true)
         convo = Mailboxer::ConversationBuilder.new({
           :subject    => subject,
           :created_at => message_timestamp,
@@ -80,7 +80,7 @@ module Mailboxer
           :updated_at   => message_timestamp
         }).build
 
-        message.deliver false, sanitize_text
+        message.deliver false, sanitize_text, with_email
       end
 
       #Basic reply method. USE NOT RECOMENDED.
