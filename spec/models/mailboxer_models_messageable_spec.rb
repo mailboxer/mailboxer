@@ -325,4 +325,17 @@ describe "Mailboxer::Models::Messageable through User" do
     expect(receipt.message.conversation.updated_at.utc.to_s).to eq expected
   end
 
+  context "with_email option" do
+    it "by default should send an email" do
+      expect {
+        @entity1.send_message(@entity2, "body", "subject")
+      }.to change { ActionMailer::Base.deliveries.count }.by(2)
+    end
+
+    it "with false should not send an email" do
+      expect {
+        @entity1.send_message(@entity2, "body", "subject", with_email: false)
+      }.not_to change { ActionMailer::Base.deliveries.count }
+    end
+  end
 end
