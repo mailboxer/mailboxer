@@ -32,6 +32,12 @@ class Mailboxer::Conversation < ActiveRecord::Base
   scope :not_trash,  lambda {|participant|
     participant(participant).merge(Mailboxer::Receipt.not_trash)
   }
+  scope :deleted,  lambda {|participant|
+    participant(participant).merge(Mailboxer::Receipt.deleted)
+  }
+  scope :not_deleted,  lambda {|participant|
+    participant(participant).merge(Mailboxer::Receipt.not_deleted)
+  }
   scope :between, lambda {|participant_one, participant_two|
     joins("INNER JOIN (#{Mailboxer::Notification.recipient(participant_two).to_sql}) `participant_two_notifications` ON `participant_two_notifications`.`conversation_id` = `mailboxer_conversations`.`id` AND `participant_two_notifications`.`type` IN ('Mailboxer::Message')").
         joins("INNER JOIN `mailboxer_receipts` ON `mailboxer_receipts`.`notification_id` = `participant_two_notifications`.`id` ").

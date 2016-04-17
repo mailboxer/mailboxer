@@ -110,6 +110,33 @@ describe Mailboxer::Conversation do
       end
     end
 
+    describe ".not_trash" do
+      it "finds non trashed conversations with receipts for participant" do
+        trashed_conversation = entity1.send_message(participant, "Body", "Subject").notification.conversation
+        trashed_conversation.move_to_trash(participant)
+
+        expect(Mailboxer::Conversation.not_trash(participant)).to eq [sentbox_conversation, inbox_conversation]
+      end
+    end
+
+    describe ".deleted" do
+      it "finds deleted conversations with receipts for participant" do
+        deleted_conversation = entity1.send_message(participant, "Body", "Subject").notification.conversation
+        deleted_conversation.mark_as_deleted(participant)
+
+        expect(Mailboxer::Conversation.deleted(participant)).to eq [deleted_conversation]
+      end
+    end
+
+    describe ".not_deleted" do
+      it "finds non deleted conversations with receipts for participant" do
+        deleted_conversation = entity1.send_message(participant, "Body", "Subject").notification.conversation
+        deleted_conversation.mark_as_deleted(participant)
+
+        expect(Mailboxer::Conversation.not_deleted(participant)).to eq [sentbox_conversation, inbox_conversation]
+      end
+    end
+
     describe ".unread" do
       it "finds unread conversations with receipts for participant" do
         [sentbox_conversation, inbox_conversation].each {|c| c.mark_as_read(participant) }
