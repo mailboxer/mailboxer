@@ -3,16 +3,10 @@ cache: bundler
 sudo: false
 
 rvm:
-  - 2
-
-matrix:
-  include:
-    - rvm: 1.9.3
-      gemfile: gemfiles/rails4.1.gemfile
-    - rvm: 2.0
-      gemfile: gemfiles/rails4.1.gemfile
-    - rvm: jruby-19mode
-      gemfile: gemfiles/rails4.1.gemfile
+  - 2.0
+  - 2.1.10
+  - 2.2.5
+  - 2.3.1
 
 gemfile:
   - gemfiles/rails3.2.gemfile
