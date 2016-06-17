@@ -8,7 +8,6 @@ describe Mailboxer::Notification do
     @entity3 = FactoryGirl.create(:user)
   end
 
-  it { should validate_presence_of :subject }
   it { should validate_presence_of :body }
 
   it { should validate_length_of(:subject).is_at_most(Mailboxer.subject_max_length) }
