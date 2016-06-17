@@ -7,11 +7,7 @@ rvm:
 
 matrix:
   include:
-    - rvm: 1.9.3
-      gemfile: gemfiles/rails4.1.gemfile
     - rvm: 2.0
-      gemfile: gemfiles/rails4.1.gemfile
-    - rvm: jruby-19mode
       gemfile: gemfiles/rails4.1.gemfile
 
 gemfile:
