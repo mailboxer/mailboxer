@@ -20,11 +20,9 @@ Gem::Specification.new do |s|
 
   # Gem dependencies
   #
-  # SQL foreign keys
-  s.add_runtime_dependency('foreigner', '>= 0.9.1')
 
   # Development Gem dependencies
-  s.add_runtime_dependency('rails', '>= 3.2.0')
+  s.add_runtime_dependency('rails', '>= 4.2.0')
   s.add_runtime_dependency('carrierwave', '>= 0.5.8')
 
   if RUBY_ENGINE == "rbx" && RUBY_VERSION >= "2.1.0"

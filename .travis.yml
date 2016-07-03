@@ -3,16 +3,19 @@ cache: bundler
 sudo: false
 
 rvm:
-  - 2.0
   - 2.1.10
   - 2.2.5
   - 2.3.1
 
 gemfile:
-  - gemfiles/rails3.2.gemfile
-  - gemfiles/rails4.0.gemfile
-  - gemfiles/rails4.1.gemfile
   - gemfiles/rails4.2.gemfile
+  - gemfiles/rails5.0.gemfile
+
+matrix:
+  exclude:
+    - rvm: 2.1.10
+      gemfile: gemfiles/rails5.0.gemfile
+
 env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
