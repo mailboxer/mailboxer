@@ -3,7 +3,7 @@ class Mailboxer::Receipt < ActiveRecord::Base
   attr_accessible :trashed, :is_read, :deleted if Mailboxer.protected_attributes?
 
   belongs_to :notification, :class_name => "Mailboxer::Notification", :validate => true, :autosave => true
-  belongs_to :receiver, :polymorphic => :true
+  belongs_to :receiver, :polymorphic => :true, :required => false
   belongs_to :message, :class_name => "Mailboxer::Message", :foreign_key => "notification_id"
 
   validates_presence_of :receiver
