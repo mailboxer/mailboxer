@@ -1,5 +1,3 @@
-# Database foreign keys
-require 'foreigner' if Rails.version < "4.2.0"
 require 'carrierwave'
 begin
   require 'sunspot_rails'

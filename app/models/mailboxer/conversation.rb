@@ -15,7 +15,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
   scope :participant, lambda {|participant|
     where('mailboxer_notifications.type'=> Mailboxer::Message.name).
     order("mailboxer_conversations.updated_at DESC").
-    joins(:receipts).merge(Mailboxer::Receipt.recipient(participant)).uniq
+    joins(:receipts).merge(Mailboxer::Receipt.recipient(participant)).distinct
   }
   scope :inbox, lambda {|participant|
     participant(participant).merge(Mailboxer::Receipt.inbox.not_trash.not_deleted)
