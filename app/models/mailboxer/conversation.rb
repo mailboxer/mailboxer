@@ -33,8 +33,8 @@ class Mailboxer::Conversation < ActiveRecord::Base
     participant(participant).merge(Mailboxer::Receipt.not_trash)
   }
   scope :between, lambda {|participant_one, participant_two|
-    joins("INNER JOIN (#{Mailboxer::Notification.recipient(participant_two).to_sql}) `participant_two_notifications` ON `participant_two_notifications`.`conversation_id` = `mailboxer_conversations`.`id` AND `participant_two_notifications`.`type` IN ('Mailboxer::Message')").
-        joins("INNER JOIN `mailboxer_receipts` ON `mailboxer_receipts`.`notification_id` = `participant_two_notifications`.`id` ").
+    joins("INNER JOIN (#{Mailboxer::Notification.recipient(participant_two).to_sql}) participant_two_notifications ON participant_two_notifications.conversation_id = mailboxer_conversations.id AND participant_two_notifications.type IN ('Mailboxer::Message')").
+        joins("INNER JOIN mailboxer_receipts ON mailboxer_receipts.notification_id = participant_two_notifications.id").
         merge(Mailboxer::Receipt.recipient(participant_one)).
         order("mailboxer_conversations.updated_at DESC").uniq
   }
