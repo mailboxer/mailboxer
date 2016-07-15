@@ -36,7 +36,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
     joins("INNER JOIN (#{Mailboxer::Notification.recipient(participant_two).to_sql}) participant_two_notifications ON participant_two_notifications.conversation_id = mailboxer_conversations.id AND participant_two_notifications.type IN ('Mailboxer::Message')").
         joins("INNER JOIN mailboxer_receipts ON mailboxer_receipts.notification_id = participant_two_notifications.id").
         merge(Mailboxer::Receipt.recipient(participant_one)).
-        order("mailboxer_conversations.updated_at DESC").uniq
+        order("mailboxer_conversations.updated_at DESC").distinct
   }
 
   #Mark the conversation as read for one of the participants
