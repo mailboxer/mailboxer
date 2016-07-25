@@ -18,6 +18,10 @@ describe Mailboxer::Message do
       expect(@message1.is_deleted?(@entity1)).to be true
     end
 
+    it "creates a conversation" do
+      expect(@message1.conversation).to eq(Mailboxer::Conversation.last)
+    end
+
     it "should send email only to receivers" do
       expect(ActionMailer::Base.deliveries.count).to eq 1
     end
