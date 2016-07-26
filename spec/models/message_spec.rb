@@ -1,6 +1,26 @@
 require 'spec_helper'
 
 describe Mailboxer::Message do
+  before do
+    ActionMailer::Base.deliveries.clear
+    @entity1 = FactoryGirl.create(:user)
+    @entity2 = FactoryGirl.create(:user)
+  end
+
+  context "with errors" do
+    describe "empty subject" do
+      before do
+        @receipt1 = @entity1.send_message(@entity2,"Body","")
+        @message1 = @receipt1.notification
+      end
+
+      it "should add errors to the created notification" do
+        errors = @message1.errors['conversation.subject']
+
+        expect(errors).to eq(["can't be blank"])
+      end
+    end
+  end
 
   context "after send" do
 
