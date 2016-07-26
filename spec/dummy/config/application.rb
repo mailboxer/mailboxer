@@ -7,9 +7,6 @@ require "mailboxer"
 
 module Dummy
   class Application < Rails::Application
-    def rails_more_than_4_2?
-      Gem::Version.new(Rails.version) >= Gem::Version.new('4.2.0')
-    end
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -40,8 +37,6 @@ module Dummy
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
-    config.active_record.raise_in_transactional_callbacks = true if rails_more_than_4_2?
-
   end
 end
 
