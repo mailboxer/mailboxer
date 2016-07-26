@@ -30,7 +30,6 @@ class Mailboxer::Receipt < ActiveRecord::Base
   scope :is_read, lambda { where(:is_read => true) }
   scope :is_unread, lambda { where(:is_read => false) }
 
-  after_validation :remove_duplicate_errors
   class << self
     #Marks all the receipts from the relation as read
     def mark_as_read(options={})
@@ -139,16 +138,6 @@ class Mailboxer::Receipt < ActiveRecord::Base
   end
 
   protected
-
-  #Removes the duplicate error about not present subject from Conversation if it has been already
-  #raised by Message
-  def remove_duplicate_errors
-    if errors["mailboxer_notification.conversation.subject"].present? and errors["mailboxer_notification.subject"].present?
-      errors["mailboxer_notification.conversation.subject"].each do |msg|
-        errors["mailboxer_notification.conversation.subject"].delete(msg)
-      end
-    end
-  end
 
   if Mailboxer.search_enabled
     searchable do
