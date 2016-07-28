@@ -5,11 +5,6 @@ class MailboxerNamespacingCompatibility < ActiveRecord::Migration
     rename_table :notifications, :mailboxer_notifications
     rename_table :receipts,      :mailboxer_receipts
 
-    if Rails.version < '4'
-      rename_index :mailboxer_notifications, :notifications_on_conversation_id, :mailboxer_notifications_on_conversation_id
-      rename_index :mailboxer_receipts,      :receipts_on_notification_id,      :mailboxer_receipts_on_notification_id
-    end
-
     Mailboxer::Notification.where(type: 'Message').update_all(type: 'Mailboxer::Message')
   end
 
@@ -17,11 +12,6 @@ class MailboxerNamespacingCompatibility < ActiveRecord::Migration
     rename_table :mailboxer_conversations, :conversations
     rename_table :mailboxer_notifications, :notifications
     rename_table :mailboxer_receipts,      :receipts
-
-    if Rails.version < '4'
-      rename_index :notifications, :mailboxer_notifications_on_conversation_id, :notifications_on_conversation_id
-      rename_index :receipts,      :mailboxer_receipts_on_notification_id,      :receipts_on_notification_id
-    end
 
     Mailboxer::Notification.where(type: 'Mailboxer::Message').update_all(type: 'Message')
   end
