@@ -80,11 +80,14 @@ class Mailboxer::Notification < ActiveRecord::Base
   #Use Mailboxer::Models::Message.notify and Notification.notify_all instead.
   def deliver(should_clean = true, send_mail = true)
     clean if should_clean
-    temp_receipts = recipients.map { |r| build_receipt(r, nil, false) }
+    temp_receipts = recipients.map do |r|
+      receipts.build(receiver: r, mailbox_type: nil, is_read: false)
+    end
 
-    if temp_receipts.all?(&:valid?)
+    if valid?
       Mailboxer::MailDispatcher.new(self, temp_receipts).call if send_mail
-      temp_receipts.each(&:save!)   #Save receipts
+      save!
+
       self.recipients = nil
     end
 
@@ -176,16 +179,4 @@ class Mailboxer::Notification < ActiveRecord::Base
   def sanitize(text)
     ::Mailboxer::Cleaner.instance.sanitize(text)
   end
-
-  private
-
-  def build_receipt(receiver, mailbox_type, is_read = false)
-    Mailboxer::ReceiptBuilder.new({
-      :notification => self,
-      :mailbox_type => mailbox_type,
-      :receiver     => receiver,
-      :is_read      => is_read
-    }).build
-  end
-
 end
