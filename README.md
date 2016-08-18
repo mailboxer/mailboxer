@@ -106,7 +106,7 @@ end
 
 If you have subclassed the Mailboxer::Notification class, you can specify the mailers using a member method:
 
-```
+```ruby
 class NewDocumentNotification < Mailboxer::Notification
   def mailer_class
     NewDocumentNotificationMailer
