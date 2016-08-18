@@ -104,6 +104,24 @@ Mailboxer.setup do |config|
 end
 ```
 
+If you have subclassed the Mailboxer::Notification class, you can specify the mailers using a member method:
+
+```
+class NewDocumentNotification < Mailboxer::Notification
+  def mailer_class
+    NewDocumentNotificationMailer
+  end
+end
+
+class NewCommentNotification < Mailboxer::Notification
+  def mailer_class
+    NewDocumentNotificationMailer
+  end
+end
+```
+
+Otherwise, the mailer class will be determined by appending 'Mailer' to the mailable class name.
+
 ### User identities
 
 Users must have an identity defined by a `name` and an `email`. We must ensure that Messageable models have some specific methods. These methods are:

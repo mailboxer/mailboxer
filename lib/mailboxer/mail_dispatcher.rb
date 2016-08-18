@@ -18,9 +18,21 @@ module Mailboxer
     private
 
     def mailer
+      mailer_config_method || mailer_from_mailable || mailer_constant
+    end
+
+    def mailer_from_mailable
+      mailable.mailer_class if mailable.respond_to? :mailer_class
+    end
+
+    def mailer_config_method
       klass = mailable.class.name.demodulize
       method = "#{klass.downcase}_mailer".to_sym
-      Mailboxer.send(method) || "#{mailable.class}Mailer".constantize
+      Mailboxer.send(method) if Mailboxer.respond_to? method
+    end
+
+    def mailer_constant
+      "#{mailable.class.name}Mailer".constantize
     end
 
     def send_email(receipt)
