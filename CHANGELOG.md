@@ -2,6 +2,12 @@
 
 ## Master (Unreleased)
 
+### Changed
+
+* When sorting entries by `created_at`, also sort by `id` descending. This
+is to ensure proper sorting of items for databases that do not store
+nanoseconds for timestamp columns.
+
 ## 0.14.0 - 2016-07-29
 
 ### Added
