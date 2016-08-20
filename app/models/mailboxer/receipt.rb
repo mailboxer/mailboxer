@@ -13,13 +13,13 @@ class Mailboxer::Receipt < ActiveRecord::Base
   }
   #Notifications Scope checks type to be nil, not Notification because of STI behaviour
   #with the primary class (no type is saved)
-  scope :notifications_receipts, lambda { joins(:notification).where('mailboxer_notifications.type' => nil) }
-  scope :messages_receipts, lambda { joins(:notification).where('mailboxer_notifications.type' => Mailboxer::Message.to_s) }
+  scope :notifications_receipts, lambda { joins(:notification).where(:mailboxer_notifications => { :type => nil }) }
+  scope :messages_receipts, lambda { joins(:notification).where(:mailboxer_notifications => { :type => Mailboxer::Message.to_s }) }
   scope :notification, lambda { |notification|
     where(:notification_id => notification.id)
   }
   scope :conversation, lambda { |conversation|
-    joins(:message).where('mailboxer_notifications.conversation_id' => conversation.id)
+    joins(:message).where(:mailboxer_notifications => { :conversation_id => conversation.id })
   }
   scope :sentbox, lambda { where(:mailbox_type => "sentbox") }
   scope :inbox, lambda { where(:mailbox_type => "inbox") }
@@ -72,12 +72,8 @@ class Mailboxer::Receipt < ActiveRecord::Base
     end
 
     def update_receipts(updates, options={})
-      ids = where(options).map { |rcp| rcp.id }
-      unless ids.empty?
-        sql = ids.map { "#{table_name}.id = ? " }.join(' OR ')
-        conditions = [sql].concat(ids)
-        Mailboxer::Receipt.where(conditions).update_all(updates)
-      end
+      ids = where(options).pluck(:id)
+      Mailboxer::Receipt.where(:id => ids).update_all(updates) unless ids.empty?
     end
   end
 

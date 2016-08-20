@@ -93,7 +93,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   #First message of the conversation.
   def original_message
-    @original_message ||= messages.order('created_at').first
+    @original_message ||= messages.order(:created_at).first
   end
 
   #Sender of the last message.
