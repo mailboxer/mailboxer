@@ -9,7 +9,7 @@ class Mailboxer::Mailbox
   #Returns the notifications for the messageable
   def notifications(options = {})
     #:type => nil is a hack not to give Messages as Notifications
-    notifs = Mailboxer::Notification.recipient(messageable).where(:type => nil).order("mailboxer_notifications.created_at DESC")
+    notifs = Mailboxer::Notification.recipient(messageable).where(:type => nil).order(:created_at => :desc, :id => :desc)
     if options[:read] == false || options[:unread]
       notifs = notifs.unread
     end

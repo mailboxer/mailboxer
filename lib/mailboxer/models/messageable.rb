@@ -14,7 +14,7 @@ module Mailboxer
 
       included do
         has_many :messages, :class_name => "Mailboxer::Message", :as => :sender
-        has_many :receipts, -> { order 'created_at DESC' }, :class_name => "Mailboxer::Receipt", dependent: :destroy, as: :receiver
+        has_many :receipts, -> { order(:created_at => :desc, :id => :desc) }, :class_name => "Mailboxer::Receipt", dependent: :destroy, as: :receiver
       end
 
       unless defined?(Mailboxer.name_method)
