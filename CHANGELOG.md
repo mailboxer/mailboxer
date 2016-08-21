@@ -8,6 +8,11 @@
 is to ensure proper sorting of items for databases that do not store
 nanoseconds for timestamp columns.
 
+### Fixed
+
+* When trying to delete a Mailboxer object, a `NameError` may be thrown due
+to a missing namespace
+
 ## 0.14.0 - 2016-07-29
 
 ### Added

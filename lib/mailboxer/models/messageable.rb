@@ -169,11 +169,11 @@ module Mailboxer
       #* An array with any of them
       def mark_as_deleted(obj)
         case obj
-          when Receipt
+          when Mailboxer::Receipt
             return obj.mark_as_deleted if obj.receiver == self
-          when Message, Notification
+          when Mailboxer::Message, Mailboxer::Notification
             obj.mark_as_deleted(self)
-          when Conversation
+          when Mailboxer::Conversation
             obj.mark_as_deleted(self)
           when Array
             obj.map{ |sub_obj| mark_as_deleted(sub_obj) }
