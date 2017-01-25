@@ -1,5 +1,5 @@
 class Mailboxer::BaseMailer < ActionMailer::Base
-  default :from => Mailboxer.default_from
+  default :from => t('mailboxer.default_from', default: Mailboxer.default_from)
 
   private
 

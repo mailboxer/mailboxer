@@ -5,3 +5,4 @@ en:
       subject_reply: "Mailboxer new reply: %{subject}"
     notification_mailer:
       subject: "Mailboxer new notification: %{subject}"
+    default_from: "no-reply@mailboxer.com"
