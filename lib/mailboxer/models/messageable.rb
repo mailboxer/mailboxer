@@ -40,6 +40,11 @@ module Mailboxer
         end
       end
 
+      #Sends a notification to the messageable
+      define_method Mailboxer.notify_method do |subject, body, obj=nil, sanitize_text=true, notification_code=nil, send_mail=true, sender=nil|
+        Mailboxer::Notification.notify_all([self],subject,body,obj,sanitize_text,notification_code,send_mail,sender)
+      end
+
       #Gets the mailbox of the messageable
       def mailbox
         @mailbox ||= Mailboxer::Mailbox.new(self)
@@ -48,11 +53,6 @@ module Mailboxer
       # Get number of unread messages
       def unread_inbox_count
         mailbox.inbox(unread: true).count
-      end
-
-      #Sends a notification to the messageable
-      def notify(subject,body,obj = nil,sanitize_text=true,notification_code=nil,send_mail=true,sender=nil)
-        Mailboxer::Notification.notify_all([self],subject,body,obj,sanitize_text,notification_code,send_mail,sender)
       end
 
       #Sends a messages, starting a new conversation, with the messageable

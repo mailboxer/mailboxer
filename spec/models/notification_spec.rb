@@ -14,7 +14,7 @@ describe Mailboxer::Notification do
   it { should validate_length_of(:body).is_at_most(Mailboxer.body_max_length) }
 
   it "should notify one user" do
-    @entity1.notify("Subject", "Body")
+    @entity1.send(Mailboxer.notify_method, "Subject", "Body")
 
     #Check getting ALL receipts
     expect(@entity1.mailbox.receipts.size).to eq 1
@@ -31,14 +31,14 @@ describe Mailboxer::Notification do
   end
 
   it "should be unread by default" do
-    @entity1.notify("Subject", "Body")
+    @entity1.send(Mailboxer.notify_method, "Subject", "Body")
     expect(@entity1.mailbox.receipts.size).to eq 1
     notification = @entity1.mailbox.receipts.first.notification
     expect(notification).to be_is_unread(@entity1)
   end
 
   it "should be able to marked as read" do
-    @entity1.notify("Subject", "Body")
+    @entity1.send(Mailboxer.notify_method, "Subject", "Body")
     expect(@entity1.mailbox.receipts.size).to eq 1
     notification = @entity1.mailbox.receipts.first.notification
     notification.mark_as_read(@entity1)
@@ -46,7 +46,7 @@ describe Mailboxer::Notification do
   end
 
   it "should be able to specify a sender for a notification" do
-    @entity1.notify("Subject", "Body", nil, true, nil, true, @entity3)
+    @entity1.send(Mailboxer.notify_method, "Subject", "Body", nil, true, nil, true, @entity3)
     expect(@entity1.mailbox.receipts.size).to eq 1
     notification = @entity1.mailbox.receipts.first.notification
     expect(notification.sender).to eq(@entity3)
@@ -126,11 +126,11 @@ describe Mailboxer::Notification do
 
   describe "scopes" do
     let(:scope_user) { FactoryGirl.create(:user) }
-    let!(:notification) { scope_user.notify("Body", "Subject").notification }
+    let!(:notification) { scope_user.send(Mailboxer.notify_method, "Body", "Subject").notification }
 
     describe ".unread" do
       it "finds unread notifications" do
-        unread_notification = scope_user.notify("Body", "Subject").notification
+        unread_notification = scope_user.send(Mailboxer.notify_method, "Body", "Subject").notification
         notification.mark_as_read(scope_user)
         expect(Mailboxer::Notification.unread.last).to eq unread_notification
       end
