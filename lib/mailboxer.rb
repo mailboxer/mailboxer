@@ -16,7 +16,7 @@ module Mailboxer
   mattr_accessor :name_method
   @@name_method = :name
   mattr_accessor :notify_method
-  @@email_method = :notify
+  @@notify_method = :notify
   mattr_accessor :subject_max_length
   @@subject_max_length = 255
   mattr_accessor :body_max_length
