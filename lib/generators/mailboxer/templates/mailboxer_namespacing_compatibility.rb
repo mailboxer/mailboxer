@@ -13,6 +13,7 @@ class MailboxerNamespacingCompatibility < ActiveRecord::Migration
     rename_table :mailboxer_notifications, :notifications
     rename_table :mailboxer_receipts,      :receipts
 
+    Mailboxer::Notification.table_name = "notifications"
     Mailboxer::Notification.where(type: 'Mailboxer::Message').update_all(type: 'Message')
   end
 end
