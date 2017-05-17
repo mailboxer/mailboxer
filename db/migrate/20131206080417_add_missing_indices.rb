@@ -1,4 +1,4 @@
-class AddMissingIndices < ActiveRecord::Migration
+class AddMissingIndices < ActiveRecord::Migration[4.2]
   def change
     # We'll explicitly specify its name, as the auto-generated name is too long and exceeds 63
     # characters limitation.

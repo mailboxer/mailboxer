@@ -1,4 +1,4 @@
-class CreateMailboxer < ActiveRecord::Migration
+class CreateMailboxer < ActiveRecord::Migration[4.2]
   def self.up
   #Tables
     #Conversations
@@ -27,7 +27,8 @@ class CreateMailboxer < ActiveRecord::Migration
       t.column :conversation_id, :integer
       t.column :draft, :boolean, :default => false
       t.string :notification_code, :default => nil
-      t.references :notified_object, :polymorphic => true
+      t.references :notified_object, :polymorphic => true, index: { name: 'mailboxer_notifications_notified_object' }
+  end
       t.column :attachment, :string
       t.column :updated_at, :datetime, :null => false
       t.column :created_at, :datetime, :null => false

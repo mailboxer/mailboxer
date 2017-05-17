@@ -1,4 +1,4 @@
-class AddConversationOptout < ActiveRecord::Migration
+class AddConversationOptout < ActiveRecord::Migration[4.2]
   def self.up
     create_table :mailboxer_conversation_opt_outs do |t|
       t.references :unsubscriber, :polymorphic => true
