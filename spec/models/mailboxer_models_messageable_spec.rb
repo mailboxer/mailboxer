@@ -170,7 +170,7 @@ describe "Mailboxer::Models::Messageable through User" do
 
 
   it "should be able to unread an owned Notification (mark as unread)" do
-    @receipt = @entity1.notify("Subject","Body")
+    @receipt = @entity1.send(Mailboxer.notify_method, "Subject", "Body")
     @notification = @receipt.notification
     expect(@receipt.is_read).to eq false
     @entity1.mark_as_read(@notification)
@@ -179,7 +179,7 @@ describe "Mailboxer::Models::Messageable through User" do
   end
 
   it "should be able to read an owned Notification (mark as read)" do
-    @receipt = @entity1.notify("Subject","Body")
+    @receipt = @entity1.send(Mailboxer.notify_method, "Subject", "Body")
     @notification = @receipt.notification
     expect(@receipt.is_read).to eq false
     @entity1.mark_as_read(@notification)
@@ -187,7 +187,7 @@ describe "Mailboxer::Models::Messageable through User" do
   end
 
   it "should not be able to unread a not owned Notification (mark as unread)" do
-    @receipt = @entity1.notify("Subject","Body")
+    @receipt = @entity1.send(Mailboxer.notify_method, "Subject", "Body")
     @notification = @receipt.notification
     expect(@receipt.is_read).to eq false
     @entity1.mark_as_read(@notification)
@@ -196,7 +196,7 @@ describe "Mailboxer::Models::Messageable through User" do
   end
 
   it "should not be able to read a not owned Notification (mark as read)" do
-    @receipt = @entity1.notify("Subject","Body")
+    @receipt = @entity1.send(Mailboxer.notify_method, "Subject", "Body")
     @notification = @receipt.notification
     expect(@receipt.is_read).to eq false
     @entity2.mark_as_read(@notification)
@@ -204,7 +204,7 @@ describe "Mailboxer::Models::Messageable through User" do
   end
 
   it "should be able to trash an owned Notification" do
-    @receipt = @entity1.notify("Subject","Body")
+    @receipt = @entity1.send(Mailboxer.notify_method, "Subject", "Body")
     @notification = @receipt.notification
     expect(@receipt.trashed).to eq false
     @entity1.trash(@notification)
@@ -212,7 +212,7 @@ describe "Mailboxer::Models::Messageable through User" do
   end
 
   it "should be able to untrash an owned Notification" do
-    @receipt = @entity1.notify("Subject","Body")
+    @receipt = @entity1.send(Mailboxer.notify_method, "Subject", "Body")
     @notification = @receipt.notification
     expect(@receipt.trashed).to eq false
     @entity1.trash(@notification)
@@ -221,7 +221,7 @@ describe "Mailboxer::Models::Messageable through User" do
   end
 
   it "should not be able to trash a not owned Notification" do
-    @receipt = @entity1.notify("Subject","Body")
+    @receipt = @entity1.send(Mailboxer.notify_method, "Subject", "Body")
     @notification = @receipt.notification
     expect(@receipt.trashed).to eq false
     @entity2.trash(@notification)
@@ -229,7 +229,7 @@ describe "Mailboxer::Models::Messageable through User" do
   end
 
   it "should not be able to untrash a not owned Notification" do
-    @receipt = @entity1.notify("Subject","Body")
+    @receipt = @entity1.send(Mailboxer.notify_method, "Subject", "Body")
     @notification = @receipt.notification
     expect(@receipt.trashed).to eq false
     @entity1.trash(@notification)
