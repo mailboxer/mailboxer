@@ -136,14 +136,16 @@ class Mailboxer::Receipt < ActiveRecord::Base
   protected
 
   if Mailboxer.search_enabled
-    searchable do
-      text :subject, :boost => 5 do
-        message.subject if message
+    if Mailboxer.search_engine != :pg_search
+      searchable do
+        text :subject, :boost => 5 do
+          message.subject if message
+        end
+        text :body do
+          message.body if message
+        end
+        integer :receiver_id
       end
-      text :body do
-        message.body if message
-      end
-      integer :receiver_id
     end
   end
 end

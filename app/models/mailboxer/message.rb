@@ -46,4 +46,11 @@ class Mailboxer::Message < Mailboxer::Notification
     end
     sender_receipt
   end
+
+  if Mailboxer.search_enabled
+    if Mailboxer.search_engine == :pg_search
+      include PgSearch
+      pg_search_scope :search, against: [:subject, :body]
+    end
+  end
 end
