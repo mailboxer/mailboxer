@@ -12,7 +12,7 @@ Mailboxer.setup do |config|
   config.notify_method = :notify
 
   #Configures if you use or not a search engine and which one you are using
-  #Supported engines: [:solr,:sphinx]
+  #Supported engines: [:solr,:sphinx,:pg_search]
   config.search_enabled = false
   config.search_engine = :solr
 
