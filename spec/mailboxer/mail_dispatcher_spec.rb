@@ -63,7 +63,7 @@ describe Mailboxer::MailDispatcher do
   describe "mailer" do
     let(:receipts) { [] }
 
-    context "mailable is a Message" do
+    context "mailable is a Notification" do
       let(:mailable) { Mailboxer::Notification.new }
 
       its(:mailer) { should be Mailboxer::NotificationMailer }
@@ -76,15 +76,26 @@ describe Mailboxer::MailDispatcher do
       end
     end
 
-    context "mailable is a Notification" do
+    context "mailable is a Message" do
       let(:mailable) { Mailboxer::Message.new }
       its(:mailer) { should be Mailboxer::MessageMailer }
 
-      context "with custom mailer" do
+      context 'mailer class is selected using global Mailboxer method' do
         before { Mailboxer.message_mailer = 'foo' }
         after  { Mailboxer.message_mailer = nil   }
 
         its(:mailer) { should eq 'foo' }
+      end
+
+      context 'mailer class is selected using Mailable#mailer_class' do
+        let(:mailable) { double(mailer_class: :foo) }
+        its(:mailer) { should eq :foo }
+      end
+
+      context 'mailer class is selected by searching for the constant' do
+        before { stub_const 'StringMailer', 1 }
+        let(:mailable) { String.new('I am a string') }
+        its(:mailer) { should eq Object.const_get('StringMailer') }
       end
     end
   end
