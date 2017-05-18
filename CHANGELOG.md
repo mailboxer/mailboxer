@@ -2,7 +2,11 @@
 
 ## Master (Unreleased)
 
+## 0.15.0 - 2017-05-17
+
 ### Changed
+
+* Update for Rails 5.1
 
 * When sorting entries by `created_at`, also sort by `id` descending. This
 is to ensure proper sorting of items for databases that do not store
