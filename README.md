@@ -80,6 +80,10 @@ $ rake db:migrate
 
 ## Requirements & Settings
 
+### Encryption Key
+
+This gem requires you have an encryption key stored in your ENV. Key is named: NotificationBodyEncryptKey
+
 ### Emails
 
 We are now adding support for sending emails when a Notification or a Message is sent to one or more recipients. You should modify the mailboxer initializer (/config/initializer/mailboxer.rb) to edit these settings:

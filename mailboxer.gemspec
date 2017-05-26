@@ -21,6 +21,8 @@ Gem::Specification.new do |s|
   # Gem dependencies
   #
 
+  s.add_runtime_dependency('attr_encrypted', '1.3.4')
+
   # Development Gem dependencies
   s.add_runtime_dependency('rails', '>= 5.0.0')
   s.add_runtime_dependency('carrierwave', '>= 0.5.8')
