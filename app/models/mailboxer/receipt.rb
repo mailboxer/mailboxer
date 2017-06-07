@@ -25,7 +25,11 @@ class Mailboxer::Receipt < ActiveRecord::Base
   scope :inbox, lambda { where(:mailbox_type => "inbox") }
   scope :trash, lambda { where(:trashed => true, :deleted => false) }
   scope :not_trash, lambda { where(:trashed => false) }
-  scope :deleted, lambda { where(:deleted => true) }
+  if defined? deleted
+  	scope :mb_deleted, lambda { where(:deleted => true) }
+  else
+	  scope :deleted, lambda { where(:deleted => true) }
+  end
   scope :not_deleted, lambda { where(:deleted => false) }
   scope :is_read, lambda { where(:is_read => true) }
   scope :is_unread, lambda { where(:is_read => false) }
