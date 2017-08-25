@@ -43,6 +43,20 @@ class Mailboxer::Conversation < ActiveRecord::Base
         order(updated_at: :desc).distinct
   }
 
+  scope :only_between, lambda {|participant_one, participant_two|
+    joins("INNER JOIN (#{Mailboxer::Notification.recipient(participant_two).to_sql}) participant_two_notifications " \
+      "ON participant_two_notifications.conversation_id = #{table_name}.id AND participant_two_notifications.type IN ('Mailboxer::Message')")
+    .joins("INNER JOIN mailboxer_receipts ON mailboxer_receipts.notification_id = participant_two_notifications.id AND mailboxer_receipts.id IN
+      (SELECT id FROM
+        (SELECT COUNT(notification_id) AS id_count, notification_id
+         FROM mailboxer_receipts
+         GROUP BY notification_id)sub
+      LEFT OUTER JOIN mailboxer_receipts
+      ON sub.notification_id = mailboxer_receipts.notification_id
+      WHERE sub.id_count = 2 )").merge(Mailboxer::Receipt.recipient(participant_one))
+    .order(updated_at: :desc).distinct
+  }
+
   #Mark the conversation as read for one of the participants
   def mark_as_read(participant)
     return unless participant
