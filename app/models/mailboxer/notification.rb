@@ -104,7 +104,7 @@ class Mailboxer::Notification < ActiveRecord::Base
 
   #Returns the receipt for the participant
   def receipt_for(participant)
-    Mailboxer::Receipt.notification(self).recipient(participant)
+    receipts.recipient(participant)
   end
 
   #Returns the receipt for the participant. Alias for receipt_for(participant)
