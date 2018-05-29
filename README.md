@@ -22,7 +22,7 @@ an [issue](https://github.com/ging/mailboxer/issues) to ask for it. It will be g
 will know what you may find useful in the gem.
 
 Mailboxer was born from the great, but outdated, code from [lpsergi /
-acts*as*messageable](https://github.com/psergi/acts_as_messageable).
+acts_as_messageable](https://github.com/psergi/acts_as_messageable).
 
 We are now working to make exhaustive documentation and some wiki
 pages in order to make it even easier to use the gem to its full potential.
