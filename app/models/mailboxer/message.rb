@@ -53,7 +53,7 @@ class Mailboxer::Message < Mailboxer::Notification
     #This method is defined so that Message builder works with
     #multiple attachments. It uses attachment= method.
     def attachment=(attached_files)
-      attached_files = [attached_files] unless is_array attached_files
+      attached_files = [*attached_files]
       self.attachments.destroy # Replacing old attachments with new ones
       attached_files.each do |file|
         self.attachments << Mailboxer::Attachment.new(file: file)
