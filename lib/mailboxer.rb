@@ -21,6 +21,8 @@ module Mailboxer
   @@subject_max_length = 255
   mattr_accessor :body_max_length
   @@body_max_length = 32000
+  mattr_accessor :uses_multiple_attachments
+  @@uses_multiple_attachments = false
   mattr_accessor :notification_mailer
   mattr_accessor :message_mailer
   mattr_accessor :custom_deliver_proc
@@ -42,3 +44,4 @@ require 'mailboxer/engine'
 require 'mailboxer/cleaner'
 require 'mailboxer/mail_dispatcher'
 require 'mailboxer/recipient_filter'
+require 'mailboxer/attachable'
