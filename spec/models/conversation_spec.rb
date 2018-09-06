@@ -186,6 +186,38 @@ describe Mailboxer::Conversation do
     end
   end
 
+  describe '#messages_for' do
+    context 'before deleted' do
+      it 'return all messages for user' do
+        expect(conversation.messages_for(entity1).count).to eq 4
+        expect(conversation.messages_for(entity2).count).to eq 4
+      end
+    end
+
+    context 'after deleted' do
+      before do
+        conversation.mark_as_deleted(entity1)
+      end
+      it 'return no messages for user' do
+        expect(conversation.messages_for(entity1).count).to eq 0
+      end
+      it 'return all messages for other user' do
+
+        expect(conversation.messages_for(entity2).count).to eq 4
+      end
+    end
+
+    context 'after deleted have have new messages' do
+      before do
+        conversation.mark_as_deleted(entity1)
+        entity2.reply_to_conversation(conversation, "Reply after deleted")
+      end
+      it 'return no messages for user' do
+        expect(conversation.messages_for(entity1).count).to eq 1
+      end
+    end
+  end
+
 
   describe "#opt_out" do
     context 'participant still opt in' do

@@ -123,6 +123,12 @@ class Mailboxer::Conversation < ActiveRecord::Base
     @last_message ||= messages.order(:created_at => :desc, :id => :desc).first
   end
 
+  #Returns the messages of the conversation for one participant
+  def messages_for(participant)
+    message_ids = receipts_for(participant).not_deleted.pluck(:notification_id)
+    messages.where(id: message_ids)
+  end
+
   #Returns the receipts of the conversation for one participants
   def receipts_for(participant)
     Mailboxer::Receipt.conversation(self).recipient(participant)

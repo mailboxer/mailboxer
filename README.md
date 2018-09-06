@@ -264,6 +264,9 @@ conversation.mark_as_deleted participant
   #* A Message
   #* An array with any of them
 alfa.mark_as_deleted conversation
+
+# get available message for specific user
+conversation.messages_for(alfa)
 ```
 ### How can I retrieve my conversations?
 
