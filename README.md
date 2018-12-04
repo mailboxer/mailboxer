@@ -312,7 +312,6 @@ Thanks to [Roman Kushnir (@RKushnir)](https://github.com/RKushnir/) you can test
 
 If you need a GUI you should take a look at these links:
 
-* The [rails-messaging](https://github.com/frodefi/rails-messaging) project.
 * The wiki page [GUI Example on a real application](https://github.com/ging/mailboxer/wiki/GUI-Example-on-a-real-application).
 
 ## Contributors
