@@ -28,7 +28,6 @@ class CreateMailboxer < ActiveRecord::Migration[4.2]
       t.column :draft, :boolean, :default => false
       t.string :notification_code, :default => nil
       t.references :notified_object, :polymorphic => true, index: { name: 'mailboxer_notifications_notified_object' }
-      t.column :attachment, :string
       t.column :updated_at, :datetime, :null => false
       t.column :created_at, :datetime, :null => false
       t.boolean :global, default: false

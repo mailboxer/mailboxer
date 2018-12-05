@@ -10,6 +10,7 @@ class Mailboxer::NotificationMailer < Mailboxer::BaseMailer
     @notification = notification
     @receiver     = receiver
     set_subject(notification)
+    attach_message_attachments
     mail :to => receiver.send(Mailboxer.email_method, notification),
          :subject => t('mailboxer.notification_mailer.subject', :subject => @subject),
          :template_name => 'new_notification_email'

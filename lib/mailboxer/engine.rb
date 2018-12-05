@@ -1,4 +1,3 @@
-require 'carrierwave'
 begin
   require 'sunspot_rails'
 rescue LoadError
