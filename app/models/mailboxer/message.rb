@@ -44,6 +44,6 @@ class Mailboxer::Message < Mailboxer::Notification
 
       on_deliver_callback.call(self) if on_deliver_callback
     end
-    sender_receipt
+    self
   end
 end
