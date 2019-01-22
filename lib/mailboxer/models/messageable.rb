@@ -60,6 +60,7 @@ module Mailboxer
       def send_message(recipients, msg_body, subject, sanitize_text=true, attachment=nil, message_timestamp = Time.now)
         convo = Mailboxer::ConversationBuilder.new({
           :subject    => subject,
+          :originator => self,
           :created_at => message_timestamp,
           :updated_at => message_timestamp
         }).build

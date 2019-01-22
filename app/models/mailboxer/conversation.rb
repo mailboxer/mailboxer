@@ -6,6 +6,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
   has_many :opt_outs, :dependent => :destroy, :class_name => "Mailboxer::Conversation::OptOut"
   has_many :messages, :dependent => :destroy, :class_name => "Mailboxer::Message"
   has_many :receipts, :through => :messages,  :class_name => "Mailboxer::Receipt"
+  belongs_to :originator, polymorphic: true
 
   validates :subject, :presence => true,
                       :length => { :maximum => Mailboxer.subject_max_length }
@@ -103,10 +104,10 @@ class Mailboxer::Conversation < ActiveRecord::Base
     recipients
   end
 
-  #Originator of the conversation.
-  def originator
-    @originator ||= original_message.sender
-  end
+  # #Originator of the conversation.
+  # def originator
+  #   @originator ||= original_message.sender
+  # end
 
   #First message of the conversation.
   def original_message
@@ -131,12 +132,12 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   #Returns the receipts of the conversation for one participants
   def receipts_for(participant)
-    Mailboxer::Receipt.conversation(self).recipient(participant)
+    receipts.recipient(participant)
   end
 
   #Returns the number of messages of the conversation
   def count_messages
-    Mailboxer::Message.conversation(self).count
+    messages.count
   end
 
   #Returns true if the messageable is a participant of the conversation
