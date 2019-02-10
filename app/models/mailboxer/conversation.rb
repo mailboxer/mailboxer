@@ -152,7 +152,8 @@ class Mailboxer::Conversation < ActiveRecord::Base
         :notification => message,
         :receiver     => participant,
         :updated_at   => message.updated_at,
-        :created_at   => message.created_at
+        :created_at   => message.created_at,
+        :mailbox_type => 'inbox'
       }).build.save
     end
   end
