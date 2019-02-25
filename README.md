@@ -282,6 +282,10 @@ alfa.mailbox.sentbox
 
 #alfa wants to retrieve his trashed conversations
 alfa.mailbox.trash
+
+#Also wants to retrieve not trashed conversations
+alfa.mailbox.conversations({ :mailbox_type => 'not_trash' })
+
 ```
 
 ### How can I paginate conversations?
