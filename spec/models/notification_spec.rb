@@ -138,14 +138,14 @@ describe Mailboxer::Notification do
 
     describe ".expired" do
       it "finds expired notifications" do
-        notification.update_attributes(expires: 1.day.ago)
+        notification.update(expires: 1.day.ago)
         expect(scope_user.mailbox.notifications.expired.count).to eq(1)
       end
     end
 
     describe ".unexpired" do
       it "finds unexpired notifications" do
-        notification.update_attributes(expires: 1.day.from_now)
+        notification.update(expires: 1.day.from_now)
         expect(scope_user.mailbox.notifications.unexpired.count).to eq(1)
       end
     end
