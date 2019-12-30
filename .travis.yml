@@ -11,7 +11,7 @@ gemfile:
   - gemfiles/rails5.0.gemfile
   - gemfiles/rails5.1.gemfile
   - gemfiles/rails5.2.gemfile
-  - gemfiles/rails5.6.gemfile
+  - gemfiles/rails6.0.gemfile
 
 matrix:
   exclude:
