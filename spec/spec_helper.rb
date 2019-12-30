@@ -19,11 +19,15 @@ Capybara.default_driver   = :rack_test
 Capybara.default_selector = :css
 
 # Run any available migration
-if Rails.gem_version >= Gem::Version.new('5.2.0')
-  ActiveRecord::MigrationContext.new(File.expand_path('../dummy/db/migrate', __FILE__)).migrate
+migrate_path = File.expand_path('../dummy/db/migrate', __FILE__)
+if Rails.version.start_with? '6'
+  ActiveRecord::MigrationContext.new(migrate_path, ActiveRecord::SchemaMigration).migrate
+elsif Rails.version.start_with? '5.2'
+  ActiveRecord::MigrationContext.new(migrate_path).migrate
 else
-  ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__)
+  ActiveRecord::Migrator.migrate migrate_path
 end
+
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
