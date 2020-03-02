@@ -11,7 +11,8 @@ class Mailboxer::Message < Mailboxer::Notification
     where(:conversation_id => conversation.id)
   }
 
-  mount_uploader :attachment, Mailboxer::AttachmentUploader
+  has_many_attached :attachment
+  mount_uploader :carrierwave_attachment, Mailboxer::AttachmentUploader
 
   class << self
     #Sets the on deliver callback method.
