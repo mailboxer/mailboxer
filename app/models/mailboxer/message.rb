@@ -11,7 +11,7 @@ class Mailboxer::Message < Mailboxer::Notification
     where(:conversation_id => conversation.id)
   }
 
-  has_many_attached :attachment
+  has_one_attached :attachment
   # mount_uploader :carrierwave_attachment, Mailboxer::AttachmentUploader
 
   class << self
