@@ -1,5 +1,6 @@
 class Mailboxer::Message < Mailboxer::Notification
-  attr_accessible :attachment if Mailboxer.protected_attributes?
+  # attr_accessible :attachment if Mailboxer.protected_attributes?
+  attr_accessible :attachments if Mailboxer.protected_attributes?
   self.table_name = :mailboxer_notifications
 
   belongs_to :conversation, :validate => true, :autosave => true
@@ -11,7 +12,8 @@ class Mailboxer::Message < Mailboxer::Notification
     where(:conversation_id => conversation.id)
   }
 
-  has_one_attached :attachment
+  # has_one_attached :attachment
+  has_many_attached :attachments
   # mount_uploader :carrierwave_attachment, Mailboxer::AttachmentUploader
 
   class << self
