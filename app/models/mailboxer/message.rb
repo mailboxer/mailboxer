@@ -12,7 +12,7 @@ class Mailboxer::Message < Mailboxer::Notification
   }
 
   has_many_attached :attachment
-  mount_uploader :carrierwave_attachment, Mailboxer::AttachmentUploader
+  # mount_uploader :carrierwave_attachment, Mailboxer::AttachmentUploader
 
   class << self
     #Sets the on deliver callback method.
