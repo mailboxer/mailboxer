@@ -1,5 +1,5 @@
 class Mailboxer::Conversation < ActiveRecord::Base
-  self.table_name = :mailboxer_conversations
+  self.table_name = "#{Mailboxer.mailboxer_schema}mailboxer_conversations"
 
   attr_accessible :subject if Mailboxer.protected_attributes?
 

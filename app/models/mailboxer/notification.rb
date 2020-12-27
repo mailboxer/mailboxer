@@ -1,5 +1,5 @@
 class Mailboxer::Notification < ActiveRecord::Base
-  self.table_name = :mailboxer_notifications
+  self.table_name =  "#{Mailboxer.mailboxer_schema}mailboxer_notifications" 
 
   attr_accessor :recipients
   attr_accessible :body, :subject, :global, :expires if Mailboxer.protected_attributes?

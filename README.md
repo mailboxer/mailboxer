@@ -2,7 +2,9 @@
 
 *****UPDATED FOR USE WITH HEADSUP APP
 
-
+Added support for alternative schame location for tables
+  #Configure schema for database tables - include the period
+  config.mailboxer_schema = 'messaging.'
 
 
 This project is based on the need for a private message system for [ging
