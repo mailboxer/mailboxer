@@ -39,6 +39,9 @@ class Mailboxer::Conversation < ActiveRecord::Base
         merge(Mailboxer::Receipt.recipient(participant_one)).
         order(updated_at: :desc).distinct
   }
+  scope :custom_box,  lambda {|participant, ub|
+    participant(participant).merge(Mailboxer::Receipt.custom_box(ub))
+  }
 
   #Mark the conversation as read for one of the participants
   def mark_as_read(participant)

@@ -29,6 +29,7 @@ class Mailboxer::Receipt < ActiveRecord::Base
   scope :not_deleted, lambda { where(:deleted => false) }
   scope :is_read, lambda { where(:is_read => true) }
   scope :is_unread, lambda { where(:is_read => false) }
+  scope :custom_box, lambda { |ub| where(:mailbox_type => ub) }
 
   class << self
     #Marks all the receipts from the relation as read

@@ -22,17 +22,17 @@ class Mailboxer::Message < Mailboxer::Notification
 
   #Delivers a Message. USE NOT RECOMENDED.
   #Use Mailboxer::Models::Message.send_message instead.
-  def deliver(reply = false, should_clean = true)
+  def deliver(reply = false, should_clean = true, mailbox_type=nil)
     self.clean if should_clean
 
     #Receiver receipts
     receiver_receipts = recipients.map do |r|
-      receipts.build(receiver: r, mailbox_type: 'inbox', is_read: false)
+      receipts.build(receiver: r, mailbox_type: mailbox_type ? mailbox_type : 'inbox', is_read: false)
     end
 
     #Sender receipt
     sender_receipt =
-      receipts.build(receiver: sender, mailbox_type: 'sentbox', is_read: true)
+      receipts.build(receiver: sender, mailbox_type: mailbox_type ? mailbox_type : 'sentbox', is_read: true)
 
     if valid?
       save!

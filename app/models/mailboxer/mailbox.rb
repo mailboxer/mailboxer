@@ -124,8 +124,10 @@ class Mailboxer::Mailbox
       Mailboxer::Conversation.trash(messageable)
     when  'not_trash'
       Mailboxer::Conversation.not_trash(messageable)
-    else
+    when nil
       Mailboxer::Conversation.participant(messageable)
+    else
+      Mailboxer::Conversation.custom_box(messageable, mailbox)
     end
   end
 end
