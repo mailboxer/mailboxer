@@ -27,12 +27,14 @@ class Mailboxer::Message < Mailboxer::Notification
 
     #Receiver receipts
     receiver_receipts = recipients.map do |r|
-      receipts.build(receiver: r, mailbox_type: mailbox_type ? mailbox_type : 'inbox', is_read: false)
+      if mailbox_type.nil? || ( mailbox_type && r != sender )
+        receipts.build(receiver: r, mailbox_type: mailbox_type.nil? ? 'inbox' : mailbox_type, is_read: false)
+      end
     end
 
     #Sender receipt
     sender_receipt =
-      receipts.build(receiver: sender, mailbox_type: mailbox_type ? mailbox_type : 'sentbox', is_read: true)
+      receipts.build(receiver: sender, mailbox_type: mailbox_type.nil? ? 'sentbox' : mailbox_type, is_read: true)
 
     if valid?
       save!
