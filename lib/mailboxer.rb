@@ -24,7 +24,9 @@ module Mailboxer
   mattr_accessor :notification_mailer
   mattr_accessor :message_mailer
   mattr_accessor :custom_deliver_proc
-
+  mattr_accessor :mailboxer_schema
+  @@mailboxer_schema = ''
+  
   class << self
     def setup
       yield self

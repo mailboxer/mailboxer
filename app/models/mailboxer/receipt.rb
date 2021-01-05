@@ -1,5 +1,5 @@
 class Mailboxer::Receipt < ActiveRecord::Base
-  self.table_name = :mailboxer_receipts
+  self.table_name = "#{Mailboxer.mailboxer_schema}mailboxer_receipts" 
   attr_accessible :trashed, :is_read, :deleted if Mailboxer.protected_attributes?
 
   belongs_to :notification, :class_name => "Mailboxer::Notification"
