@@ -35,7 +35,7 @@ class Mailboxer::Mailbox
   #* :unread=true
   #
   def conversations(options = {})
-    conv = get_conversations(options[:mailbox_type])
+    conv = get_conversations(options[:mailbox_type], options[:message_type])
 
     if options[:read] == false || options[:unread]
       conv = conv.unread(messageable)
@@ -114,18 +114,18 @@ class Mailboxer::Mailbox
 
   private
 
-  def get_conversations(mailbox)
+  def get_conversations(mailbox, message_type)
     case mailbox
     when 'inbox'
-      Mailboxer::Conversation.inbox(messageable)
+      Mailboxer::Conversation.inbox(messageable, message_type)
     when 'sentbox'
-      Mailboxer::Conversation.sentbox(messageable)
+      Mailboxer::Conversation.sentbox(messageable, message_type)
     when 'trash'
-      Mailboxer::Conversation.trash(messageable)
+      Mailboxer::Conversation.trash(messageable, message_type)
     when  'not_trash'
-      Mailboxer::Conversation.not_trash(messageable)
+      Mailboxer::Conversation.not_trash(messageable, message_type)
     else
-      Mailboxer::Conversation.participant(messageable)
+      Mailboxer::Conversation.participant(messageable, message_type)
     end
   end
 end

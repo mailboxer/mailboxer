@@ -1,7 +1,7 @@
 class Mailboxer::Conversation < ActiveRecord::Base
   self.table_name = "#{Mailboxer.mailboxer_schema}mailboxer_conversations"
 
-  attr_accessible :subject if Mailboxer.protected_attributes?
+  attr_accessible :subject, :message_type if Mailboxer.protected_attributes?
 
   has_many :opt_outs, :dependent => :destroy, :class_name => "Mailboxer::Conversation::OptOut"
   has_many :messages, :dependent => :destroy, :class_name => "Mailboxer::Message"
@@ -12,27 +12,28 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   before_validation :clean
 
-  scope :participant, lambda {|participant|
-    where('mailboxer_notifications.type'=> Mailboxer::Message.name).
-    order(updated_at: :desc).
-    joins(:receipts).merge(Mailboxer::Receipt.recipient(participant)).distinct
+  scope :participant, lambda {|participant, message_type|
+    where('mailboxer_notifications.type'=> Mailboxer::Message.name)
+    .where( message_type: message_type) unless message_type.nil?
+    .order(updated_at: :desc)
+    .joins(:receipts).merge(Mailboxer::Receipt.recipient(participant)).distinct
   }
-  scope :inbox, lambda {|participant|
+  scope :inbox, lambda {|participant, message_type|
     participant(participant).merge(Mailboxer::Receipt.inbox.not_trash.not_deleted)
   }
-  scope :sentbox, lambda {|participant|
+  scope :sentbox, lambda {|participant, message_type|
     participant(participant).merge(Mailboxer::Receipt.sentbox.not_trash.not_deleted)
   }
-  scope :trash, lambda {|participant|
+  scope :trash, lambda {|participant, message_type|
     participant(participant).merge(Mailboxer::Receipt.trash)
   }
-  scope :unread,  lambda {|participant|
+  scope :unread,  lambda {|participant, message_type|
     participant(participant).merge(Mailboxer::Receipt.is_unread)
   }
-  scope :not_trash,  lambda {|participant|
+  scope :not_trash,  lambda {|participant, message_type|
     participant(participant).merge(Mailboxer::Receipt.not_trash)
   }
-  scope :not_deleted,  lambda {|participant|
+  scope :not_deleted,  lambda {|participant, message_type|
     participant(participant).merge(Mailboxer::Receipt.not_deleted)
   }
   scope :between, lambda {|participant_one, participant_two|
