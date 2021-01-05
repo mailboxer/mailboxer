@@ -25,9 +25,9 @@ class Mailboxer::Message < Mailboxer::Notification
   def deliver(reply = false, should_clean = true)
     self.clean if should_clean
 
-    #Receiver receipts
+    #Receiver receipts - don't send to yourself
     receiver_receipts = recipients.map do |r|
-      receipts.build(receiver: r, mailbox_type: 'inbox', is_read: false)
+      receipts.build(receiver: r, mailbox_type: 'inbox', is_read: false) unless r == sender 
     end
 
     #Sender receipt
