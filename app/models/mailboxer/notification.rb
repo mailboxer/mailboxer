@@ -4,8 +4,8 @@ class Mailboxer::Notification < ActiveRecord::Base
   attr_accessor :recipients
   attr_accessible :body, :subject, :global, :expires if Mailboxer.protected_attributes?
 
-  belongs_to :sender, :polymorphic => :true, :required => false
-  belongs_to :notified_object, :polymorphic => :true, :required => false
+  belongs_to :sender, :polymorphic => :true, :required => false, optional: true
+  belongs_to :notified_object, :polymorphic => :true, :required => false, optional: true
   has_many :receipts, :dependent => :destroy, :class_name => "Mailboxer::Receipt"
 
   validates :subject, :length => { :maximum => Mailboxer.subject_max_length }

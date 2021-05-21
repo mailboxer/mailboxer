@@ -3,8 +3,8 @@ module Mailboxer
     class OptOut < ActiveRecord::Base
       self.table_name = :mailboxer_conversation_opt_outs
 
-      belongs_to :conversation, :class_name  => "Mailboxer::Conversation"
-      belongs_to :unsubscriber, :polymorphic => true
+      belongs_to :conversation, :class_name  => "Mailboxer::Conversation", optional: true
+      belongs_to :unsubscriber, :polymorphic => true, optional: true
 
       validates :unsubscriber, :presence => true
 
