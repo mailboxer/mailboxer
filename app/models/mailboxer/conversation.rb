@@ -207,6 +207,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   # tells if participant is opt in
   def has_subscriber?(participant)
+    return false if participant.nil?
     !opt_outs.unsubscriber(participant).any?
   end
 
