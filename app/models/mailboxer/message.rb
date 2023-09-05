@@ -7,6 +7,10 @@ class Mailboxer::Message < Mailboxer::Notification
 
   class_attribute :on_deliver_callback
   protected :on_deliver_callback
+
+  class_attribute :on_after_save_callback
+  protected :on_after_save_callback
+
   scope :conversation, lambda { |conversation|
     where(:conversation_id => conversation.id)
   }
@@ -18,6 +22,11 @@ class Mailboxer::Message < Mailboxer::Notification
     def on_deliver(callback_method)
       self.on_deliver_callback = callback_method
     end
+
+    #Sets the after message save callback method.
+     def on_after_save(callback_method)
+       self.on_after_save_callback = callback_method
+     end
   end
 
   #Delivers a Message. USE NOT RECOMENDED.
@@ -36,6 +45,9 @@ class Mailboxer::Message < Mailboxer::Notification
 
     if valid?
       save!
+
+      on_after_save_callback.call(self) if on_after_save_callback
+
       Mailboxer::MailDispatcher.new(self, receiver_receipts).call
 
       conversation.touch if reply
