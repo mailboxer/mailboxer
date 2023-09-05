@@ -9,16 +9,7 @@ class Mailboxer::BaseBuilder
   def build
     klass.new.tap do |object|
       params.keys.each do |field|
-        field_value = get(field)
-        next if field_value.nil?
-
-        attr = if field.to_s == "attachment" && field_value.is_a?(String)
-                 "remote_#{field}_url"
-               else
-                 field
-               end
-
-        object.send("#{attr}=", field_value)
+        object.send("#{field}=", get(field)) unless get(field).nil?
       end
     end
   end
@@ -32,5 +23,4 @@ class Mailboxer::BaseBuilder
   def recipients
     Array(params[:recipients]).uniq
   end
-
 end
